@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Marquee, PointerArea, ScrollTools, SectionIndex } from "@/components/site/Motion";
 import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import { techProjects, techSkills } from "@/lib/content";
+import { slug } from "@/lib/slug";
 import "./tech.css";
 
 export const metadata: Metadata = {
@@ -19,24 +21,30 @@ export default function TechPage() {
   return (
     <div className="world-tech">
       <SiteNav side="tech" />
+      <ScrollTools />
 
       <main id="main">
-        <section className="tp-hero">
+        <PointerArea className="tp-hero">
           <h1 className="tp-title">Build<span>.</span></h1>
           <div className="tp-intro">
             <p className="tp-lede">
               <strong>Web apps, mobile and embedded hardware.</strong> {techProjects.length} projects, from client
               websites to an offline LoRa safety system for hikers.
             </p>
-            <p className="tp-skills">{techSkills.join(", ")}</p>
           </div>
-        </section>
+        </PointerArea>
 
-        <ul className="tp-list">
+        <Marquee items={techSkills} label="Languages and frameworks" />
+
+        <div className="tp-body">
+          <aside className="tp-side">
+            <SectionIndex label="Projects" items={techProjects.map((p) => ({ id: slug(p.title), title: p.title }))} />
+          </aside>
+          <ul className="tp-list">
           {techProjects.map((project, i) => {
             const link = project.demoLink ?? project.ghLink;
             return (
-              <li key={project.title} className="tp-row">
+              <li key={project.title} id={slug(project.title)} className="tp-row">
                 <a
                   className="tp-shot"
                   href={link}
@@ -66,7 +74,8 @@ export default function TechPage() {
               </li>
             );
           })}
-        </ul>
+          </ul>
+        </div>
       </main>
 
       <ContactBand

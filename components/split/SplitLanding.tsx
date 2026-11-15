@@ -16,9 +16,11 @@ const Stage = dynamic(() => import("./Stage"), { ssr: false });
 type Side = "tech" | "edit";
 const ROUTE: Record<Side, string> = { tech: "/tech", edit: "/editor" };
 
-// How far the portrait can travel, and how far it must go before a side opens.
+// How far the portrait can travel, how far it must go before a side opens,
+// and how little movement still counts as a click.
 const EDGE = 0.1;
 const COMMIT = 0.15;
+const CLICK_SLOP = 6;
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -45,6 +47,8 @@ export default function SplitLanding({
   const root = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const opening = useRef(false);
+  const startX = useRef(0);
+  const moved = useRef(false);
 
   // h = where the portrait is (0..1 across the page); p = the share of the page Build takes.
   // Pulling the portrait toward a side gives that side the room, so they move in opposite directions.
@@ -55,10 +59,25 @@ export default function SplitLanding({
   };
 
   useEffect(() => {
-    place(0.5); // also resets the shared value when coming back to this page
-    // Warm both routes so opening a side feels immediate.
+    // The router keeps this page alive while you visit Build or Cut, so coming back must
+    // undo everything "opening a side" left behind, or the portrait stays locked.
+    const reset = () => {
+      opening.current = false;
+      dragging.current = false;
+      moved.current = false;
+      const el = root.current;
+      el?.removeAttribute("data-opening");
+      el?.removeAttribute("data-settling");
+      el?.removeAttribute("data-dragging");
+      place(0.5);
+    };
+    reset();
+    window.addEventListener("pageshow", reset); // browser back/forward cache
+    // Warm the routes so opening a side feels immediate.
     router.prefetch(ROUTE.tech);
     router.prefetch(ROUTE.edit);
+    router.prefetch("/about");
+    return () => window.removeEventListener("pageshow", reset);
   }, [router]);
 
   const settle = (on: boolean) => {
@@ -86,12 +105,18 @@ export default function SplitLanding({
   const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (opening.current || !e.isPrimary) return;
     dragging.current = true;
+    moved.current = false;
+    startX.current = e.clientX;
     e.currentTarget.setPointerCapture(e.pointerId);
     settle(false);
-    root.current?.setAttribute("data-dragging", "");
   };
   const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (!dragging.current || !root.current) return;
+    if (!moved.current) {
+      if (Math.abs(e.clientX - startX.current) < CLICK_SLOP) return; // still a click, not a drag
+      moved.current = true;
+      root.current.setAttribute("data-dragging", "");
+    }
     const rect = root.current.getBoundingClientRect();
     const raw = (e.clientX - rect.left) / rect.width;
     place(Math.min(1 - EDGE, Math.max(EDGE, raw)));
@@ -100,10 +125,19 @@ export default function SplitLanding({
     if (!dragging.current) return;
     dragging.current = false;
     root.current?.removeAttribute("data-dragging");
+    if (!moved.current) return; // a plain click: onClick takes it from here
     const h = 1 - seam.p;
     if (h <= 0.5 - COMMIT) open("tech");
     else if (h >= 0.5 + COMMIT) open("edit");
     else recentre();
+  };
+  // Click, Enter or Space on the portrait opens the About page. A drag must not count as a click.
+  const onClick = () => {
+    if (moved.current) {
+      moved.current = false;
+      return;
+    }
+    if (!opening.current) router.push("/about");
   };
   const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (e.key === "ArrowLeft") open("tech");
@@ -117,19 +151,19 @@ export default function SplitLanding({
       <header className="sp-nav">
         <Link href="/" className="sp-mark">b1kjuu</Link>
         <nav className="sp-links" aria-label="Main">
-          <a href="/CV_GUSI.pdf" target="_blank" rel="noreferrer">CV</a>
-          <a href="https://github.com/B1Kjuu" target="_blank" rel="noreferrer">GitHub</a>
+          <Link href="/about">About</Link>
+          <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
           <a className="sp-contact" href="mailto:joebeckgusi25@gmail.com">Contact</a>
         </nav>
       </header>
 
       <main id="main" className="sp-halves">
-        {/* The page's one heading: the person, set across both sides. */}
-        <div className="sp-id">
+        {/* The page's one heading: the person, set across both sides. It links to the About page. */}
+        <Link href="/about" className="sp-id">
           <Image src={avatar} alt="" className="sp-idPhoto" sizes="56px" />
           <h1 className="sp-name">Joebeck Andrew Gusi</h1>
           <p className="sp-role">Developer and video editor</p>
-        </div>
+        </Link>
 
         <section className="sp-half sp-tech" aria-labelledby="build-title">
           <div className="sp-stage"><Stage side="tech" cards={techCards} /></div>
@@ -162,15 +196,16 @@ export default function SplitLanding({
 
       <span className="sp-seam" aria-hidden />
 
-      {/* Pull the portrait toward a side to open it. The two buttons above do the same without dragging. */}
+      {/* Click the portrait for the About page; pull it toward a side to open that side. */}
       <button
         type="button"
         className="sp-handle"
-        aria-label="Portrait of Joebeck Andrew Gusi. Drag it toward Build or Cut to open that side, or press the left or right arrow key."
+        aria-label="About Joebeck Andrew Gusi. Click to read more, drag toward Build or Cut to open that side, or press the left or right arrow key."
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
+        onClick={onClick}
         onKeyDown={onKeyDown}
       >
         <span className="sp-grip">
@@ -182,6 +217,7 @@ export default function SplitLanding({
             <path d="M9 6l6 6-6 6" />
           </svg>
         </span>
+        <span className="sp-hint" aria-hidden>Click for about, drag to a side</span>
       </button>
     </div>
   );

@@ -54,3 +54,12 @@ body {
   transform: translateY(-200%);
 }
 .skip:focus-visible { transform: none; }
+
+/* Loops on the accent dots: Build's blinks like a text cursor, Cut's pulses like a record light. */
+@keyframes dot-blink { 50% { opacity: 0; } }
+@keyframes dot-rec { to { opacity: 0.3; } }
+.tp-title span, .sp-tech .sp-dot { animation: dot-blink 1.15s steps(1, end) 1.4s infinite; }
+.ep-title span, .sp-edit .sp-dot { animation: dot-rec 1.5s ease-in-out 1.4s infinite alternate; }
+@media (prefers-reduced-motion: reduce) {
+  .tp-title span, .sp-tech .sp-dot, .ep-title span, .sp-edit .sp-dot { animation: none; }
+}

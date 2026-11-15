@@ -15,7 +15,8 @@
     linear-gradient(#ffffff0a 1px, transparent 1px),
     linear-gradient(90deg, #ffffff0a 1px, transparent 1px);
   background-size: 48px 48px;
-  mask-image: radial-gradient(ellipse at 80% 20%, #000 0%, transparent 65%);
+  /* the grid is lit around the pointer; it rests top right until the mouse moves */
+  mask-image: radial-gradient(560px circle at var(--mx, 80%) var(--my, 20%), #000 0%, transparent 100%);
 }
 .tp-title {
   position: relative;
@@ -110,3 +111,13 @@
 .tp-intro { animation: tp-fade 700ms ease-out 320ms backwards; }
 /* Reduced motion keeps the fade and drops the movement. */
 @media (prefers-reduced-motion: reduce) { .tp-title { animation-name: tp-fade; animation-duration: 300ms; } }
+
+/* ---------- project index beside the list (wide screens) ---------- */
+.tp-side { display: none; }
+.tp-row { scroll-margin-top: 16px; }
+@media (min-width: 1180px) {
+  .tp-body { display: grid; grid-template-columns: calc(var(--gutter) + 190px) minmax(0, 1fr); }
+  .tp-side { display: block; padding: clamp(32px, 5vw, 72px) 0 0 var(--gutter); border-top: 1px solid var(--line); }
+  .tp-side .si { position: sticky; top: 28px; }
+  .tp-body .tp-row { padding-left: clamp(24px, 3vw, 48px); }
+}

@@ -11,6 +11,8 @@ mkdirSync(OUT, { recursive: true });
 
 const VIEWPORTS = [
   { name: "desktop", width: 1440, height: 900 },
+  { name: "laptop", width: 1366, height: 700 },
+  { name: "wide", width: 2560, height: 1440 },
   { name: "tablet", width: 820, height: 1180, isMobile: true, hasTouch: true },
   { name: "phone", width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
 ];
@@ -18,6 +20,7 @@ const PAGES = [
   { name: "landing", path: "/" },
   { name: "tech", path: "/tech" },
   { name: "editor", path: "/editor" },
+  { name: "about", path: "/about" },
 ];
 
 // Runs in the page: structural checks that need no judgement.
@@ -104,39 +107,46 @@ for (const vp of VIEWPORTS) {
     if (pg.name === "landing") {
       r.canvases = await page.$$eval(".sp-stage canvas", (cs) => cs.map((c) => [c.width, c.height]));
       if (name === "desktop") {
-        // a short pull springs back; a long pull toward a side opens that side
+        const share = () => page.evaluate(() => getComputedStyle(document.querySelector(".sp-root")).getPropertyValue("--p"));
         const pull = async (dx) => {
-          const h = await page.locator(".sp-handle").boundingBox();
+          const h = await page.locator(".sp-grip").boundingBox();
           const cx = h.x + h.width / 2, cy = h.y + h.height / 2;
           await page.mouse.move(cx, cy);
           await page.mouse.down();
           await page.mouse.move(cx + dx, cy, { steps: 12 });
-          return cy;
         };
+        // a click on the portrait opens About
+        await page.locator(".sp-handle").click();
+        await page.waitForURL("**/about", { timeout: 5000 }).catch(() => {});
+        r.clickOpens = new URL(page.url()).pathname;
+        await page.goBack();
+        await page.waitForTimeout(1200);
+        // a short pull springs back
         await pull(-90);
-        r.midDragBuildShare = await page.evaluate(() => getComputedStyle(document.querySelector(".sp-root")).getPropertyValue("--p"));
+        r.midDragBuildShare = await share();
         await page.mouse.up();
         await page.waitForTimeout(700);
-        r.shortPullSettles = await page.evaluate(() => getComputedStyle(document.querySelector(".sp-root")).getPropertyValue("--p"));
+        r.shortPullSettles = await share();
+        // a long pull opens that side; after going BACK the portrait must still work
         await pull(-380);
-        await page.waitForTimeout(500);
+        await page.waitForTimeout(400);
         await page.screenshot({ path: join(OUT, `${key}-dragged.png`) });
         await page.mouse.up();
         await page.waitForURL("**/tech", { timeout: 5000 }).catch(() => {});
         r.pullLeftOpens = new URL(page.url()).pathname;
-        await page.goto(BASE + "/", { waitUntil: "networkidle" });
+        await page.goBack();
         await page.waitForTimeout(1500);
+        r.afterBackShare = await share();
         await pull(380);
         await page.mouse.up();
         await page.waitForURL("**/editor", { timeout: 5000 }).catch(() => {});
-        r.pullRightOpens = new URL(page.url()).pathname;
-        await page.goto(BASE + "/", { waitUntil: "networkidle" });
-        await page.waitForTimeout(1200);
-        await page.locator(".sp-handle").focus();
-        await page.screenshot({ path: join(OUT, `${key}-focus.png`) });
-        await page.keyboard.press("ArrowRight");
-        await page.waitForURL("**/editor", { timeout: 5000 }).catch(() => {});
-        r.arrowRightOpens = new URL(page.url()).pathname;
+        r.afterBackPullRightOpens = new URL(page.url()).pathname;
+        await page.goBack();
+        await page.waitForTimeout(1500);
+        await pull(-380);
+        await page.mouse.up();
+        await page.waitForURL("**/tech", { timeout: 5000 }).catch(() => {});
+        r.secondBackPullLeftOpens = new URL(page.url()).pathname;
       } else {
         await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
         await page.waitForTimeout(2500);
@@ -170,6 +180,21 @@ for (const vp of VIEWPORTS) {
       await page.screenshot({ path: join(OUT, `${key}-player.png`) });
       await page.keyboard.press("Escape");
       await page.waitForTimeout(400);
+      await page.locator(".ep-row").nth(1).click(); // reopen: the player was closed just above
+      await page.waitForTimeout(600);
+      const before = await page.locator("#ep-playing").textContent();
+      await page.locator(".ep-step").last().click();
+      await page.waitForTimeout(500);
+      r.nextChangesVideo = before !== (await page.locator("#ep-playing").textContent());
+      await page.keyboard.press("Escape");
+      await page.waitForTimeout(400);
+      await page.locator(".ep-field input").fill("bunny");
+      await page.waitForTimeout(300);
+      r.searchBunny = { rows: await page.locator(".ep-row").count(), status: await page.locator(".ep-found").textContent() };
+      await page.locator(".ep-field input").fill("zzzz");
+      await page.waitForTimeout(300);
+      r.searchEmpty = await page.locator(".ep-empty").count();
+      await page.screenshot({ path: join(OUT, `${key}-search.png`) });
       r.playerClosed = await page.evaluate(() => ({ open: document.querySelector("dialog").open, videos: document.querySelectorAll("dialog video").length }));
     }
     await page.close();

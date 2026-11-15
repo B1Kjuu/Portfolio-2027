@@ -1,0 +1,74 @@
+/* About: the person behind both sides. Dark world, label column on the left. */
+.ab-hero {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: clamp(24px, 5vw, 72px);
+  align-items: start;
+  padding: clamp(28px, 5vw, 64px) var(--gutter) clamp(48px, 7vw, 96px);
+}
+.ab-photo {
+  width: clamp(120px, 16vw, 220px);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px var(--line), 0 40px 70px -30px #000;
+}
+.ab-name {
+  font-family: var(--font-archivo), sans-serif;
+  font-stretch: 118%;
+  font-weight: 820;
+  font-size: clamp(44px, 8vw, 124px);
+  line-height: 0.92;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+.ab-role { margin-top: 20px; font-size: clamp(18px, 1.6vw, 22px); font-weight: 600; color: var(--accent); }
+.ab-intro { margin-top: 16px; max-width: 62ch; font-size: clamp(17px, 1.5vw, 20px); line-height: 1.55; color: var(--muted); text-wrap: pretty; }
+.ab-role + .ab-intro { color: var(--ink); }
+
+/* ---------- rows: section name on the left, content on the right ---------- */
+.ab-row {
+  display: grid;
+  grid-template-columns: minmax(0, 3fr) minmax(0, 9fr);
+  gap: 16px clamp(24px, 4vw, 64px);
+  padding: clamp(32px, 5vw, 64px) var(--gutter);
+  border-top: 1px solid var(--line);
+}
+.ab-row h2 {
+  font-family: var(--font-archivo), sans-serif;
+  font-stretch: 116%;
+  font-weight: 750;
+  font-size: clamp(24px, 2.6vw, 36px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.ab-entries { list-style: none; display: grid; gap: clamp(28px, 3vw, 40px); }
+.ab-entryHead { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 4px 24px; }
+.ab-entryHead h3 { font-size: clamp(20px, 1.9vw, 26px); font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
+.ab-when { font-size: 16px; color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ab-place { margin-top: 2px; font-size: 17px; color: var(--accent); }
+.ab-points { margin-top: 12px; padding-left: 1.1em; display: grid; gap: 6px; max-width: 68ch; font-size: 17px; line-height: 1.55; color: var(--muted); }
+.ab-points li::marker { color: var(--line); }
+
+.ab-highlights { list-style: none; display: grid; gap: 20px; max-width: 30em; font-size: clamp(20px, 2vw, 28px); line-height: 1.35; letter-spacing: -0.01em; text-wrap: pretty; }
+
+.ab-skills { display: grid; gap: 20px; }
+.ab-skills div { display: grid; grid-template-columns: minmax(0, 11rem) minmax(0, 1fr); gap: 4px 24px; }
+.ab-skills dt { font-size: 17px; font-weight: 600; }
+.ab-skills dd { font-size: 17px; line-height: 1.55; color: var(--muted); max-width: 60ch; }
+
+@keyframes ab-rise { from { opacity: 0; transform: translateY(0.18em); } }
+@keyframes ab-fade { from { opacity: 0; } }
+.ab-name { animation: ab-rise 800ms var(--ease-out) backwards; }
+.ab-photo, .ab-role, .ab-intro { animation: ab-fade 600ms var(--ease-out) 160ms backwards; }
+
+@media (max-width: 760px) {
+  .ab-hero { grid-template-columns: 1fr; }
+  .ab-row { grid-template-columns: 1fr; }
+  .ab-skills div { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ab-name { animation-name: ab-fade; animation-duration: 300ms; }
+}

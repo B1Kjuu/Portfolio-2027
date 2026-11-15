@@ -3,14 +3,24 @@ import "./site.css";
 
 // Shared top bar for the two inner worlds. `side` picks the palette and which
 // world the switch link crosses over to.
-export default function SiteNav({ side }: { side: "tech" | "edit" }) {
+export default function SiteNav({ side, about = false }: { side: "tech" | "edit"; about?: boolean }) {
   const other = side === "tech" ? { href: "/editor", label: "Cut" } : { href: "/tech", label: "Build" };
   return (
     <header className={`sn sn-${side}`}>
       <Link href="/" className="sn-mark">b1kjuu</Link>
       <nav className="sn-links" aria-label="Main">
-        <Link href={other.href}>{other.label}</Link>
-        <a href="/CV_GUSI.pdf" target="_blank" rel="noreferrer">CV</a>
+        {about ? (
+          <>
+            <Link href="/tech">Build</Link>
+            <Link href="/editor">Cut</Link>
+          </>
+        ) : (
+          <>
+            <Link href={other.href}>{other.label}</Link>
+            <Link href="/about">About</Link>
+          </>
+        )}
+        <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
         <a className="sn-contact" href="mailto:joebeckgusi25@gmail.com">Contact</a>
       </nav>
     </header>
@@ -50,7 +60,7 @@ export function ContactBand({ title, body }: { title: string; body: string }) {
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
           </a>
-          <a className="cb-alt" href="/CV_GUSI.pdf" target="_blank" rel="noreferrer">Read the CV</a>
+          <a className="cb-alt" href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Read the resume</a>
         </div>
       </div>
     </section>

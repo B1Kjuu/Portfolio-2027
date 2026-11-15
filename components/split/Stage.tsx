@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useMemo, useRef } from "react";
+import { Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import { Float, Image } from "@react-three/drei";
 import { MathUtils, type Group } from "three";
@@ -23,6 +23,9 @@ const SLOTS: Record<Side, [number, number, number][]> = {
     [-0.95, -0.25, 0.4],
   ],
 };
+
+// Brightness by depth: the cards behind are dimmed so the front one leads.
+const DEPTH_TINT = ["#8a8f96", "#c9cdd1", "#ffffff"];
 
 const SIZE: Record<Side, [number, number]> = {
   tech: [3.7, 1.96], // site screenshots, ~1.89:1
@@ -48,12 +51,14 @@ function Card({
   card,
   side,
   slot,
+  depth,
   index,
   still,
 }: {
   card: StageCard;
   side: Side;
   slot: [number, number, number];
+  depth: number;
   index: number;
   still: boolean;
 }) {
@@ -86,7 +91,7 @@ function Card({
         floatingRange={[-0.06, 0.06]}
       >
         {/* eslint-disable-next-line jsx-a11y/alt-text -- drei Image is a WebGL mesh, not an <img> */}
-        <Image url={card.src} scale={[w, h]} radius={0.07} color={card.tint ?? "#ffffff"} toneMapped={false} />
+        <Image url={card.src} scale={[w, h]} radius={0.07} color={DEPTH_TINT[depth] ?? "#ffffff"} toneMapped={false} />
       </Float>
     </group>
   );
@@ -101,6 +106,14 @@ function Stack({ side, cards, still }: { side: Side; cards: StageCard[]; still: 
   const dir = side === "tech" ? 1 : -1;
   const baseX = dir * (compact ? 0.3 : -0.25);
   const baseRotY = -dir * 0.55;
+
+  // Loop: every few seconds each card steps one place forward and the front one goes to the back.
+  const [turn, setTurn] = useState(0);
+  useEffect(() => {
+    if (still) return;
+    const id = window.setInterval(() => setTurn((t) => t + 1), side === "tech" ? 4600 : 5200);
+    return () => window.clearInterval(id);
+  }, [still, side]);
 
   useFrame((_, delta) => {
     const g = ref.current;
@@ -117,7 +130,7 @@ function Stack({ side, cards, still }: { side: Side; cards: StageCard[]; still: 
   return (
     <group ref={ref} position={[baseX, -0.2, 0]} rotation={[0.1, baseRotY, 0]}>
       {cards.map((card, i) => (
-        <Card key={card.src} card={card} side={side} slot={SLOTS[side][i]} index={i} still={still} />
+        <Card key={card.src} card={card} side={side} slot={SLOTS[side][(i + turn) % cards.length]} depth={(i + turn) % cards.length} index={i} still={still} />
       ))}
     </group>
   );

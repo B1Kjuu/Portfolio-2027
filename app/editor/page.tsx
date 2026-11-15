@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
+import { Marquee, ScrollTools } from "@/components/site/Motion";
 import PhoneReel from "@/components/site/PhoneReel";
 import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import { editorProjects, editorTools } from "@/lib/content";
-import { label, slug } from "@/lib/slug";
+import { slug } from "@/lib/slug";
 import EditorIndex from "./EditorIndex";
 import "./editor.css";
 
@@ -17,6 +18,7 @@ export default function EditorPage() {
   return (
     <div className="world-edit">
       <SiteNav side="edit" />
+      <ScrollTools />
 
       <main id="main">
         <section className="ep-hero">
@@ -27,7 +29,6 @@ export default function EditorPage() {
                 <strong>Short-form, long-form and UGC edits.</strong> {total} videos, paced for retention and finished
                 for clients.
               </p>
-              <p className="ep-tools">{editorTools.join(", ")}</p>
               <a className="ep-jump" href={`#${slug(editorProjects[0].title)}`}>
                 Watch the edits
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -41,13 +42,7 @@ export default function EditorPage() {
           </div>
         </section>
 
-        <nav className="ep-cats" aria-label="Categories">
-          {editorProjects.map((folder) => (
-            <a key={folder.title} href={`#${slug(folder.title)}`}>
-              {label(folder.title)} <span>{folder.items?.length ?? 0}</span>
-            </a>
-          ))}
-        </nav>
+        <Marquee items={editorTools} label="Editing tools" />
 
         <EditorIndex folders={editorProjects} />
       </main>

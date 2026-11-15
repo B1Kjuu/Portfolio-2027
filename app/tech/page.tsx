@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
-import Tilt from "@/components/site/Tilt";
 import { techProjects, techSkills } from "@/lib/content";
 import "./tech.css";
 
@@ -21,7 +20,7 @@ export default function TechPage() {
     <div className="world-tech">
       <SiteNav side="tech" />
 
-      <main>
+      <main id="main">
         <section className="tp-hero">
           <h1 className="tp-title">Build<span>.</span></h1>
           <div className="tp-intro">
@@ -38,15 +37,21 @@ export default function TechPage() {
             const link = project.demoLink ?? project.ghLink;
             return (
               <li key={project.title} className="tp-row">
-                <Tilt className="tp-shot">
+                <a
+                  className="tp-shot"
+                  href={link}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`${project.title}: ${project.demoLink ? "visit the site" : "view the code"}`}
+                >
                   <Image
                     src={project.image}
-                    alt={`Screenshot of ${project.title}`}
+                    alt=""
                     sizes="(min-width: 900px) 58vw, 100vw"
                     placeholder={typeof project.image === "string" ? "empty" : "blur"}
                     priority={i === 0}
                   />
-                </Tilt>
+                </a>
                 <div className="tp-text">
                   <h2>{project.title}</h2>
                   <p className="tp-desc">{project.description}</p>

@@ -18,15 +18,15 @@ const SLOTS: Record<Side, [number, number, number][]> = {
     [-0.45, -0.65, 0.4],
   ],
   edit: [
-    [1.3, 0.25, -2.4],
-    [0.2, -0.1, -1.0],
-    [-0.95, -0.6, 0.4],
+    [1.3, 0.5, -2.4],
+    [0.2, 0.15, -1.0],
+    [-0.95, -0.25, 0.4],
   ],
 };
 
 const SIZE: Record<Side, [number, number]> = {
   tech: [3.7, 1.96], // site screenshots, ~1.89:1
-  edit: [1.6, 2.84], // 9:16 reels
+  edit: [1.5, 2.67], // 9:16 reels
 };
 
 // One window-level pointer for both canvases (they sit under the text, pointer-events: none).

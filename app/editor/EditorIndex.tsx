@@ -7,9 +7,11 @@ import { label, slug } from "@/lib/slug";
 export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [playing, setPlaying] = useState<EditorItem | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const open = (video: EditorItem) => {
     setPlaying(video);
+    setLoading(true); // large source files can take a while before the first frame
     dialog.current?.showModal();
   };
   // Clearing the selection unmounts the <video>, which stops playback and the download.
@@ -51,7 +53,19 @@ export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
       >
         {playing && (
           <div className="ep-player">
-            <video key={playing.videoUrl} src={playing.videoUrl} controls autoPlay playsInline preload="auto" />
+            <div className="ep-frame" data-loading={loading || undefined}>
+              <video
+                key={playing.videoUrl}
+                src={playing.videoUrl}
+                controls
+                autoPlay
+                playsInline
+                preload="auto"
+                onLoadedData={() => setLoading(false)}
+                onError={() => setLoading(false)}
+              />
+              {loading && <p className="ep-loading" role="status">Loading video…</p>}
+            </div>
             <div className="ep-meta">
               <div>
                 <h3 id="ep-playing">{playing.title}</h3>

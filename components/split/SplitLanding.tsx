@@ -1,16 +1,24 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import avatar from "@/assets/avatar.png";
-import { clampSeam, seam, SEAM_MAX, SEAM_MIN } from "./seam";
+import { seam } from "./seam";
 import type { StageCard } from "./Stage";
 import "./split.css";
 
 // WebGL only exists in the browser; the text renders on the server without it.
 const Stage = dynamic(() => import("./Stage"), { ssr: false });
+
+type Side = "tech" | "edit";
+const ROUTE: Record<Side, string> = { tech: "/tech", edit: "/editor" };
+
+// How far the portrait can travel, and how far it must go before a side opens.
+const EDGE = 0.1;
+const COMMIT = 0.15;
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -33,54 +41,73 @@ export default function SplitLanding({
   videoCount: number;
   categoryCount: number;
 }) {
+  const router = useRouter();
   const root = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
-  // Only for the slider's aria value; layout and 3D read the live value directly.
-  const [value, setValue] = useState(50);
+  const opening = useRef(false);
 
-  const apply = (p: number) => {
-    seam.p = p;
-    root.current?.style.setProperty("--p", String(p));
+  // h = where the portrait is (0..1 across the page); p = the share of the page Build takes.
+  // Pulling the portrait toward a side gives that side the room, so they move in opposite directions.
+  const place = (h: number) => {
+    seam.p = 1 - h;
+    root.current?.style.setProperty("--h", String(h));
+    root.current?.style.setProperty("--p", String(seam.p));
   };
-  const setSeam = (p: number, commit = false) => {
-    apply(clampSeam(p));
-    if (commit) setValue(Math.round(seam.p * 100));
+
+  useEffect(() => {
+    place(0.5); // also resets the shared value when coming back to this page
+    // Warm both routes so opening a side feels immediate.
+    router.prefetch(ROUTE.tech);
+    router.prefetch(ROUTE.edit);
+  }, [router]);
+
+  const settle = (on: boolean) => {
+    if (on) root.current?.setAttribute("data-settling", "");
+    else root.current?.removeAttribute("data-settling");
   };
-  const snapTo = (p: number) => {
-    const el = root.current;
-    if (!el) return;
-    el.setAttribute("data-snapping", "");
-    setSeam(p, true);
-    window.setTimeout(() => el.removeAttribute("data-snapping"), 450);
+
+  const open = (side: Side) => {
+    if (opening.current) return;
+    opening.current = true;
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) return router.push(ROUTE[side]);
+    settle(true);
+    root.current?.setAttribute("data-opening", side);
+    place(side === "tech" ? 0 : 1); // that side takes the whole page
+    window.setTimeout(() => router.push(ROUTE[side]), 420);
+  };
+
+  const recentre = () => {
+    settle(true);
+    place(0.5);
+    window.setTimeout(() => settle(false), 450);
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (opening.current || !e.isPrimary) return;
     dragging.current = true;
     e.currentTarget.setPointerCapture(e.pointerId);
+    settle(false);
     root.current?.setAttribute("data-dragging", "");
   };
   const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (!dragging.current || !root.current) return;
     const rect = root.current.getBoundingClientRect();
     const raw = (e.clientX - rect.left) / rect.width;
-    // Past either limit the seam keeps following, with rising resistance, instead of hitting a wall.
-    const over = raw - clampSeam(raw);
-    apply(clampSeam(raw) + over * 0.22);
+    place(Math.min(1 - EDGE, Math.max(EDGE, raw)));
   };
   const onPointerUp = () => {
     if (!dragging.current) return;
     dragging.current = false;
     root.current?.removeAttribute("data-dragging");
-    if (seam.p !== clampSeam(seam.p)) snapTo(seam.p); // settle back inside the limits
-    else setValue(Math.round(seam.p * 100));
+    const h = 1 - seam.p;
+    if (h <= 0.5 - COMMIT) open("tech");
+    else if (h >= 0.5 + COMMIT) open("edit");
+    else recentre();
   };
-  // Double-click recentres.
-  const onDoubleClick = () => snapTo(0.5);
   const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    const step = { ArrowLeft: -0.04, ArrowRight: 0.04 }[e.key];
-    if (step) setSeam(seam.p + step, true);
-    else if (e.key === "Home") setSeam(SEAM_MIN, true);
-    else if (e.key === "End") setSeam(SEAM_MAX, true);
+    if (e.key === "ArrowLeft") open("tech");
+    else if (e.key === "ArrowRight") open("edit");
     else return;
     e.preventDefault();
   };
@@ -96,10 +123,10 @@ export default function SplitLanding({
         </nav>
       </header>
 
-      <main className="sp-halves">
-        {/* The person sits on the seam: one name, two sides. */}
-        <div className="sp-plate">
-          <Image src={avatar} alt="" className="sp-plateAvatar" sizes="72px" />
+      <main id="main" className="sp-halves">
+        {/* The page's one heading: the person, set across both sides. */}
+        <div className="sp-id">
+          <Image src={avatar} alt="" className="sp-idPhoto" sizes="56px" />
           <h1 className="sp-name">Joebeck Andrew Gusi</h1>
           <p className="sp-role">Developer and video editor</p>
         </div>
@@ -133,28 +160,24 @@ export default function SplitLanding({
         </section>
       </main>
 
+      <span className="sp-seam" aria-hidden />
+
+      {/* Pull the portrait toward a side to open it. The two buttons above do the same without dragging. */}
       <button
         type="button"
         className="sp-handle"
-        role="slider"
-        aria-label="Resize the two sides"
-        aria-orientation="horizontal"
-        aria-valuemin={SEAM_MIN * 100}
-        aria-valuemax={SEAM_MAX * 100}
-        aria-valuenow={value}
-        aria-valuetext={`Build ${value}%, Cut ${100 - value}%`}
+        aria-label="Portrait of Joebeck Andrew Gusi. Drag it toward Build or Cut to open that side, or press the left or right arrow key."
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerCancel={onPointerUp}
         onKeyDown={onKeyDown}
-        onDoubleClick={onDoubleClick}
       >
         <span className="sp-grip">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M15 6l-6 6 6 6" />
           </svg>
-          <Image src={avatar} alt="" className="sp-avatar" sizes="96px" priority draggable={false} />
+          <Image src={avatar} alt="" className="sp-avatar" sizes="112px" priority draggable={false} />
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <path d="M9 6l6 6-6 6" />
           </svg>

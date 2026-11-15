@@ -79,7 +79,7 @@ html { scroll-behavior: smooth; }
   text-decoration: none;
   transition: background-color 160ms ease, color 160ms ease;
 }
-.ep-cats a span { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; transition: color 160ms ease; }
+.ep-cats a span { font-size: 14px; color: var(--muted); font-variant-numeric: tabular-nums; transition: color 160ms ease; }
 
 /* ---------- sections ---------- */
 .ep-section { padding: clamp(40px, 6vw, 88px) var(--gutter) 0; scroll-margin-top: 64px; }
@@ -149,6 +149,21 @@ html { scroll-behavior: smooth; }
 @starting-style { .ep-dialog[open] { opacity: 0; transform: scale(0.97); } }
 .ep-dialog::backdrop { background: #120d08e0; backdrop-filter: blur(6px); }
 .ep-player { display: grid; gap: 14px; justify-items: center; }
+.ep-frame { position: relative; max-width: 100%; }
+/* Before the first frame arrives the video has no size: hold a portrait frame so nothing jumps. */
+.ep-frame[data-loading] video { width: min(340px, 78vw); aspect-ratio: 9 / 16; }
+.ep-loading {
+  position: absolute;
+  inset: 0 0 56px 0;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  color: #c9bda9;
+  pointer-events: none;
+  animation: ep-pulse 1.4s ease-in-out infinite alternate;
+}
+@keyframes ep-pulse { from { opacity: 0.45; } }
+@media (prefers-reduced-motion: reduce) { .ep-loading { animation: none; } }
 .ep-player video {
   display: block;
   max-width: 100%;

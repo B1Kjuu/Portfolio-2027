@@ -6,6 +6,7 @@
   position: relative;
   height: 100svh;
   min-height: 640px;
+  --h: 0.5;
   overflow: hidden;
   background: var(--ink-dark);
 }
@@ -32,9 +33,10 @@
   font-size: 19px;
   letter-spacing: -0.01em;
   color: #e8ecef;
+  padding: 10px 0;
 }
-.sp-links { display: flex; align-items: center; gap: 28px; color: #1c1611; }
-.sp-links a { color: inherit; padding-block: 12px; transition: opacity 160ms ease; }
+.sp-links { display: flex; align-items: center; gap: 10px; color: #1c1611; }
+.sp-links a { color: inherit; padding: 12px; transition: opacity 160ms ease; }
 .sp-contact {
   background: #1c1611;
   color: var(--paper) !important;
@@ -95,7 +97,7 @@
 .sp-stage {
   position: absolute;
   top: 26%;
-  bottom: 0;
+  bottom: 104px;
   width: 50vw;
   pointer-events: none;
 }
@@ -173,39 +175,37 @@
 .sp-enter svg { width: 18px; height: 18px; transition: transform 200ms var(--ease-out); }
 .sp-enter:active { transform: scale(0.97); }
 
-/* ---------- seam ---------- */
-.sp-handle {
+/* ---------- seam and portrait ---------- */
+.sp-seam {
   position: absolute;
-  z-index: 6;
+  z-index: 5;
   top: 0;
   bottom: 0;
   left: calc(var(--p) * 100%);
-  width: 44px;
-  margin-left: -22px;
-  padding: 0;
-  border: 0;
-  background: none;
-  color: var(--ink-dark);
-  cursor: ew-resize;
-  touch-action: none;
-  display: grid;
-  place-items: center;
-}
-.sp-handle::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
   width: 1px;
   background: #ffffff80;
+  pointer-events: none;
+}
+/* The portrait travels with the pointer (--h); the seam moves the other way (--p). */
+.sp-handle {
+  position: absolute;
+  z-index: 6;
+  top: 50%;
+  left: calc(var(--h, 0.5) * 100%);
+  translate: -50% -50%;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--ink-dark);
+  cursor: grab;
+  touch-action: none;
 }
 .sp-grip {
-  width: max-content;
-  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
+  width: max-content;
   padding: 6px 8px;
   border-radius: 999px;
   background: #fbf8f2;
@@ -216,8 +216,8 @@
 .sp-avatar {
   flex: none;
   max-width: none;
-  width: 92px;
-  height: 92px;
+  width: 104px;
+  height: 104px;
   border-radius: 50%;
   object-fit: cover;
   user-select: none;
@@ -227,29 +227,39 @@
 .sp-handle:focus-visible { outline: none; }
 .sp-handle:focus-visible .sp-grip { outline: 3px solid #c4f24a; outline-offset: 3px; }
 
-.sp-plate {
+/* The name is the page's heading: set in the top bar across both sides, and readable on
+   either because it inverts whatever is behind it. No caption plate under the photo. */
+.sp-id {
   position: absolute;
-  z-index: 6;
-  left: calc(var(--p) * 100%);
-  top: calc(50% + 66px);
-  transform: translateX(-50%);
-  padding: 10px 18px 11px;
-  border-radius: 14px;
-  background: #fbf8f2;
-  color: #1c1611;
+  z-index: 5;
+  top: 14px;
+  left: 50%;
+  translate: -50% 0;
+  color: #fff;
+  mix-blend-mode: difference;
   text-align: center;
   white-space: nowrap;
-  box-shadow: 0 14px 34px -10px #000000a0;
   pointer-events: none;
 }
-.sp-plateAvatar { display: none; }
-.sp-name { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.25; }
-.sp-role { font-size: 13.5px; color: #655a4b; line-height: 1.3; }
+.sp-idPhoto { display: none; }
+.sp-name {
+  font-family: var(--font-archivo), sans-serif;
+  font-stretch: 112%;
+  font-weight: 700;
+  font-size: 21px;
+  letter-spacing: -0.015em;
+  line-height: 1.2;
+}
+.sp-role { font-size: 14px; line-height: 1.35; opacity: 0.78; }
 
-.sp-root[data-dragging] { cursor: ew-resize; user-select: none; }
-.sp-root[data-snapping] .sp-half { transition: width 420ms var(--ease-out); }
-.sp-root[data-snapping] .sp-handle,
-.sp-root[data-snapping] .sp-plate { transition: left 420ms var(--ease-out); }
+.sp-root[data-dragging] { user-select: none; }
+.sp-root[data-dragging] .sp-handle { cursor: grabbing; }
+/* Letting go: the seam and portrait travel to where they are going (centre, or a full side). */
+.sp-root[data-settling] .sp-half { transition: width 420ms var(--ease-out); }
+.sp-root[data-settling] .sp-seam,
+.sp-root[data-settling] .sp-handle { transition: left 420ms var(--ease-out), opacity 200ms ease; }
+.sp-root[data-opening] .sp-handle,
+.sp-root[data-opening] .sp-seam { opacity: 0; }
 
 /* One entrance, once: the two words rise, then the supporting lines, then the person. */
 @keyframes sp-rise { from { opacity: 0; transform: translateY(0.18em); } }
@@ -257,8 +267,8 @@
 @keyframes sp-pop { from { opacity: 0; scale: 0.9; } }
 .sp-title { animation: sp-rise 800ms var(--ease-out) backwards; }
 .sp-edit .sp-title { animation-delay: 70ms; }
-.sp-lede, .sp-foot { animation: sp-fade 700ms ease-out 380ms backwards; }
-.sp-grip, .sp-plate { animation: sp-pop 520ms var(--ease-out) 560ms backwards; }
+.sp-lede, .sp-foot, .sp-id { animation: sp-fade 600ms var(--ease-out) 160ms backwards; }
+.sp-grip { animation: sp-pop 520ms var(--ease-out) 240ms backwards; }
 
 @media (hover: hover) and (pointer: fine) {
   .sp-links a:not(.sp-contact):hover { opacity: 0.6; }
@@ -286,33 +296,32 @@
   .sp-foot { left: 20px; right: 20px; bottom: 28px; flex-direction: row; align-items: center; justify-content: space-between; }
   .sp-edit .sp-foot { align-items: center; }
   .sp-enter { padding: 14px 20px; font-size: 16px; }
-  .sp-handle { display: none; }
-  /* the name plate straddles the line between the two stacked sides */
-  .sp-plate {
+  .sp-handle, .sp-seam { display: none; }
+  /* stacked: the person sits on the line between the two sides, photo beside the name */
+  .sp-id {
+    z-index: 6;
     left: 50%;
     top: max(100svh, 600px);
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
     display: grid;
     grid-template-columns: auto auto;
     column-gap: 12px;
     align-items: center;
-    text-align: left;
-    padding: 8px 20px 8px 8px;
+    padding: 8px 22px 8px 8px;
     border-radius: 999px;
+    background: #fbf8f2;
+    color: #1c1611;
+    mix-blend-mode: normal;
+    text-align: left;
+    box-shadow: 0 14px 34px -10px #000000a0;
   }
-  .sp-plateAvatar { display: block; grid-row: span 2; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
-  .sp-name { align-self: end; }
-  .sp-role { align-self: start; }
+  .sp-idPhoto { display: block; grid-row: span 2; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
+  .sp-name { align-self: end; font-size: 18px; }
+  .sp-role { align-self: start; opacity: 1; color: #655a4b; }
 }
-
-@media (max-width: 420px) {
-  .sp-count { display: none; }
-  .sp-foot { justify-content: flex-start; }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .sp-enter, .sp-enter svg, .sp-grip, .sp-contact { transition: none; }
   /* keep the fades, drop the movement */
-  .sp-title, .sp-grip, .sp-plate { animation-name: sp-fade; animation-duration: 300ms; }
-  .sp-root[data-snapping] .sp-half, .sp-root[data-snapping] .sp-handle, .sp-root[data-snapping] .sp-plate { transition: none; }
+  .sp-title, .sp-grip { animation-name: sp-fade; animation-duration: 300ms; }
+  .sp-root[data-settling] .sp-half, .sp-root[data-settling] .sp-seam, .sp-root[data-settling] .sp-handle { transition: none; }
 }

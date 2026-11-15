@@ -18,7 +18,7 @@ export default function EditorPage() {
     <div className="world-edit">
       <SiteNav side="edit" />
 
-      <main>
+      <main id="main">
         <section className="ep-hero">
           <div className="ep-words">
             <h1 className="ep-title">Cut<span>.</span></h1>

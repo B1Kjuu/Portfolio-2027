@@ -14,7 +14,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${hanken.variable} ${archivo.variable} ${fraunces.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <a className="skip" href="#main">Skip to content</a>
+        {children}
+      </body>
     </html>
   );
 }

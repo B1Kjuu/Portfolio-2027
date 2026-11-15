@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import SiteNav, { CrossOver, SiteFooter } from "@/components/site/SiteNav";
+import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import Tilt from "@/components/site/Tilt";
 import { techProjects, techSkills } from "@/lib/content";
 import "./tech.css";
@@ -64,6 +64,10 @@ export default function TechPage() {
         </ul>
       </main>
 
+      <ContactBand
+        title="Have something that needs building?"
+        body="Tell me what it should do and who it is for. I can take it from a rough idea to a deployed site or app."
+      />
       <CrossOver to="edit" />
       <SiteFooter side="tech" />
     </div>

@@ -26,3 +26,15 @@ body {
   outline: 3px solid #c4f24a;
   outline-offset: 3px;
 }
+
+/* Browser surfaces: scrollbar, form controls and overscroll follow the world on screen. */
+:root {
+  color-scheme: dark;
+  scrollbar-color: #3a424d #0c0e11;
+}
+:root:has(.world-edit) {
+  color-scheme: light;
+  scrollbar-color: #b9ab93 #efe6d6;
+  background: #efe6d6;
+}
+:root:has(.world-edit) body { background: #efe6d6; }

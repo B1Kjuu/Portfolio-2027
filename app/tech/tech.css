@@ -55,7 +55,6 @@
 .tilt-inner {
   transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
   transition: transform 500ms var(--ease-out);
-  will-change: transform;
 }
 .tp-shot .tilt-inner {
   border-radius: 12px;
@@ -111,3 +110,10 @@
   .tilt-inner { transform: none; transition: none; }
   .tp-link, .tp-link svg { transition: none; }
 }
+
+@keyframes tp-rise { from { opacity: 0; transform: translateY(0.18em); } }
+@keyframes tp-fade { from { opacity: 0; } }
+.tp-title { animation: tp-rise 800ms var(--ease-out) backwards; }
+.tp-intro { animation: tp-fade 700ms ease-out 320ms backwards; }
+/* Reduced motion keeps the fade and drops the movement. */
+@media (prefers-reduced-motion: reduce) { .tp-title { animation-name: tp-fade; animation-duration: 300ms; } }

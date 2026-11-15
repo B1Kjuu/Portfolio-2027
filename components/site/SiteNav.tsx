@@ -22,7 +22,6 @@ export function CrossOver({ to }: { to: "tech" | "edit" }) {
   const tech = to === "tech";
   return (
     <Link href={tech ? "/tech" : "/editor"} className={`xo xo-${to}`}>
-      <span className="xo-lead">The other half of the work</span>
       <span className="xo-word">
         {tech ? "Build" : "Cut"}
         <span className="xo-dot">.</span>
@@ -34,6 +33,27 @@ export function CrossOver({ to }: { to: "tech" | "edit" }) {
         </svg>
       </span>
     </Link>
+  );
+}
+
+// Closing call to action; the copy differs per world, the action is the same.
+export function ContactBand({ title, body }: { title: string; body: string }) {
+  return (
+    <section className="cb" aria-labelledby="cb-title">
+      <h2 id="cb-title">{title}</h2>
+      <div className="cb-side">
+        <p>{body}</p>
+        <div className="cb-acts">
+          <a className="cb-main" href="mailto:joebeckgusi25@gmail.com">
+            Get in touch
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+              <path d="M5 12h14M13 6l6 6-6 6" />
+            </svg>
+          </a>
+          <a className="cb-alt" href="/CV_GUSI.pdf" target="_blank" rel="noreferrer">Read the CV</a>
+        </div>
+      </div>
+    </section>
   );
 }
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import SiteNav, { CrossOver, SiteFooter } from "@/components/site/SiteNav";
+import PhoneReel from "@/components/site/PhoneReel";
+import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import { editorProjects, editorTools } from "@/lib/content";
 import { label, slug } from "@/lib/slug";
 import EditorIndex from "./EditorIndex";
@@ -19,13 +20,24 @@ export default function EditorPage() {
 
       <main>
         <section className="ep-hero">
-          <h1 className="ep-title">Cut<span>.</span></h1>
-          <div className="ep-intro">
-            <p className="ep-lede">
-              <strong>Short-form, long-form and UGC edits.</strong> {total} videos, paced for retention and finished for
-              clients.
-            </p>
-            <p className="ep-tools">{editorTools.join(", ")}</p>
+          <div className="ep-words">
+            <h1 className="ep-title">Cut<span>.</span></h1>
+            <div className="ep-intro">
+              <p className="ep-lede">
+                <strong>Short-form, long-form and UGC edits.</strong> {total} videos, paced for retention and finished
+                for clients.
+              </p>
+              <p className="ep-tools">{editorTools.join(", ")}</p>
+              <a className="ep-jump" href={`#${slug(editorProjects[0].title)}`}>
+                Watch the edits
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M12 5v14M6 13l6 6 6-6" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div className="ep-phone">
+            <PhoneReel src="/reels/hero-reel.mp4" poster="/reels/hero-reel.jpg" label="Excerpt from the Fungy Mushroom Coffee edit" />
           </div>
         </section>
 
@@ -40,6 +52,10 @@ export default function EditorPage() {
         <EditorIndex folders={editorProjects} />
       </main>
 
+      <ContactBand
+        title="Have footage that needs cutting?"
+        body="Send the raw files and tell me what the video has to do. You get back an edit that is ready to post."
+      />
       <CrossOver to="tech" />
       <SiteFooter side="edit" />
     </div>

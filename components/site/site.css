@@ -29,6 +29,8 @@
 
 /* ---------- nav ---------- */
 .sn {
+  position: relative;
+  z-index: 2; /* stays above the hero's soft ground, which reaches up behind it */
   height: 76px;
   padding: 0 var(--gutter);
   display: flex;
@@ -46,11 +48,11 @@
   letter-spacing: -0.01em;
 }
 .sn-links { display: flex; align-items: center; gap: clamp(16px, 2.4vw, 28px); }
-.sn-links a { transition: opacity 160ms ease; }
+.sn-links a { padding-block: 12px; transition: opacity 160ms ease; }
 .sn-contact {
   background: var(--ink);
   color: var(--bg) !important;
-  padding: 10px 18px;
+  padding: 12px 18px !important;
   border-radius: 999px;
   transition: transform 140ms var(--ease-out) !important;
 }
@@ -67,7 +69,6 @@
 }
 .xo-tech { background: #0c0e11; color: #e8ecef; --xo-accent: #c4f24a; --xo-muted: #98a2ad; }
 .xo-edit { background: #efe6d6; color: #1c1611; --xo-accent: #cf3a16; --xo-muted: #655a4b; }
-.xo-lead { grid-column: 1 / -1; font-size: 17px; color: var(--xo-muted); }
 .xo-word { font-size: clamp(72px, 15vw, 200px); line-height: 0.86; }
 .xo-tech .xo-word {
   font-family: var(--font-archivo), sans-serif;
@@ -99,6 +100,88 @@
 .xo-go svg { width: 18px; height: 18px; transition: transform 200ms var(--ease-out); }
 .xo:active .xo-go { transform: scale(0.97); }
 
+/* ---------- contact band ---------- */
+.cb {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+  gap: 24px clamp(24px, 4vw, 64px);
+  align-items: end;
+  padding: clamp(48px, 8vw, 120px) var(--gutter);
+  border-top: 1px solid var(--line);
+}
+.cb h2 { font-size: clamp(40px, 6.4vw, 96px); line-height: 0.95; text-wrap: balance; }
+.world-tech .cb h2 {
+  font-family: var(--font-archivo), sans-serif;
+  font-stretch: 116%;
+  font-weight: 780;
+  letter-spacing: -0.03em;
+}
+.world-edit .cb h2 {
+  font-family: var(--font-fraunces), serif;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.03em;
+}
+.cb p { font-size: clamp(17px, 1.5vw, 20px); line-height: 1.5; color: var(--muted); max-width: 40ch; text-wrap: pretty; }
+.cb-acts { margin-top: 24px; display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; }
+.cb-main {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 24px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 140ms var(--ease-out);
+}
+.cb-main svg { width: 18px; height: 18px; transition: transform 200ms var(--ease-out); }
+.cb-main:active { transform: scale(0.97); }
+.cb-alt { color: var(--ink); font-size: 16px; font-weight: 500; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 5px; transition: text-decoration-color 160ms ease; }
+
+/* ---------- phone reel ---------- */
+.phone {
+  position: relative;
+  width: min(300px, 62vw);
+  aspect-ratio: 9 / 18.6;
+  padding: 10px;
+  border-radius: 46px;
+  background: #15110d;
+  box-shadow: 0 0 0 1.5px #3a3128, 0 50px 80px -30px #3d2a12b0, 0 18px 30px -18px #3d2a1280;
+}
+.phone video { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 37px; background: #000; }
+.phone::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 78px;
+  height: 22px;
+  margin-left: -39px;
+  border-radius: 999px;
+  background: #15110d;
+  z-index: 1;
+}
+.phone-toggle {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 50%;
+  background: #fff6eaeb;
+  color: #1c1611;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: transform 140ms var(--ease-out);
+}
+.phone-toggle svg { width: 18px; height: 18px; }
+.phone-toggle:active { transform: scale(0.94); }
+
 /* ---------- footer ---------- */
 .sf {
   display: flex;
@@ -117,12 +200,15 @@
   .sn-links a:not(.sn-contact):hover { opacity: 0.6; }
   .xo:hover .xo-go svg { transform: translateX(4px); }
   .sf a:hover { text-decoration-color: currentColor; }
+  .cb-main:hover svg { transform: translateX(4px); }
+  .cb-alt:hover { text-decoration-color: currentColor; }
 }
 @media (max-width: 640px) {
   .sn { height: 64px; }
   .xo { grid-template-columns: 1fr; }
   .xo-go { justify-self: start; margin-top: 16px; }
+  .cb { grid-template-columns: 1fr; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .sn-contact, .xo-go, .xo-go svg { transition: none !important; }
+  .sn-contact, .xo-go, .xo-go svg, .cb-main, .cb-main svg, .phone-toggle { transition: none !important; }
 }

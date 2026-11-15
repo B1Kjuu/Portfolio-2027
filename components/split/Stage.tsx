@@ -2,7 +2,7 @@
 
 import { Suspense, useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Float, Image, RoundedBox } from "@react-three/drei";
+import { Float, Image } from "@react-three/drei";
 import { MathUtils, type Group } from "three";
 import { seam } from "./seam";
 
@@ -18,9 +18,9 @@ const SLOTS: Record<Side, [number, number, number][]> = {
     [-0.45, -0.65, 0.4],
   ],
   edit: [
-    [1.35, 0.85, -2.4],
-    [0.25, 0.25, -1.0],
-    [-0.95, -0.45, 0.4],
+    [1.3, 0.25, -2.4],
+    [0.2, -0.1, -1.0],
+    [-0.95, -0.6, 0.4],
   ],
 };
 
@@ -28,8 +28,6 @@ const SIZE: Record<Side, [number, number]> = {
   tech: [3.7, 1.96], // site screenshots, ~1.89:1
   edit: [1.6, 2.84], // 9:16 reels
 };
-
-const BACKING: Record<Side, string> = { tech: "#1a1e24", edit: "#1c1611" };
 
 // One window-level pointer for both canvases (they sit under the text, pointer-events: none).
 const pointer = { x: 0, y: 0 };
@@ -87,9 +85,6 @@ function Card({
         floatIntensity={0.35}
         floatingRange={[-0.06, 0.06]}
       >
-        <RoundedBox args={[w + 0.07, h + 0.07, 0.05]} radius={0.025} smoothness={3} position={[0, 0, -0.035]}>
-          <meshBasicMaterial color={BACKING[side]} />
-        </RoundedBox>
         {/* eslint-disable-next-line jsx-a11y/alt-text -- drei Image is a WebGL mesh, not an <img> */}
         <Image url={card.src} scale={[w, h]} radius={0.07} color={card.tint ?? "#ffffff"} toneMapped={false} />
       </Float>
@@ -102,9 +97,9 @@ function Stack({ side, cards, still }: { side: Side; cards: StageCard[]; still: 
   const width = useThree((s) => s.size.width);
   const compact = width < 560;
 
-  // The stack hugs the seam: tech sits to the right of its canvas, edit to the left.
+  // Each canvas is anchored to the seam; nudge the stack away from it so the name plate stays clear.
   const dir = side === "tech" ? 1 : -1;
-  const baseX = dir * (compact ? 0.35 : 0.5);
+  const baseX = dir * (compact ? 0.3 : -0.25);
   const baseRotY = -dir * 0.55;
 
   useFrame((_, delta) => {

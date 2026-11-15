@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio 2027
 
-## Getting Started
+Personal portfolio of Joebeck Andrew Gusi (b1kjuu): developer and video editor.
 
-First, run the development server:
+The landing page is a split screen. One half is **Build** (web, mobile and embedded
+hardware projects), the other is **Cut** (client video edits). Drag the seam, or use the
+arrow keys, to give one side more room; double-click it to recentre.
+
+## Pages
+
+| Route | What it is |
+|---|---|
+| `/` | Split-screen landing with two three.js scenes and a draggable seam |
+| `/tech` | Build: project list with screenshots and links |
+| `/editor` | Cut: video index by category with a pop-up player |
+
+## Stack
+
+- Next.js 16 (App Router) and React 19, TypeScript
+- Tailwind CSS 4 plus plain CSS files per area
+- three.js through React Three Fiber and drei (landing page only)
+
+## Run it
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts: `npm run build`, `npm run start`, `npm run lint`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Where things live
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `lib/content.ts`: every project and video. Edit this to add or change work.
+- `components/split/`: the landing page (layout, seam, 3D stage).
+- `components/site/`: shared nav, contact band, footer, phone reel, tilt.
+- `app/tech/`, `app/editor/`: the two inner pages and their styles.
+- `assets/`: screenshots, reel stills, avatar. `public/`: CV and the hero reel loop.
 
-## Learn More
+## Notes
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- CSS Modules are not used: the Tailwind Turbopack loader in `next.config.ts` strips
+  their class exports, so styles are plain CSS with prefixed class names (`sp-`, `tp-`,
+  `ep-`, `sn-`).
+- Videos are streamed from external storage; the URLs are in `lib/content.ts`.

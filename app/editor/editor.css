@@ -6,17 +6,19 @@ html { scroll-behavior: smooth; }
   position: relative;
   padding: clamp(28px, 5vw, 64px) var(--gutter) clamp(40px, 6vw, 80px);
   display: grid;
-  gap: clamp(24px, 3vw, 40px);
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(24px, 5vw, 80px);
+  align-items: center;
 }
 .ep-hero::before {
   content: "";
   position: absolute;
   inset: -76px 0 0 0;
   pointer-events: none;
-  background: radial-gradient(ellipse at 82% 30%, #e2d3b6 0%, transparent 60%);
+  background: radial-gradient(ellipse at 82% 40%, #e2d3b6 0%, transparent 60%);
 }
+.ep-words { position: relative; display: grid; gap: clamp(24px, 3vw, 40px); }
 .ep-title {
-  position: relative;
   font-family: var(--font-fraunces), serif;
   font-style: italic;
   font-weight: 500;
@@ -25,17 +27,28 @@ html { scroll-behavior: smooth; }
   letter-spacing: -0.04em;
 }
 .ep-title span { color: var(--accent); }
-.ep-intro {
-  position: relative;
-  display: grid;
-  grid-template-columns: minmax(0, 46ch) minmax(0, 40ch);
-  justify-content: space-between;
-  gap: 16px 48px;
-  align-items: end;
-}
+.ep-intro { display: grid; gap: 14px; max-width: 46ch; }
 .ep-lede { font-size: clamp(18px, 1.6vw, 22px); line-height: 1.5; color: var(--muted); text-wrap: pretty; }
 .ep-lede strong { color: var(--ink); font-weight: 600; }
-.ep-tools { font-size: 16px; line-height: 1.6; color: var(--muted); text-align: right; text-wrap: balance; }
+.ep-tools { font-size: 16px; line-height: 1.6; color: var(--muted); text-wrap: pretty; }
+.ep-jump {
+  justify-self: start;
+  margin-top: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px 24px;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 140ms var(--ease-out);
+}
+.ep-jump svg { width: 18px; height: 18px; transition: transform 200ms var(--ease-out); }
+.ep-jump:active { transform: scale(0.97); }
+.ep-phone { position: relative; padding-right: clamp(0px, 4vw, 72px); rotate: 3deg; }
 
 /* ---------- category strip ---------- */
 .ep-cats {
@@ -44,7 +57,7 @@ html { scroll-behavior: smooth; }
   z-index: 3;
   display: flex;
   gap: 8px;
-  padding: 12px var(--gutter);
+  padding: 10px var(--gutter);
   overflow-x: auto;
   scrollbar-width: none;
   background: #efe6d6e6;
@@ -57,7 +70,7 @@ html { scroll-behavior: smooth; }
   display: inline-flex;
   align-items: baseline;
   gap: 8px;
-  padding: 9px 16px;
+  padding: 12px 16px;
   border-radius: 999px;
   box-shadow: inset 0 0 0 1px var(--line);
   color: var(--ink);
@@ -163,6 +176,7 @@ html { scroll-behavior: smooth; }
 .ep-close:active { transform: scale(0.97); }
 
 @media (hover: hover) and (pointer: fine) {
+  .ep-jump:hover svg { transform: translateY(3px); }
   .ep-cats a:hover { background: var(--ink); color: var(--bg); }
   .ep-cats a:hover span { color: #c9bda9; }
   .ep-row:hover { background: #1c16110d; }
@@ -170,8 +184,8 @@ html { scroll-behavior: smooth; }
 }
 
 @media (max-width: 900px) {
-  .ep-intro { grid-template-columns: 1fr; }
-  .ep-tools { text-align: left; }
+  .ep-hero { grid-template-columns: 1fr; }
+  .ep-phone { justify-self: center; padding-right: 0; rotate: 2deg; }
   .ep-row { grid-template-columns: 44px minmax(0, 1fr); gap: 14px; align-items: start; }
   .ep-play { width: 44px; height: 44px; }
   .ep-note { grid-column: 2; text-align: left; }
@@ -180,3 +194,12 @@ html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) {
   .ep-dialog, .ep-play, .ep-close, .ep-row, .ep-cats a { transition: none; }
 }
+
+@keyframes ep-rise { from { opacity: 0; transform: translateY(0.18em); } }
+@keyframes ep-fade { from { opacity: 0; } }
+.ep-title { animation: ep-rise 800ms var(--ease-out) backwards; }
+@keyframes ep-phone-in { from { opacity: 0; translate: 0 40px; rotate: 9deg; } }
+.ep-intro { animation: ep-fade 700ms ease-out 320ms backwards; }
+.ep-phone { animation: ep-phone-in 900ms var(--ease-out) 200ms backwards; }
+/* Reduced motion keeps the fade and drops the movement. */
+@media (prefers-reduced-motion: reduce) { .ep-title, .ep-phone { animation-name: ep-fade; animation-duration: 300ms; } .ep-jump, .ep-jump svg { transition: none; } }

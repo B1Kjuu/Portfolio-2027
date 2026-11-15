@@ -8,6 +8,7 @@ import HIKESAFEWEB from "@/assets/projects/HIKESAFEWEB.png";
 import EASYJOURNAL from "@/assets/projects/EASYJOURNAL.png";
 import INTERFACE2026 from "@/assets/projects/INTERFACE2026.png";
 import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.png";
+import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.png";
 
 export type TechProject = {
   title: string;
@@ -82,9 +83,17 @@ export const techProjects: TechProject[] = [
     demoLink: "https://interface-2026-six.vercel.app",
   },
   {
-    title: "OLD PORTFOLIO",
-    description: "Archived Old Portfolio, forked from a template",
-    note: "Templated Portfolio from one of the trending templates",
+    title: "PORTFOLIO 2026",
+    description: "Last year's portfolio at b1kjuu.studio: a tech side and a Windows 95-style desktop for the editing work.",
+    note: "Built with Next.js, React95 and Tailwind CSS.",
+    image: PORTFOLIO2026,
+    demoLink: "https://www.b1kjuu.studio",
+    ghLink: "https://github.com/B1Kjuu/Portfolio-2026",
+  },
+  {
+    title: "PORTFOLIO 2025",
+    description: "Archived 2025 portfolio, forked from a template.",
+    note: "Templated portfolio from one of the trending templates.",
     image: OLDPORTFOLIO,
     demoLink: "https://b1kjuu-portfolio.vercel.app",
   },

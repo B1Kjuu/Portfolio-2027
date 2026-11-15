@@ -12,11 +12,14 @@ const Chevron = ({ dir }: { dir: "left" | "right" }) => (
   </svg>
 );
 
-export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
+export type Pick = { title: string; poster: string };
+
+export default function EditorIndex({ folders, featured = [] }: { folders: EditorItem[]; featured?: Pick[] }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
   const [current, setCurrent] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [failed, setFailed] = useState(false);
   const [active, setActive] = useState(slug(folders[0]?.title ?? ""));
 
   // One flat, numbered list so the player can step through videos across categories.
@@ -40,6 +43,8 @@ export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
   const open = (video: Video) => {
     setCurrent(video.id);
     setLoading(true); // large source files can take a while before the first frame
+    setFailed(false);
+    leaveHover();
     if (!dialog.current?.open) dialog.current?.showModal();
   };
   const step = (dir: 1 | -1) => {
@@ -65,8 +70,77 @@ export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
     return () => io.disconnect();
   }, [q, folders]);
 
+  // Hover previews (mouse only): a frame plays in place, a list row shows a small floating
+  // player. A short pause before loading means a passing cursor does not fetch a video.
+  const [hoverPick, setHoverPick] = useState<number | null>(null);
+  const [preview, setPreview] = useState<{ video: Video; top: number } | null>(null);
+  const hoverTimer = useRef(0);
+  const canPreview = (e: React.PointerEvent) =>
+    e.pointerType === "mouse" &&
+    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const enterPick = (video: Video, e: React.PointerEvent) => {
+    if (!canPreview(e)) return;
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setHoverPick(video.id), 220);
+  };
+  const enterRow = (video: Video, e: React.PointerEvent<HTMLElement>) => {
+    if (!canPreview(e)) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const top = Math.max(230, Math.min(window.innerHeight - 360, rect.top - 110));
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setPreview({ video, top }), 350);
+  };
+  const leaveHover = () => {
+    window.clearTimeout(hoverTimer.current);
+    setHoverPick(null);
+    setPreview(null);
+  };
+  // React can drop the muted attribute, and unmuted autoplay is blocked: set it by hand.
+  const playMuted = (el: HTMLVideoElement | null) => {
+    if (!el) return;
+    el.muted = true;
+    el.play().catch(() => {});
+  };
+
+  // Hand-picked starting points: the videos we have a still frame for.
+  const picks = featured
+    .map((pick) => ({ pick, video: all.find((v) => v.title === pick.title) }))
+    .filter((p): p is { pick: Pick; video: Video } => !!p.video);
+
   return (
     <>
+      {picks.length > 0 && (
+        <section className="ep-picks" aria-labelledby="ep-picks-title">
+          <h2 id="ep-picks-title">Start here</h2>
+          <ul>
+            {picks.map(({ pick, video }) => (
+              <li key={video.id}>
+                <button
+                  type="button"
+                  className="ep-pick"
+                  onClick={() => open(video)}
+                  onPointerEnter={(e) => enterPick(video, e)}
+                  onPointerLeave={leaveHover}
+                  aria-label={`Play ${video.title}`}
+                >
+                  {/* eslint-disable-next-line @next/next/no-img-element -- small local still, already sized */}
+                  <img src={pick.poster} alt="" loading="lazy" />
+                  {hoverPick === video.id && <video ref={playMuted} src={video.videoUrl} loop playsInline preload="auto" />}
+                  <span className="ep-pickPlay" aria-hidden>
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z" /></svg>
+                  </span>
+                  <span className="ep-pickName">
+                    {video.title}
+                    <small>{label(video.folder)}</small>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <div className="ep-search">
         <label className="ep-field">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -112,7 +186,7 @@ export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
           <ul className="ep-list">
             {g.items.map((video) => (
               <li key={video.id}>
-                <button type="button" className="ep-row" onClick={() => open(video)}>
+                <button type="button" className="ep-row" onClick={() => open(video)} onPointerEnter={(e) => enterRow(video, e)} onPointerLeave={leaveHover}>
                   <span className="ep-play" aria-hidden>
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z" /></svg>
                   </span>
@@ -127,6 +201,13 @@ export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
           </ul>
         </section>
       ))}
+
+      {preview && !playing && (
+        <div className="ep-preview" style={{ top: preview.top }} aria-hidden>
+          <video key={preview.video.videoUrl} ref={playMuted} src={preview.video.videoUrl} loop playsInline preload="auto" />
+          <span>Preview, no sound</span>
+        </div>
+      )}
 
       <dialog
         ref={dialog}
@@ -152,9 +233,18 @@ export default function EditorIndex({ folders }: { folders: EditorItem[] }) {
                 playsInline
                 preload="auto"
                 onLoadedData={() => setLoading(false)}
-                onError={() => setLoading(false)}
+                onError={() => {
+                  setLoading(false);
+                  setFailed(true);
+                }}
               />
               {loading && <p className="ep-loading" role="status">Loading video…</p>}
+              {failed && (
+                <div className="ep-error" role="alert">
+                  <p>This video could not be loaded here.</p>
+                  <a href={playing.videoUrl} target="_blank" rel="noreferrer">Open the video file directly</a>
+                </div>
+              )}
             </div>
             <div className="ep-meta">
               <div>

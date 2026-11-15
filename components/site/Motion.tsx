@@ -1,17 +1,25 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import type { Tool } from "@/lib/content";
 
 // A looping strip of words. The list is rendered twice so the loop has no seam; the copy is
-// hidden from assistive tech. Pauses on hover or focus, and stands still for reduced motion.
-export function Marquee({ items, label }: { items: string[]; label: string }) {
+// hidden from assistive tech.
+export function Marquee({ items, label, tone }: { items: Tool[]; label: string; tone: "tech" | "edit" }) {
+  // One copy must be wider than the screen or the loop shows a gap, so short lists are repeated.
+  const repeats = Math.max(1, Math.ceil(12 / items.length));
+  const strip = Array.from({ length: repeats }, () => items).flat();
   return (
-    <div className="mq" role="group" aria-label={label}>
+    <div className={`mq mq-${tone}`} role="group" aria-label={label}>
       <div className="mq-track">
         {[0, 1].map((copy) => (
           <ul key={copy} aria-hidden={copy === 1 || undefined}>
-            {items.map((item) => (
-              <li key={item}>{item}</li>
+            {strip.map((item, i) => (
+              <li key={`${item.name}-${i}`} aria-hidden={i >= items.length || undefined}>
+                <Image src={item.icon} alt="" width={26} height={26} data-dark={item.dark || undefined} />
+                <span>{item.name}</span>
+              </li>
             ))}
           </ul>
         ))}
@@ -65,10 +73,32 @@ export function ScrollTools() {
     };
   }, []);
 
+  // Scroll to the top as a visible, eased movement (not a jump). Any wheel, touch or key
+  // input hands control straight back to the reader.
   const toTop = () => {
+    const from = window.scrollY;
+    if (from <= 0) return;
     const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-    document.getElementById("main")?.focus({ preventScroll: true });
+    const html = document.documentElement;
+    const previous = html.style.scrollBehavior;
+    html.style.scrollBehavior = "auto"; // CSS smooth scrolling would fight a frame-by-frame scroll
+    const duration = reduce ? 220 : Math.min(1200, 520 + from * 0.14);
+    const started = performance.now();
+    let frame = 0;
+    const stop = () => {
+      cancelAnimationFrame(frame);
+      html.style.scrollBehavior = previous;
+      ["wheel", "touchstart", "keydown"].forEach((type) => window.removeEventListener(type, stop));
+    };
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - started) / duration);
+      const eased = 1 - Math.pow(1 - t, 4); // fast start, long soft landing
+      window.scrollTo(0, Math.round(from * (1 - eased)));
+      if (t < 1) frame = requestAnimationFrame(tick);
+      else stop();
+    };
+    ["wheel", "touchstart", "keydown"].forEach((type) => window.addEventListener(type, stop, { passive: true }));
+    frame = requestAnimationFrame(tick);
   };
 
   return (

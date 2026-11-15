@@ -15,12 +15,14 @@ const VIEWPORTS = [
   { name: "wide", width: 2560, height: 1440 },
   { name: "tablet", width: 820, height: 1180, isMobile: true, hasTouch: true },
   { name: "phone", width: 390, height: 844, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
+  { name: "landscape", width: 844, height: 390, isMobile: true, hasTouch: true, deviceScaleFactor: 2 },
 ];
 const PAGES = [
   { name: "landing", path: "/" },
   { name: "tech", path: "/tech" },
   { name: "editor", path: "/editor" },
   { name: "about", path: "/about" },
+  { name: "contact", path: "/contact" },
 ];
 
 // Runs in the page: structural checks that need no judgement.
@@ -87,12 +89,14 @@ const inspect = () => {
   };
 };
 
+const ENTERED = () => { try { sessionStorage.setItem("b1-entered", "1"); } catch {} };
 const report = {};
 const browser = await chromium.launch({ channel: "chrome", args: ["--autoplay-policy=no-user-gesture-required"] });
 
 for (const vp of VIEWPORTS) {
   const { name, ...opts } = vp;
   const context = await browser.newContext({ viewport: { width: vp.width, height: vp.height }, isMobile: opts.isMobile, hasTouch: opts.hasTouch, deviceScaleFactor: opts.deviceScaleFactor ?? 1 });
+  await context.addInitScript(ENTERED); // skip the opening curtain and the landing-first gate
   for (const pg of PAGES) {
     const page = await context.newPage();
     const errors = [];
@@ -147,10 +151,28 @@ for (const vp of VIEWPORTS) {
         await page.mouse.up();
         await page.waitForURL("**/tech", { timeout: 5000 }).catch(() => {});
         r.secondBackPullLeftOpens = new URL(page.url()).pathname;
-      } else {
-        await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
-        await page.waitForTimeout(2500);
-        await page.screenshot({ path: join(OUT, `${key}-second.png`) });
+      } else if (name === "phone" || name === "tablet") {
+        // the split is on its side here: pull the portrait up to open Build, down to open Cut
+        const pullY = async (dy) => {
+          const h = await page.locator(".sp-grip").boundingBox();
+          const cx = h.x + h.width / 2, cy = h.y + h.height / 2;
+          await page.mouse.move(cx, cy);
+          await page.mouse.down();
+          await page.mouse.move(cx, cy + dy, { steps: 12 });
+        };
+        r.fitsOneScreen = await page.evaluate(() => document.documentElement.scrollHeight <= window.innerHeight + 1);
+        await pullY(-Math.round(vp.height * 0.28));
+        await page.waitForTimeout(400);
+        await page.screenshot({ path: join(OUT, `${key}-dragged.png`) });
+        await page.mouse.up();
+        await page.waitForURL("**/tech", { timeout: 5000 }).catch(() => {});
+        r.pullUpOpens = new URL(page.url()).pathname;
+        await page.goBack();
+        await page.waitForTimeout(1500);
+        await pullY(Math.round(vp.height * 0.28));
+        await page.mouse.up();
+        await page.waitForURL("**/editor", { timeout: 5000 }).catch(() => {});
+        r.pullDownOpens = new URL(page.url()).pathname;
       }
     }
 
@@ -165,6 +187,21 @@ for (const vp of VIEWPORTS) {
     }
 
     if (pg.name === "editor") {
+      if (name === "desktop") {
+        await page.locator(".ep-pick").first().scrollIntoViewIfNeeded();
+        await page.locator(".ep-pick").first().hover();
+        await page.waitForTimeout(900);
+        r.framePlaysOnHover = (await page.locator(".ep-pick video").count()) === 1;
+        await page.locator(".ep-row").nth(2).scrollIntoViewIfNeeded();
+        await page.locator(".ep-row").nth(2).hover();
+        await page.waitForTimeout(900);
+        r.rowShowsPreview = (await page.locator(".ep-preview video").count()) === 1;
+        await page.screenshot({ path: join(OUT, `${key}-hover.png`) });
+        await page.mouse.move(2, 2);
+        await page.waitForTimeout(300);
+        r.previewGoneAfterLeave = (await page.locator(".ep-preview").count()) === 0 && (await page.locator(".ep-pick video").count()) === 0;
+        await page.evaluate(() => window.scrollTo(0, 0));
+      }
       r.heroReel = await page.$eval(".phone video", (v) => ({ paused: v.paused, time: +v.currentTime.toFixed(2), muted: v.muted }));
       await page.locator(".ep-section").first().scrollIntoViewIfNeeded();
       await page.waitForTimeout(700);
@@ -188,7 +225,7 @@ for (const vp of VIEWPORTS) {
       r.nextChangesVideo = before !== (await page.locator("#ep-playing").textContent());
       await page.keyboard.press("Escape");
       await page.waitForTimeout(400);
-      await page.locator(".ep-field input").fill("bunny");
+      await page.locator(".ep-field input").fill("coffee");
       await page.waitForTimeout(300);
       r.searchBunny = { rows: await page.locator(".ep-row").count(), status: await page.locator(".ep-found").textContent() };
       await page.locator(".ep-field input").fill("zzzz");
@@ -205,6 +242,7 @@ for (const vp of VIEWPORTS) {
 // Reduced motion: the page must still show everything.
 {
   const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: "reduce" });
+  await context.addInitScript(ENTERED);
   const page = await context.newPage();
   await page.goto(BASE + "/", { waitUntil: "networkidle" });
   await page.waitForTimeout(2000);
@@ -212,6 +250,52 @@ for (const vp of VIEWPORTS) {
   await page.goto(BASE + "/editor", { waitUntil: "networkidle" });
   await page.waitForTimeout(1500);
   report["reduced-motion"] = { heroReelPaused: await page.$eval(".phone video", (v) => v.paused) };
+  await context.close();
+}
+
+// A first-time visitor who opens an inner page is sent to the landing page, sees the curtain
+// once, and can then move around freely.
+{
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page = await context.newPage();
+  await page.goto(BASE + "/tech", { waitUntil: "networkidle" });
+  const g = (report["first-visit"] = { deepLinkLandsOn: new URL(page.url()).pathname });
+  g.curtainShown = (await page.locator('.in[data-phase="hold"]').count()) > 0;
+  await page.screenshot({ path: join(OUT, "intro-hold.png") });
+  await page.waitForTimeout(1900);
+  await page.screenshot({ path: join(OUT, "intro-open.png") });
+  await page.waitForTimeout(1600);
+  g.curtainGone = (await page.locator(".in").count()) === 0;
+  await page.screenshot({ path: join(OUT, "intro-done.png") });
+  // the colour wipe covers the screen while the page changes
+  await page.locator(".sp-links a:visible", { hasText: "About" }).click();
+  await page.waitForTimeout(250);
+  g.wipeShown = await page.evaluate(() => document.querySelector(".wp")?.getAttribute("data-tone"));
+  await page.screenshot({ path: join(OUT, "wipe-mid.png") });
+  await page.waitForURL("**/about", { timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(900);
+  g.wipeOpens = new URL(page.url()).pathname;
+  g.wipeCleared = await page.evaluate(() => !document.querySelector(".wp")?.hasAttribute("data-phase"));
+  await page.locator(".sn-contact:visible").click();
+  await page.waitForURL("**/contact", { timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(900);
+  g.contactOpens = new URL(page.url()).pathname;
+  await page.locator(".sn-mark:visible").click();
+  await page.waitForURL(BASE + "/", { timeout: 5000 }).catch(() => {});
+  await page.waitForTimeout(1200);
+  await page.locator(".sp-tech .sp-enter:visible").click();
+  await page.waitForURL("**/tech", { timeout: 5000 }).catch(() => {});
+  g.afterLandingCanOpen = new URL(page.url()).pathname;
+  await page.reload({ waitUntil: "networkidle" });
+  g.reloadStaysOn = new URL(page.url()).pathname;
+  await page.locator(".st-top").waitFor({ state: "attached" });
+  await page.evaluate(() => window.scrollTo(0, 3000));
+  await page.waitForTimeout(400);
+  await page.locator(".st-top").click();
+  await page.waitForTimeout(250);
+  g.scrollMidway = await page.evaluate(() => Math.round(window.scrollY));
+  await page.waitForTimeout(1500);
+  g.scrollEnd = await page.evaluate(() => Math.round(window.scrollY));
   await context.close();
 }
 

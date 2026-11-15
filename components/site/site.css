@@ -1,20 +1,20 @@
 /* Shared chrome for the two inner worlds: nav, cross-over band, footer. */
 .world-tech {
-  --bg: #0c0e11;
-  --ink: #e8ecef;
-  --muted: #98a2ad;
+  --bg: var(--color-ink-dark);
+  --ink: var(--color-ink-light);
+  --muted: var(--color-muted-dark);
   --line: #ffffff1c;
-  --accent: #c4f24a;
-  --on-accent: #0c0e11;
+  --accent: var(--color-lime);
+  --on-accent: var(--color-ink-dark);
   background: var(--bg);
   color: var(--ink);
 }
 .world-edit {
-  --bg: #efe6d6;
-  --ink: #1c1611;
-  --muted: #655a4b;
+  --bg: var(--color-paper);
+  --ink: var(--color-ink-warm);
+  --muted: var(--color-muted-warm);
   --line: #1c161124;
-  --accent: #cf3a16;
+  --accent: var(--color-vermilion);
   --on-accent: #fff6ea;
   background: var(--bg);
   color: var(--ink);
@@ -25,8 +25,8 @@
   --gutter: max(clamp(20px, 4vw, 56px), calc((100vw - 1640px) / 2));
   flex: 1;
 }
-.world-edit ::selection { background: #cf3a16; color: #fff6ea; }
-.world-edit :focus-visible { outline-color: #cf3a16; }
+.world-edit ::selection { background: var(--color-vermilion); color: #fff6ea; }
+.world-edit :focus-visible { outline-color: var(--color-vermilion); }
 
 /* ---------- nav ---------- */
 .sn {
@@ -69,8 +69,8 @@
   padding: clamp(40px, 7vw, 88px) var(--gutter);
   text-decoration: none;
 }
-.xo-tech { background: #0c0e11; color: #e8ecef; --xo-accent: #c4f24a; --xo-muted: #98a2ad; }
-.xo-edit { background: #efe6d6; color: #1c1611; --xo-accent: #cf3a16; --xo-muted: #655a4b; }
+.xo-tech { background: var(--color-ink-dark); color: var(--color-ink-light); --xo-accent: var(--color-lime); --xo-muted: var(--color-muted-dark); }
+.xo-edit { background: var(--color-paper); color: var(--color-ink-warm); --xo-accent: var(--color-vermilion); --xo-muted: var(--color-muted-warm); }
 .xo-word { font-size: clamp(72px, 15vw, 200px); line-height: 0.86; }
 .xo-tech .xo-word {
   font-family: var(--font-archivo), sans-serif;
@@ -218,6 +218,7 @@
 
 /* ---------- marquee ---------- */
 .mq {
+  position: relative;
   overflow: hidden;
   padding: 16px 0;
   border-block: 1px solid var(--line);
@@ -236,10 +237,47 @@
   white-space: nowrap;
   color: var(--muted);
 }
+.mq li img { width: 24px; height: 24px; object-fit: contain; }
 .mq li::after { content: ""; width: 8px; height: 8px; background: var(--accent); flex: none; }
 .world-edit .mq li::after { border-radius: 50%; }
 @keyframes mq { to { transform: translateX(-50%); } }
-.mq:hover .mq-track, .mq:focus-within .mq-track { animation-play-state: paused; }
+
+.mq-tech {
+  background: #10151a;
+  border-color: #ffffff2b;
+}
+.mq-tech .mq-track { animation-duration: 30s; }
+.mq-tech li {
+  font-family: var(--font-archivo), sans-serif;
+  font-stretch: 108%;
+  font-size: clamp(17px, 1.8vw, 23px);
+  letter-spacing: 0.01em;
+  color: var(--ink);
+}
+.mq-tech li img {
+  padding: 5px;
+  border-radius: 8px;
+  background: #f5f7f8;
+}
+
+.mq-edit {
+  background: #e6dac5;
+  border-color: #1c16112e;
+}
+.mq-edit .mq-track { animation-duration: 52s; }
+.mq-edit li {
+  font-family: var(--font-fraunces), serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(21px, 2.4vw, 32px);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+.mq-edit li img {
+  padding: 4px;
+  border-radius: 50%;
+  background: #fff6ea;
+}
 
 /* ---------- scroll tools ---------- */
 .st-bar { position: fixed; inset: 0 0 auto 0; height: 3px; z-index: 50; pointer-events: none; }
@@ -287,8 +325,13 @@
 @media (hover: hover) and (pointer: fine) { .si a:hover { color: var(--ink); } }
 
 @media (prefers-reduced-motion: reduce) {
-  .mq-track { animation: none; flex-wrap: wrap; width: auto; padding: 0 var(--gutter); }
-  .mq ul[aria-hidden] { display: none; }
-  .mq ul { flex-wrap: wrap; row-gap: 8px; }
+  .mq-track { animation-duration: 120s; }
   .st-top, .si a::before { transition: none; }
 }
+
+/* ---------- Build strip: icons sit straight on the dark band, no light tiles ---------- */
+.mq { position: relative; z-index: 1; }
+.mq-tech li img { padding: 0; border-radius: 0; background: none; width: 26px; height: 26px; }
+.mq-tech li img[data-dark] { filter: invert(1); }
+.mq li { gap: 14px; padding-right: 0; }
+.mq li::after { margin: 0 26px 0 12px; }

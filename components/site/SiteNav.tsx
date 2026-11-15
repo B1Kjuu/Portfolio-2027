@@ -3,7 +3,7 @@ import "./site.css";
 
 // Shared top bar for the two inner worlds. `side` picks the palette and which
 // world the switch link crosses over to.
-export default function SiteNav({ side, about = false }: { side: "tech" | "edit"; about?: boolean }) {
+export default function SiteNav({ side, about = false, contact = false }: { side: "tech" | "edit"; about?: boolean; contact?: boolean }) {
   const other = side === "tech" ? { href: "/editor", label: "Cut" } : { href: "/tech", label: "Build" };
   return (
     <header className={`sn sn-${side}`}>
@@ -21,7 +21,7 @@ export default function SiteNav({ side, about = false }: { side: "tech" | "edit"
           </>
         )}
         <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
-        <a className="sn-contact" href="mailto:joebeckgusi25@gmail.com">Contact</a>
+        <Link className="sn-contact" href="/contact" aria-current={contact ? "page" : undefined}>Contact</Link>
       </nav>
     </header>
   );
@@ -54,12 +54,12 @@ export function ContactBand({ title, body }: { title: string; body: string }) {
       <div className="cb-side">
         <p>{body}</p>
         <div className="cb-acts">
-          <a className="cb-main" href="mailto:joebeckgusi25@gmail.com">
+          <Link className="cb-main" href="/contact">
             Get in touch
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
-          </a>
+          </Link>
           <a className="cb-alt" href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Read the resume</a>
         </div>
       </div>
@@ -72,6 +72,7 @@ export function SiteFooter({ side }: { side: "tech" | "edit" }) {
     <footer className={`sf sf-${side}`}>
       <span>Joebeck Andrew Gusi</span>
       <span className="sf-links">
+        <Link href="/about">About</Link>
         <a href="https://github.com/B1Kjuu" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/gusi-joebeck-andrew" target="_blank" rel="noreferrer">LinkedIn</a>
         <a href="https://www.facebook.com/b1kjuu" target="_blank" rel="noreferrer">Facebook</a>

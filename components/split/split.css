@@ -1,7 +1,7 @@
 .sp-root {
   --p: 0.5;
-  --ink-dark: #0c0e11;
-  --paper: #efe6d6;
+  --ink-dark: var(--color-ink-dark);
+  --paper: var(--color-paper);
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
   position: relative;
   height: 100svh;
@@ -56,23 +56,25 @@
 }
 .sp-tech {
   left: 0;
-  width: calc(var(--p) * 100%);
+  width: 100%;
+  clip-path: inset(0 calc(100% - (var(--p) * 100%)) 0 0);
   background: var(--ink-dark);
-  color: #e8ecef;
-  --accent: #c4f24a;
-  --on-accent: #0c0e11;
-  --muted: #98a2ad;
-  --strong: #e8ecef;
+  color: var(--color-ink-light);
+  --accent: var(--color-lime);
+  --on-accent: var(--color-ink-dark);
+  --muted: var(--color-muted-dark);
+  --strong: var(--color-ink-light);
 }
 .sp-edit {
   right: 0;
-  width: calc((1 - var(--p)) * 100%);
+  width: 100%;
+  clip-path: inset(0 0 0 calc(var(--p) * 100%));
   background: var(--paper);
-  color: #1c1611;
-  --accent: #cf3a16;
+  color: var(--color-ink-warm);
+  --accent: var(--color-vermilion);
   --on-accent: #fff6ea;
-  --muted: #655a4b;
-  --strong: #1c1611;
+  --muted: var(--color-muted-warm);
+  --strong: var(--color-ink-warm);
 }
 
 /* quiet grounds: a blueprint grid for the build side, a warm pool for the cut side */
@@ -101,8 +103,9 @@
   width: 50vw;
   pointer-events: none;
 }
-.sp-tech .sp-stage { right: 0; }
-.sp-edit .sp-stage { left: 0; }
+/* Both stages meet at the seam: anchored on the centre line, then moved with it. */
+.sp-tech .sp-stage { right: 50%; translate: calc((var(--p) - 0.5) * 100vw) 0; }
+.sp-edit .sp-stage { left: 50%; translate: calc((var(--p) - 0.5) * 100vw) 0; }
 
 .sp-copy {
   position: absolute;
@@ -135,7 +138,7 @@
 
 .sp-lede {
   margin-top: 28px;
-  max-width: clamp(300px, 24cqw, 440px);
+  max-width: clamp(290px, 16vw, 440px); /* vw, not cqw: each half is now a full-width layer */
   font-size: clamp(18px, 1.15vw, 23px);
   line-height: 1.5;
   color: var(--muted);
@@ -181,9 +184,10 @@
   z-index: 5;
   top: 0;
   bottom: 0;
-  left: calc(var(--p) * 100%);
+  left: 50%;
   width: 1px;
   background: #ffffff80;
+  translate: calc((var(--p) - 0.5) * 100vw) 0;
   pointer-events: none;
 }
 /* The portrait travels with the pointer (--h); the seam moves the other way (--p). */
@@ -191,8 +195,8 @@
   position: absolute;
   z-index: 6;
   top: 50%;
-  left: calc(var(--h, 0.5) * 100%);
-  translate: -50% -50%;
+  left: 50%;
+  translate: calc(-50% + (var(--h, 0.5) - 0.5) * 100vw) -50%;
   padding: 0;
   border: 0;
   border-radius: 999px;
@@ -246,10 +250,10 @@
 .sp-name {
   font-family: var(--font-archivo), sans-serif;
   font-stretch: 112%;
-  font-weight: 700;
-  font-size: 21px;
-  letter-spacing: -0.015em;
-  line-height: 1.2;
+  font-weight: 750;
+  font-size: clamp(22px, 2.3vw, 34px);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 .sp-role { font-size: 14px; line-height: 1.35; opacity: 0.78; }
 
@@ -274,19 +278,13 @@
 .sp-handle:focus-visible .sp-hint { opacity: 1; }
 .sp-root[data-dragging] .sp-hint, .sp-root[data-opening] .sp-hint { opacity: 0 !important; }
 
-/* Loop: the two chevrons nudge outward, showing the portrait can be pulled either way. */
-@keyframes sp-nudge-l { 50% { transform: translateX(-3px); } }
-@keyframes sp-nudge-r { 50% { transform: translateX(3px); } }
-.sp-grip svg:first-child { animation: sp-nudge-l 2.2s ease-in-out 1.4s infinite; }
-.sp-grip svg:last-child { animation: sp-nudge-r 2.2s ease-in-out 1.4s infinite; }
-.sp-root[data-dragging] .sp-grip svg { animation-play-state: paused; }
-
 .sp-root[data-dragging] { user-select: none; }
 .sp-root[data-dragging] .sp-handle { cursor: grabbing; }
 /* Letting go: the seam and portrait travel to where they are going (centre, or a full side). */
-.sp-root[data-settling] .sp-half { transition: width 420ms var(--ease-out); }
+.sp-root[data-settling] .sp-half { transition: clip-path 420ms var(--ease-out); }
+.sp-root[data-settling] .sp-stage { transition: translate 420ms var(--ease-out); }
 .sp-root[data-settling] .sp-seam,
-.sp-root[data-settling] .sp-handle { transition: left 420ms var(--ease-out), opacity 200ms ease; }
+.sp-root[data-settling] .sp-handle { transition: translate 420ms var(--ease-out), opacity 200ms ease; }
 .sp-root[data-opening] .sp-handle,
 .sp-root[data-opening] .sp-seam { opacity: 0; }
 
@@ -319,53 +317,123 @@
   .sp-stage { bottom: 88px; }
 }
 
-/* ---------- stacked on small screens: no seam, one side per screen ---------- */
+/* The label under the portrait is always visible: a plain "About me" button face. */
+.sp-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px;
+  background: #1c1611;
+  color: #fbf8f2;
+  font-size: 15px;
+  font-weight: 600;
+  opacity: 1;
+  transition: opacity 160ms ease, transform 160ms var(--ease-out);
+  animation: sp-pop 520ms var(--ease-out) 320ms backwards;
+}
+.sp-hint svg { width: 15px; height: 15px; transition: transform 200ms var(--ease-out); }
+@media (hover: hover) and (pointer: fine) { .sp-handle:hover .sp-hint svg { transform: translateX(3px); } }
+
+/* While the opening curtain is up, hold the page's own entrance so it plays as the curtain parts. */
+html[data-intro] .sp-title, html[data-intro] .sp-lede, html[data-intro] .sp-foot,
+html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { animation-play-state: paused; }
+
+/* ---------- phones and narrow tablets: the same split, turned on its side ----------
+   Build is the top layer and Cut the bottom one, both on one screen. The seam is a
+   horizontal line and the portrait is dragged up or down. */
 @media (max-width: 860px) {
-  .sp-root { height: auto; min-height: 0; overflow: visible; }
+  .sp-root { height: 100svh; min-height: 600px; }
   .sp-nav { padding: 0 20px; height: 64px; }
-  .sp-links { color: #e8ecef; gap: 18px; }
+  .sp-links { color: #e8ecef; gap: 4px; }
   .sp-contact { background: #e8ecef; color: #0c0e11 !important; }
-  .sp-half { position: relative; width: 100%; height: 100svh; min-height: 600px; }
-  .sp-stage { width: 100%; top: 36%; bottom: 96px; }
-  .sp-copy { top: 92px; left: 20px; right: 20px; }
-  .sp-edit .sp-copy { text-align: left; top: 76px; }
-  .sp-tech .sp-foot { bottom: 64px; }
-  .sp-tech .sp-stage { bottom: 132px; }
-  .sp-edit .sp-lede { margin-left: 0; }
-  .sp-title { font-size: clamp(64px, 25cqw, 132px); }
-  .sp-edit .sp-title { font-size: clamp(74px, 29cqw, 150px); }
-  .sp-lede { margin-top: 20px; font-size: 17px; }
-  .sp-foot { left: 20px; right: 20px; bottom: 28px; flex-direction: row; align-items: center; justify-content: space-between; }
-  .sp-edit .sp-foot { align-items: center; }
-  .sp-enter { padding: 14px 20px; font-size: 16px; }
-  .sp-handle, .sp-seam { display: none; }
-  /* stacked: the person sits on the line between the two sides, photo beside the name */
+
+  .sp-tech { clip-path: inset(0 0 calc(100% - (var(--p) * 100%)) 0); }
+  .sp-edit { clip-path: inset(calc(var(--p) * 100%) 0 0 0); }
+  .sp-seam { top: 50%; bottom: auto; left: 0; right: 0; width: auto; height: 1px; translate: 0 calc((var(--p) - 0.5) * 100svh); }
+  .sp-handle { translate: -50% calc(-50% + (var(--h, 0.5) - 0.5) * 100svh); cursor: grab; }
+  .sp-grip { flex-direction: column; gap: 2px; padding: 6px; }
+  .sp-grip svg { rotate: 90deg; }
+  .sp-avatar { width: 68px; height: 68px; }
+  /* "About me" sits to the right of the portrait, the name to its left, both on the seam */
+  .sp-hint { top: 50%; left: calc(100% + 10px); translate: 0 -50%; padding: 8px 13px; font-size: 14px; }
   .sp-id {
-    z-index: 6;
-    left: 50%;
-    top: max(100svh, 600px);
-    translate: -50% -50%;
-    display: grid;
-    grid-template-columns: auto auto;
-    column-gap: 12px;
-    align-items: center;
-    padding: 8px 22px 8px 8px;
-    border-radius: 999px;
-    background: #fbf8f2;
-    color: #1c1611;
-    mix-blend-mode: normal;
-    text-align: left;
-    box-shadow: 0 14px 34px -10px #000000a0;
+    top: 50%;
+    left: auto;
+    right: calc(50% + 54px);
+    max-width: 128px;
+    translate: 0 calc(-50% + (var(--h, 0.5) - 0.5) * 100svh);
+    text-align: right;
+    white-space: normal;
   }
-  .sp-idPhoto { display: block; grid-row: span 2; width: 56px; height: 56px; border-radius: 50%; object-fit: cover; }
-  .sp-name { align-self: end; font-size: 18px; }
-  .sp-role { align-self: start; opacity: 1; color: #655a4b; }
+  .sp-name { font-size: 15px; line-height: 1.15; }
+  .sp-id { padding-block: 6px; } /* 44px tap height */
+  .sp-role { display: none; }
+  .sp-root[data-settling] .sp-id { transition: translate 420ms var(--ease-out), opacity 200ms ease; }
+  .sp-root[data-opening] .sp-id { opacity: 0; }
+
+  .sp-copy { top: 70px; left: 20px; right: 20px; }
+  .sp-edit .sp-copy { top: calc(50% + 64px); text-align: left; }
+  .sp-edit .sp-lede { margin-left: 0; }
+  .sp-title { font-size: clamp(56px, 21vw, 120px); }
+  .sp-edit .sp-title { font-size: clamp(64px, 24vw, 136px); }
+  /* room is tight: show only the bold line of each intro */
+  .sp-lede { margin-top: 12px; max-width: min(64vw, 300px); font-size: 0; } /* px, not ch: ch is 0 at font-size 0 */
+  .sp-lede strong { font-size: 16px; line-height: 1.4; }
+
+  .sp-foot { left: 20px; right: auto; flex-direction: row; }
+  .sp-tech .sp-foot { bottom: calc(50% + 76px); }
+  .sp-edit .sp-foot { bottom: 22px; align-items: center; }
+  .sp-count { display: none; }
+  .sp-enter { padding: 13px 19px; font-size: 16px; }
+
+  /* the 3D sits on the right of each half, under the text */
+  .sp-tech .sp-stage, .sp-edit .sp-stage { left: 30%; right: 0; width: auto; translate: none; }
+  .sp-tech .sp-stage { top: 150px; bottom: calc(50% + 8px); }
+  .sp-edit .sp-stage { top: calc(50% + 150px); bottom: 6px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sp-enter, .sp-enter svg, .sp-grip, .sp-contact { transition: none; }
   /* keep the fades, drop the movement */
   .sp-title, .sp-grip { animation-name: sp-fade; animation-duration: 300ms; }
-  .sp-grip svg { animation: none !important; }
   .sp-hint { transition: none; }
   .sp-root[data-settling] .sp-half, .sp-root[data-settling] .sp-seam, .sp-root[data-settling] .sp-handle { transition: none; }
+}
+
+/* ---------- phones on their side: both halves side by side, text only, no drag ---------- */
+@media (max-width: 860px) and (orientation: landscape) and (max-height: 560px) {
+  .sp-root { min-height: 320px; }
+  .sp-half { width: 50%; clip-path: none; }
+  .sp-tech { left: 0; }
+  .sp-edit { left: 50%; right: auto; }
+  .sp-seam, .sp-handle, .sp-stage { display: none; }
+  .sp-copy, .sp-edit .sp-copy { top: 62px; left: 20px; right: 16px; text-align: left; }
+  .sp-title { font-size: min(13vw, 25svh); }
+  .sp-edit .sp-title { font-size: min(15vw, 28svh); }
+  .sp-lede { margin-top: 10px; max-width: none; }
+  .sp-lede strong { font-size: 15px; }
+  .sp-tech .sp-foot, .sp-edit .sp-foot { left: 20px; right: 16px; bottom: 14px; }
+  .sp-enter { padding: 12px 18px; font-size: 15px; }
+  .sp-links a:not(.sp-contact) { display: none; }
+  /* the person becomes a pill in the top bar that opens About */
+  .sp-id {
+    top: 8px;
+    left: 50%;
+    right: auto;
+    max-width: none;
+    translate: -50% 0;
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 10px;
+    align-items: center;
+    padding: 4px 16px 4px 4px;
+    border-radius: 999px;
+    background: #fbf8f2;
+    color: #1c1611;
+    mix-blend-mode: normal;
+    text-align: left;
+    white-space: nowrap;
+    box-shadow: 0 10px 24px -10px #000000a0;
+  }
+  .sp-idPhoto { display: block; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
+  .sp-name { font-size: 16px; }
 }

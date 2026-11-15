@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import avatar from "@/assets/avatar.png";
+import Intro from "@/components/site/Intro";
+import { go } from "@/components/site/Wipe";
 import { seam } from "./seam";
 import type { StageCard } from "./Stage";
 import "./split.css";
@@ -21,6 +23,12 @@ const ROUTE: Record<Side, string> = { tech: "/tech", edit: "/editor" };
 const EDGE = 0.1;
 const COMMIT = 0.15;
 const CLICK_SLOP = 6;
+
+// Phones and narrow tablets show the split turned on its side: Build above, Cut below,
+// and the portrait is dragged up or down. (A phone held sideways has no drag at all.)
+const isVertical = () =>
+  window.matchMedia("(max-width: 860px)").matches &&
+  !window.matchMedia("(orientation: landscape) and (max-height: 560px)").matches;
 
 const Arrow = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
@@ -47,10 +55,10 @@ export default function SplitLanding({
   const root = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const opening = useRef(false);
-  const startX = useRef(0);
+  const start = useRef({ x: 0, y: 0 });
   const moved = useRef(false);
 
-  // h = where the portrait is (0..1 across the page); p = the share of the page Build takes.
+  // h = where the portrait is (0..1 along the split's axis); p = the share of the page Build takes.
   // Pulling the portrait toward a side gives that side the room, so they move in opposite directions.
   const place = (h: number) => {
     seam.p = 1 - h;
@@ -106,19 +114,21 @@ export default function SplitLanding({
     if (opening.current || !e.isPrimary) return;
     dragging.current = true;
     moved.current = false;
-    startX.current = e.clientX;
+    start.current = { x: e.clientX, y: e.clientY };
     e.currentTarget.setPointerCapture(e.pointerId);
     settle(false);
   };
   const onPointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (!dragging.current || !root.current) return;
+    const vertical = isVertical();
     if (!moved.current) {
-      if (Math.abs(e.clientX - startX.current) < CLICK_SLOP) return; // still a click, not a drag
+      const travelled = vertical ? e.clientY - start.current.y : e.clientX - start.current.x;
+      if (Math.abs(travelled) < CLICK_SLOP) return; // still a click, not a drag
       moved.current = true;
       root.current.setAttribute("data-dragging", "");
     }
     const rect = root.current.getBoundingClientRect();
-    const raw = (e.clientX - rect.left) / rect.width;
+    const raw = vertical ? (e.clientY - rect.top) / rect.height : (e.clientX - rect.left) / rect.width;
     place(Math.min(1 - EDGE, Math.max(EDGE, raw)));
   };
   const onPointerUp = () => {
@@ -137,23 +147,24 @@ export default function SplitLanding({
       moved.current = false;
       return;
     }
-    if (!opening.current) router.push("/about");
+    if (!opening.current) go("/about");
   };
   const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (e.key === "ArrowLeft") open("tech");
-    else if (e.key === "ArrowRight") open("edit");
+    if (e.key === "ArrowLeft" || e.key === "ArrowUp") open("tech");
+    else if (e.key === "ArrowRight" || e.key === "ArrowDown") open("edit");
     else return;
     e.preventDefault();
   };
 
   return (
     <div ref={root} className="sp-root">
+      <Intro />
       <header className="sp-nav">
         <Link href="/" className="sp-mark">b1kjuu</Link>
         <nav className="sp-links" aria-label="Main">
           <Link href="/about">About</Link>
           <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
-          <a className="sp-contact" href="mailto:joebeckgusi25@gmail.com">Contact</a>
+          <Link className="sp-contact" href="/contact">Contact</Link>
         </nav>
       </header>
 
@@ -162,7 +173,7 @@ export default function SplitLanding({
         <Link href="/about" className="sp-id">
           <Image src={avatar} alt="" className="sp-idPhoto" sizes="56px" />
           <h1 className="sp-name">Joebeck Andrew Gusi</h1>
-          <p className="sp-role">Developer and video editor</p>
+          <p className="sp-role">Full-stack developer and creative technologist</p>
         </Link>
 
         <section className="sp-half sp-tech" aria-labelledby="build-title">
@@ -170,7 +181,8 @@ export default function SplitLanding({
           <div className="sp-copy">
             <h2 id="build-title" className="sp-title">Build<span className="sp-dot">.</span></h2>
             <p className="sp-lede">
-              <strong>Web apps, mobile and embedded hardware.</strong> React, Next.js, React Native, ESP32 and LoRa.
+              <strong>Web apps, mobile and embedded hardware for teams.</strong> React, Next.js, React Native, ESP32
+              and LoRa.
             </p>
           </div>
           <div className="sp-foot">
@@ -184,7 +196,7 @@ export default function SplitLanding({
           <div className="sp-copy">
             <h2 id="cut-title" className="sp-title">Cut<span className="sp-dot">.</span></h2>
             <p className="sp-lede">
-              <strong>Short-form, long-form and UGC edits.</strong> Paced for retention, finished for clients.
+              <strong>Short-form, long-form and UGC edits for brands.</strong> Paced for retention, finished for clients.
             </p>
           </div>
           <div className="sp-foot">
@@ -200,7 +212,7 @@ export default function SplitLanding({
       <button
         type="button"
         className="sp-handle"
-        aria-label="About Joebeck Andrew Gusi. Click to read more, drag toward Build or Cut to open that side, or press the left or right arrow key."
+        aria-label="About Joebeck Andrew Gusi. Click to read more, drag toward Build or Cut to open that side, or use the arrow keys."
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -217,7 +229,12 @@ export default function SplitLanding({
             <path d="M9 6l6 6-6 6" />
           </svg>
         </span>
-        <span className="sp-hint" aria-hidden>Click for about, drag to a side</span>
+        <span className="sp-hint" aria-hidden>
+          About me
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </span>
       </button>
     </div>
   );

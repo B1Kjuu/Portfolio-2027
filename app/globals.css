@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0c0e11;
-  --foreground: #e8ecef;
+  --color-ink-dark: #0c0e11;
+  --color-paper: #efe6d6;
+  --color-ink-light: #e8ecef;
+  --color-ink-warm: #1c1611;
+  --color-muted-dark: #98a2ad;
+  --color-muted-warm: #655a4b;
+  --color-lime: #c4f24a;
+  --color-vermilion: #cf3a16;
+  --background: var(--color-ink-dark);
+  --foreground: var(--color-ink-light);
 }
 
 @theme inline {
@@ -55,11 +63,62 @@ body {
 }
 .skip:focus-visible { transform: none; }
 
-/* Loops on the accent dots: Build's blinks like a text cursor, Cut's pulses like a record light. */
-@keyframes dot-blink { 50% { opacity: 0; } }
-@keyframes dot-rec { to { opacity: 0.3; } }
-.tp-title span, .sp-tech .sp-dot { animation: dot-blink 1.15s steps(1, end) 1.4s infinite; }
-.ep-title span, .sp-edit .sp-dot { animation: dot-rec 1.5s ease-in-out 1.4s infinite alternate; }
-@media (prefers-reduced-motion: reduce) {
-  .tp-title span, .sp-tech .sp-dot, .ep-title span, .sp-edit .sp-dot { animation: none; }
+/* ---------- opening curtain (landing page, once per session) ---------- */
+.in { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; pointer-events: none; }
+html[data-entered] .in[data-phase="hold"] { display: none; } /* later visits: never shown */
+.in-panel { position: absolute; top: 0; bottom: 0; width: 50%; transition: transform 850ms cubic-bezier(0.77, 0, 0.175, 1); }
+.in-build { left: 0; background: var(--color-ink-dark); color: var(--color-ink-light); }
+.in-cut { right: 0; background: var(--color-paper); color: var(--color-ink-warm); }
+.in-panel span { position: absolute; bottom: clamp(20px, 4vw, 44px); font-size: clamp(34px, 6vw, 84px); line-height: 0.9; opacity: 0.16; }
+.in-build span { left: clamp(20px, 4vw, 44px); font-family: var(--font-archivo), sans-serif; font-stretch: 122%; font-weight: 850; letter-spacing: -0.035em; }
+.in-cut span { right: clamp(20px, 4vw, 44px); font-family: var(--font-fraunces), serif; font-style: italic; font-weight: 500; letter-spacing: -0.04em; }
+.in-panel i { font-style: normal; }
+.in-build i { color: var(--color-lime); }
+.in-cut i { color: var(--color-vermilion); }
+.in-mid { position: relative; display: grid; justify-items: center; gap: 14px; transition: opacity 260ms ease, scale 320ms cubic-bezier(0.23, 1, 0.32, 1); }
+.in-photo { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; box-shadow: 0 0 0 6px #fbf8f2, 0 18px 40px -12px #000000a0; animation: in-pop 600ms cubic-bezier(0.23, 1, 0.32, 1) backwards; }
+.in-name { color: #fff; mix-blend-mode: difference; font-family: var(--font-archivo), sans-serif; font-stretch: 112%; font-weight: 750; font-size: clamp(20px, 2.4vw, 30px); letter-spacing: -0.02em; white-space: nowrap; animation: in-fade 500ms ease-out 150ms backwards; }
+.in-bar { width: min(220px, 50vw); height: 3px; border-radius: 3px; background: #8884; overflow: hidden; }
+.in-bar div { height: 100%; background: linear-gradient(90deg, var(--color-lime) 50%, var(--color-vermilion) 50%); transform-origin: left; animation: in-load 1400ms cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+@keyframes in-load { from { transform: scaleX(0); } }
+@keyframes in-pop { from { opacity: 0; scale: 0.85; } }
+@keyframes in-fade { from { opacity: 0; } }
+.in[data-phase="open"] .in-build { transform: translateX(-101%); }
+.in[data-phase="open"] .in-cut { transform: translateX(101%); }
+.in[data-phase="open"] .in-mid { opacity: 0; scale: 0.92; }
+@media (max-width: 860px) and (orientation: portrait) {
+  /* stacked like the phone layout: the curtain parts up and down */
+  .in-panel { left: 0; right: 0; width: auto; height: 50%; }
+  .in-build { top: 0; bottom: auto; }
+  .in-cut { top: auto; bottom: 0; }
+  .in[data-phase="open"] .in-build { transform: translateY(-101%); }
+  .in[data-phase="open"] .in-cut { transform: translateY(101%); }
 }
+@media (prefers-reduced-motion: reduce) {
+  .in-panel { transition: opacity 240ms ease; }
+  .in[data-phase="open"] .in-panel { transform: none; opacity: 0; }
+  .in-photo, .in-name { animation: none; }
+  .in-bar div { animation-duration: 200ms; }
+}
+
+/* ---------- page-change wipe: a panel in the destination's colour crosses the screen ---------- */
+.wp { position: fixed; inset: 0; z-index: 150; overflow: hidden; visibility: hidden; pointer-events: none; }
+.wp[data-phase] { visibility: visible; pointer-events: auto; }
+.wp::before, .wp::after { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 100%; transition: transform 420ms cubic-bezier(0.77, 0, 0.175, 1); }
+.wp::after { display: none; }
+.wp[data-phase="ready"]::before, .wp[data-phase="ready"]::after { transition: none; }
+.wp[data-tone="tech"]::before, .wp[data-tone="about"]::before { background: var(--color-ink-dark); }
+.wp[data-tone="edit"]::before, .wp[data-tone="contact"]::before { background: var(--color-paper); }
+/* Build comes in from its side (left) and leaves to the right; Cut does the reverse */
+.wp[data-tone="tech"][data-phase="ready"]::before { transform: translateX(-100%); }
+.wp[data-tone="tech"][data-phase="leave"]::before { transform: translateX(100%); }
+.wp[data-tone="edit"][data-phase="ready"]::before { transform: translateX(100%); }
+.wp[data-tone="edit"][data-phase="leave"]::before { transform: translateX(-100%); }
+/* About and Contact rise from the bottom and leave through the top */
+.wp[data-tone="about"][data-phase="ready"]::before, .wp[data-tone="contact"][data-phase="ready"]::before { transform: translateY(100%); }
+.wp[data-tone="about"][data-phase="leave"]::before, .wp[data-tone="contact"][data-phase="leave"]::before { transform: translateY(-100%); }
+/* Home closes as the two halves, then they part again */
+.wp[data-tone="home"]::before { width: 50%; background: var(--color-ink-dark); }
+.wp[data-tone="home"]::after { display: block; left: 50%; width: 50%; background: var(--color-paper); }
+.wp[data-tone="home"][data-phase="ready"]::before, .wp[data-tone="home"][data-phase="leave"]::before { transform: translateX(-100%); }
+.wp[data-tone="home"][data-phase="ready"]::after, .wp[data-tone="home"][data-phase="leave"]::after { transform: translateX(100%); }

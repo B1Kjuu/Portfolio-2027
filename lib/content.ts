@@ -1,4 +1,4 @@
-import type { StaticImageData } from "next/image"; 
+import type { StaticImageData } from "next/image";
 import P3KCARS from "@/assets/projects/P3KCARS.png";
 import PTSI from "@/assets/projects/PTSI.png";
 import RESORTIFYPH from "@/assets/projects/RESORTIFYPH.png";
@@ -9,9 +9,21 @@ import EASYJOURNAL from "@/assets/projects/EASYJOURNAL.png";
 import INTERFACE2026 from "@/assets/projects/INTERFACE2026.png";
 import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.png";
 import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.png";
+import affinityIcon from "@/assets/techicons/Affinity.svg";
+import canvaIcon from "@/assets/techicons/Canva.svg";
+import davinciIcon from "@/assets/techicons/DaVinci Resolve.svg";
+import firebaseIcon from "@/assets/techicons/Firebase.svg";
+import nextIcon from "@/assets/techicons/Next.svg";
+import nodeIcon from "@/assets/techicons/Node.svg";
+import photoshopIcon from "@/assets/techicons/Photoshop.svg";
+import pythonIcon from "@/assets/techicons/Python.svg";
+import reactIcon from "@/assets/techicons/React.svg";
+import tailwindIcon from "@/assets/techicons/Tailwind.svg";
+import typescriptIcon from "@/assets/techicons/Typescript.svg";
 
 export type TechProject = {
   title: string;
+  category: "Websites" | "Apps" | "Hardware" | "Portfolio";
   description: string;
   note: string;
   image: string | StaticImageData;
@@ -28,6 +40,7 @@ export const techStats = [
 export const techProjects: TechProject[] = [
   {
     title: "P3KCARS",
+    category: "Websites",
     description: "Public website with responsive UI and clean navigation.",
     note: "Frontend build with a polished user-facing experience.",
     image: P3KCARS, 
@@ -35,6 +48,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "PTSI",
+    category: "Websites",
     description: "Company site deployed to Firebase Hosting.",
     note: "Deployed with a lightweight, reliable web stack.",
     image: PTSI,
@@ -42,6 +56,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "ResortifyPH",
+    category: "Websites",
     description: "Resort booking platform (under development).",
     note: "Designed to feel fast on mobile and desktop.",
     image: RESORTIFYPH,
@@ -49,6 +64,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "IIA",
+    category: "Websites",
     description: "Organization website: content, resources, and membership info.",
     note: "Built to centralize event and org information.",
     image: IIA,
@@ -56,6 +72,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "HikeSafe app",
+    category: "Apps",
     description: "Safety-focused hiking app; code available on GitHub.",
     note: "This App is built using React Native, used for offline communication",
     image: HIKESAFE,
@@ -63,6 +80,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "HikeSafe website",
+    category: "Websites",
     description: "Official Website of HIKESAFE. Showcasing our Thesis.",
     note: "Developed to showcase our thesis project.",
     image: HIKESAFEWEB,
@@ -70,6 +88,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "EasyJournal",
+    category: "Apps",
     description: "Simple journaling app; repository with implementation details.",
     note: "A lightweight personal writing tool.",
     image: EASYJOURNAL,
@@ -77,6 +96,7 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "Interface 2026",
+    category: "Websites",
     description: "A seminar website for INTERFACE 2026 with speaker profiles, roadmap, and registration details.",
     note: "Bridges the event content into a polished seminar experience.",
     image: INTERFACE2026,
@@ -84,14 +104,16 @@ export const techProjects: TechProject[] = [
   },
   {
     title: "Portfolio 2026",
-    description: "Last year's portfolio at b1kjuu.studio: a tech side and a Windows 95-style desktop for the editing work.",
+    category: "Portfolio",
+    description: "Last year's portfolio: a tech side and a Windows 95-style desktop for the editing work.",
     note: "Built with Next.js, React95 and Tailwind CSS.",
     image: PORTFOLIO2026,
-    demoLink: "https://www.b1kjuu.studio",
+    demoLink: "https://portfolio-202six.vercel.app",
     ghLink: "https://github.com/B1Kjuu/Portfolio-2026",
   },
   {
     title: "Portfolio 2025",
+    category: "Portfolio",
     description: "Archived 2025 portfolio, forked from a template.",
     note: "Templated portfolio from one of the trending templates.",
     image: OLDPORTFOLIO,
@@ -99,15 +121,17 @@ export const techProjects: TechProject[] = [
   },
 ];
 
-export const techSkills = [
-  "JavaScript",
-  "TypeScript",
-  "React",
-  "Next.js",
-  "Node.js",
-  "Tailwind CSS",
-  "HTML5",
-  "Python",
+// `dark` marks a black icon that needs inverting on the dark Build strip.
+export type Tool = { name: string; icon: StaticImageData; dark?: boolean };
+
+export const techSkills: Tool[] = [
+  { name: "TypeScript", icon: typescriptIcon },
+  { name: "React", icon: reactIcon },
+  { name: "Next.js", icon: nextIcon, dark: true },
+  { name: "Node.js", icon: nodeIcon },
+  { name: "Tailwind CSS", icon: tailwindIcon },
+  { name: "Python", icon: pythonIcon },
+  { name: "Firebase", icon: firebaseIcon },
 ];
 
 export const editorStats = [
@@ -205,19 +229,6 @@ type: "video",
         description: "High-octane action sequence. Relies heavily on speed-ramping, kinetic typography, and immersive spatial sound design.",
         note: "Action / Lifestyle edit.",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/TRAVEL/MOTOVLOG%20trial.mp4"
-      }
-    ]
-  },
-  {
-    type: "folder",
-    title: "THESIS",
-    items: [
-      {
-        type: "video",
-        title: "HikeSafe",
-        description: "Deployment Video of our thesis.",
-        note: "Site is Espadang Bato",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/THESIS/demofinal.mp4"
       }
     ]
   },
@@ -336,26 +347,12 @@ type: "video",
         note: "Coastal luxury real estate feature in Corona del Mar, CA.",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/REAL%20ESTATE/Corona%20del%20Mar.mp4"
       },
-      {
-        type: "video",
-        title: "Trial",
-        description: "A trial edit for a real estate video project.",
-        note: "Test/trial cut for review and feedback.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/REAL%20ESTATE/TRIaL.mp4"
-      },
     ]
   },
   {
     type: "folder",
     title: "Long Form",
     items: [
-      {
-        type: "video",
-        title: "CKC Trial",
-        description: "A long-form trial edit for a CKC project.",
-        note: "Trial cut for client review.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/CKC_TRIAL.mp4"
-      },
       {
         type: "video",
         title: "East Coast Living Throughout the Seasons",
@@ -379,20 +376,6 @@ type: "video",
       },
       {
         type: "video",
-        title: "Test Edit 2",
-        description: "A second test edit for an ongoing long-form video project.",
-        note: "Internal test cut for review.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/Test%20Edit%202.mp4.mp4"
-      },
-      {
-        type: "video",
-        title: "Test Job",
-        description: "A test job edit submitted for review and quality check.",
-        note: "Trial production piece for client or internal approval.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/Test%20job.mp4"
-      },
-      {
-        type: "video",
         title: "VSL Final",
         description: "The final cut of a Video Sales Letter (VSL) designed to convert viewers into customers.",
         note: "Polished VSL ready for campaign deployment.",
@@ -407,119 +390,11 @@ type: "video",
       },
     ]
   },
-  {
-    type: "folder",
-    title: "AI Generated",
-    items: [
-      {
-        type: "video",
-        title: "Bunny as a Chef",
-        description: "An AI-generated video of an adorable bunny living its best life as a chef.",
-        note: "Tagged #rabbit #pets #mycuterabbit — great for pet-loving audiences.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Bunny%20as%20A%20Chef%20%23rabbit%20%23pets%20%23mycuterabbit.mp4"
-      },
-      {
-        type: "video",
-        title: "Bunny Goes Super Saiyan 😮",
-        description: "An AI-generated clip of a bunny powering up Dragon Ball Z style — watch until the end!",
-        note: "Viral-style AI animation blending cute pets with anime culture.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Bunny%20goes%20Super%20Saiyan%20%F0%9F%98%AE%20(Watch%20until%20the%20End!!).mp4"
-      },
-      {
-        type: "video",
-        title: "Cat vs Alien",
-        description: "An AI-generated showdown between a fearless cat and an extraterrestrial invader.",
-        note: "Action-packed AI animation for sci-fi and pet content fans.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/CAT%20vs%20ALIEN.mp4"
-      },
-      {
-        type: "video",
-        title: "Celebration!",
-        description: "A festive AI-generated video bursting with celebratory energy and visuals.",
-        note: "Great for milestone posts, holidays, or hype content.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/CELEBRATION!.mp4"
-      },
-      {
-        type: "video",
-        title: "The Bunny That Found a Mysterious Phone",
-        description: "An AI-generated short about a curious bunny who stumbles upon a mysterious phone.",
-        note: "Tagged #shorts #funny #pets #bunny — built for viral short-form reach.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Copy%20of%20The%20Bunny%20That%20Found%20a%20Mysterious%20Phone%20%23shorts%20%23funny%20%23pets%20%23bunny.mp4"
-      },
-      {
-        type: "video",
-        title: "Dodge It",
-        description: "An AI-generated action reel featuring high-speed dodging sequences and dramatic visuals.",
-        note: "Fast-paced AI animation built for entertainment and engagement.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/DODGE%20IT.mp4"
-      },
-      {
-        type: "video",
-        title: "Dulla",
-        description: "An AI-generated character piece featuring a bold and expressive AI persona named Dulla.",
-        note: "Original AI character showcase.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/DULLA.mp4"
-      },
-      {
-        type: "video",
-        title: "Dudi Dudi Dum Dummm",
-        description: "A fun and quirky AI-generated bunny video set to a catchy rhythm.",
-        note: "Tagged #rabbit #bunny #pets — lighthearted content for pet audiences.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Dudi%20dudi%20dum%20dummm%20%23rabbit%20%23bunny%20%23pets.mp4"
-      },
-      {
-        type: "video",
-        title: "Egg Breaking",
-        description: "An AI-generated satisfying and dramatic egg-breaking sequence.",
-        note: "Oddly satisfying AI visual content.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/EGG%20BREAKING.mp4"
-      },
-      {
-        type: "video",
-        title: "Family, Cake, and Business Boundaries",
-        description: "An AI-generated storytelling piece exploring the clash between family dynamics and professional boundaries.",
-        note: "Relatable narrative-driven AI content for lifestyle audiences.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Family,%20Cake,%20and%20Business%20Boundaries.mp4"
-      },
-      {
-        type: "video",
-        title: "Fat Bunny Becomes a Dimensional Chef King",
-        description: "An AI-generated epic short where a chubby bunny rises to become the ruler of a culinary dimension.",
-        note: "Tagged #shorts #bunny #cutebunny — wild AI storytelling at its best.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Fat%20Bunny%20Becomes%20a%20Dimensional%20Chef%20King%20%23shorts%20%23bunny%20%23cutebunny.mp4"
-      },
-      {
-        type: "video",
-        title: "Fluffy Bunny vs. Alligator with a Bat!",
-        description: "An AI-generated battle clip of a fluffy bunny squaring off against an alligator armed with a bat.",
-        note: "Tagged #shorts #aibunny #bunny #cutebunny — absurd and entertaining AI action.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/Fluffy%20Bunny%20vs.%20Alligator%20with%20a%20Bat_!%20%23shorts%20%23aibunny%20%23bunny%20%23cutebunny.mp4"
-      },
-      {
-        type: "video",
-        title: "Is That All You Got",
-        description: "A bold AI-generated hype video with an intense, challenging energy.",
-        note: "Great for motivational or combat-themed AI content.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/IS%20THAT%20ALL%20YOU%20GOT.mp4"
-      },
-      {
-        type: "video",
-        title: "King Charles",
-        description: "An AI-generated regal piece featuring a dramatic portrayal of King Charles.",
-        note: "Royal-themed AI generated content with a cinematic feel.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/AI%20GENERATED/KING%20CHARLES.mp4"
-      },
-    ]
-  }
 ];
 
-export const editorTools = [
-  "Adobe Premiere Pro",
-  "Adobe Photoshop",
-  "Affinity",
-  "Lightroom",
-  "DaVinci Resolve",
-  "Canva",
-  "CapCut",
-  "Figma",
+export const editorTools: Tool[] = [
+  { name: "DaVinci Resolve", icon: davinciIcon },
+  { name: "Adobe Photoshop", icon: photoshopIcon },
+  { name: "Affinity", icon: affinityIcon },
+  { name: "Canva", icon: canvaIcon },
 ];

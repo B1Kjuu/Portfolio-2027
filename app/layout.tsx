@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo, Fraunces, Hanken_Grotesk } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import Wipe from "@/components/site/Wipe";
 import "./globals.css";
 
@@ -27,6 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a className="skip" href="#main">Skip to content</a>
         {children}
         <Wipe />
+        <Analytics />
       </body>
     </html>
   );

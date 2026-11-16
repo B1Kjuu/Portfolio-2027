@@ -1,5 +1,24 @@
 /* Contact: paper world, one clear action. */
 .ct-hero { padding: clamp(28px, 5vw, 64px) var(--gutter) clamp(48px, 7vw, 96px); }
+.ct-hero-meta, .ct-hero-note {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.ct-hero-meta { padding-bottom: clamp(28px, 5vw, 64px); border-bottom: 1px solid var(--line); }
+.ct-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 7fr) minmax(320px, 5fr);
+  gap: clamp(32px, 8vw, 140px);
+  align-items: end;
+  padding-block: clamp(48px, 8vw, 112px);
+}
+.ct-hero-copy { max-width: 860px; }
 .ct-title {
   font-family: var(--font-fraunces), serif;
   font-style: italic;
@@ -10,12 +29,21 @@
   text-wrap: balance;
   animation: ct-rise 800ms var(--ease-out) backwards;
 }
+.ct-title em { font-style: normal; color: var(--muted); }
 .ct-title span { color: var(--accent); }
 .ct-lede { margin-top: clamp(20px, 3vw, 36px); max-width: 46ch; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.5; color: var(--muted); text-wrap: pretty; }
 
-.ct-email { margin-top: clamp(28px, 4vw, 48px); display: grid; gap: 18px; justify-items: start; animation: ct-fade 600ms var(--ease-out) 160ms backwards; }
+.ct-contact-panel {
+  padding: clamp(24px, 3vw, 38px);
+  border: 1px solid var(--line);
+  background: #e6dac5;
+  box-shadow: 14px 14px 0 #1c16110d;
+  animation: ct-fade 600ms var(--ease-out) 160ms backwards;
+}
+.ct-panel-kicker { display: block; color: var(--muted); font-size: 14px; font-weight: 700; }
+.ct-email { margin-top: 16px; display: grid; gap: 18px; justify-items: start; }
 .ct-address {
-  font-size: clamp(22px, 4.6vw, 56px);
+  font-size: clamp(21px, 2.8vw, 38px);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -49,6 +77,23 @@
 .ct-write svg { width: 18px; height: 18px; transition: transform 200ms var(--ease-out); }
 .ct-copy:active, .ct-write:active { transform: scale(0.97); }
 .ct-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.ct-panel-rule { height: 1px; margin: 28px 0 22px; background: var(--line); }
+.ct-whatsapp { display: grid; gap: 6px; margin-top: 6px; }
+.ct-contactLabel { color: var(--muted); font-size: 15px; font-weight: 600; }
+.ct-whatsapp a {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: clamp(20px, 3vw, 32px);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.16em;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+.ct-whatsapp svg { width: 18px; height: 18px; flex: none; color: var(--muted); transition: transform 200ms var(--ease-out), color 160ms ease; }
 
 .ct-row {
   display: grid;
@@ -66,10 +111,14 @@
   letter-spacing: -0.02em;
   text-wrap: balance;
 }
-.ct-briefs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px clamp(24px, 4vw, 64px); }
+.ct-briefs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.ct-brief { position: relative; min-height: 240px; padding: 24px; background: var(--bg); }
+.ct-brief-number { display: block; margin-bottom: 52px; color: var(--accent); font-size: 14px; font-weight: 700; }
 .ct-briefs h3 { font-size: clamp(19px, 1.7vw, 24px); font-weight: 600; letter-spacing: -0.01em; }
 .ct-briefs ul { margin-top: 12px; padding-left: 1.1em; display: grid; gap: 8px; font-size: 17px; line-height: 1.5; color: var(--muted); }
 .ct-briefs li::marker { color: var(--accent); }
+.ct-hero-note { align-items: center; padding-top: 20px; border-top: 1px solid var(--line); }
+.ct-note-arrow { color: var(--accent); font-size: 22px; }
 
 .ct-links { list-style: none; border-top: 1px solid var(--line); }
 .ct-links li { border-bottom: 1px solid var(--line); }
@@ -94,12 +143,26 @@
 @media (hover: hover) and (pointer: fine) {
   .ct-address:hover { text-decoration-color: var(--accent); }
   .ct-write:hover svg { transform: translateX(4px); }
+  .ct-whatsapp a:hover { color: var(--accent); text-decoration-color: var(--accent); }
+  .ct-whatsapp a:hover svg { color: var(--accent); transform: translate(2px, -2px); }
   .ct-links a:hover { color: var(--accent); }
   .ct-links a:hover svg { color: var(--accent); transform: translate(2px, -2px); }
 }
 @media (max-width: 760px) {
+  .ct-hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .ct-contact-panel { box-shadow: 8px 8px 0 #1c16110d; }
   .ct-row { grid-template-columns: 1fr; }
   .ct-briefs { grid-template-columns: 1fr; }
+  .ct-brief { min-height: 0; }
+  .ct-brief-number { margin-bottom: 30px; }
+}
+@media (max-width: 480px) {
+  .ct-hero-meta, .ct-hero-note { font-size: 11px; }
+  .ct-hero-meta span:last-child { text-align: right; }
+  .ct-hero-note { align-items: flex-start; }
+  .ct-contact-panel { padding: 22px 18px; }
+  .ct-acts { align-items: stretch; flex-direction: column; width: 100%; }
+  .ct-copy, .ct-write { justify-content: center; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
   .ct-title { animation-name: ct-fade; animation-duration: 300ms; }

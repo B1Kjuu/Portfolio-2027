@@ -26,6 +26,9 @@ const elsewhere = [
   { label: "Facebook", href: "https://www.facebook.com/b1kjuu" },
 ];
 
+const whatsappNumber = "+63 994 158 6766";
+const whatsappHref = "https://wa.me/639941586766";
+
 export default function ContactPage() {
   return (
     <div className="world-edit">
@@ -33,31 +36,57 @@ export default function ContactPage() {
 
       <main id="main">
         <section className="ct-hero">
-          <h1 className="ct-title">Get in touch<span>.</span></h1>
-          <p className="ct-lede">
-            For a website, an app or a video edit, email is the fastest way to reach me. I am based in {person.location}.
-          </p>
-          <CopyEmail email={person.email} />
+          <div className="ct-hero-meta">
+            <span>Contact / 01</span>
+            <span>Based in {person.location}</span>
+          </div>
+          <div className="ct-hero-grid">
+            <div className="ct-hero-copy">
+              <h1 className="ct-title">Let&apos;s make something <em>real</em><span>.</span></h1>
+              <p className="ct-lede">
+                Websites, apps and edits with a clear point of view. Tell me what you are trying to make and I will help find the sharpest way forward.
+              </p>
+            </div>
+            <div className="ct-contact-panel" aria-label="Contact Joebeck">
+              <span className="ct-panel-kicker">Start with an email</span>
+              <CopyEmail email={person.email} />
+              <div className="ct-panel-rule" />
+              <div className="ct-whatsapp">
+                <span className="ct-contactLabel">Prefer WhatsApp?</span>
+                <a href={whatsappHref} target="_blank" rel="noreferrer">
+                  {whatsappNumber}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                    <path d="M7 17L17 7M9 7h8v8" />
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div className="ct-hero-note">
+            <span>Good conversations start with a rough idea.</span>
+            <span className="ct-note-arrow" aria-hidden>↓</span>
+          </div>
         </section>
 
         <section className="ct-row" aria-labelledby="ct-brief">
           <h2 id="ct-brief">What helps me reply well</h2>
           <div className="ct-briefs">
             {briefs.map((brief) => (
-              <div key={brief.title}>
+              <article className="ct-brief" key={brief.title}>
+                <span className="ct-brief-number" aria-hidden>0{briefs.indexOf(brief) + 1}</span>
                 <h3>{brief.title}</h3>
                 <ul>
                   {brief.points.map((point) => (
                     <li key={point}>{point}</li>
                   ))}
                 </ul>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
         <section className="ct-row" aria-labelledby="ct-else">
-          <h2 id="ct-else">Elsewhere</h2>
+          <h2 id="ct-else">Find me elsewhere</h2>
           <ul className="ct-links">
             {elsewhere.map((item) => (
               <li key={item.label}>

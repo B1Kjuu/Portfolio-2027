@@ -143,6 +143,14 @@ export default function Stage({ side, cards }: { side: Side; cards: StageCard[] 
   );
   usePointer(!still);
 
+  // Phones held upright have no room for the 3D beside the text and buttons, so it is not
+  // created there at all (no WebGL, no battery cost). Tablets and wider keep it.
+  const phone = useMemo(
+    () => typeof window !== "undefined" && window.matchMedia("(max-width: 699px) and (orientation: portrait)").matches,
+    [],
+  );
+  if (phone) return null;
+
   return (
     <Canvas
       camera={{ fov: 34, position: [0, 0, 9] }}

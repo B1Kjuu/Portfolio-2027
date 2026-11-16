@@ -217,6 +217,7 @@
   transition: transform 160ms var(--ease-out);
 }
 .sp-grip svg { width: 18px; height: 18px; flex: none; }
+.sp-gripName { display: none; } /* phones only */
 .sp-avatar {
   flex: none;
   max-width: none;
@@ -339,8 +340,9 @@ html[data-intro] .sp-title, html[data-intro] .sp-lede, html[data-intro] .sp-foot
 html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { animation-play-state: paused; }
 
 /* ---------- phones and narrow tablets: the same split, turned on its side ----------
-   Build is the top layer and Cut the bottom one, both on one screen. The seam is a
-   horizontal line and the portrait is dragged up or down. */
+   Build is the top layer and Cut the bottom one, both on one screen. Each half holds three
+   things only (word, one line, one button) and the seam holds one: a pill with the portrait
+   and name that is dragged up or down, or tapped for About. */
 @media (max-width: 860px) {
   .sp-root { height: 100svh; min-height: 600px; }
   .sp-nav { padding: 0 20px; height: 64px; }
@@ -351,45 +353,50 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
   .sp-edit { clip-path: inset(calc(var(--p) * 100%) 0 0 0); }
   .sp-seam { top: 50%; bottom: auto; left: 0; right: 0; width: auto; height: 1px; translate: 0 calc((var(--p) - 0.5) * 100svh); }
   .sp-handle { translate: -50% calc(-50% + (var(--h, 0.5) - 0.5) * 100svh); cursor: grab; }
-  .sp-grip { flex-direction: column; gap: 2px; padding: 6px; }
-  .sp-grip svg { rotate: 90deg; }
-  .sp-avatar { width: 68px; height: 68px; }
-  /* "About me" sits to the right of the portrait, the name to its left, both on the seam */
-  .sp-hint { top: 50%; left: calc(100% + 10px); translate: 0 -50%; padding: 8px 13px; font-size: 14px; }
-  .sp-id {
-    top: 50%;
-    left: auto;
-    right: calc(50% + 54px);
-    max-width: 128px;
-    translate: 0 calc(-50% + (var(--h, 0.5) - 0.5) * 100svh);
-    text-align: right;
-    white-space: normal;
-  }
-  .sp-name { font-size: 15px; line-height: 1.15; }
-  .sp-id { padding-block: 6px; } /* 44px tap height */
-  .sp-role { display: none; }
-  .sp-root[data-settling] .sp-id { transition: translate 420ms var(--ease-out), opacity 200ms ease; }
-  .sp-root[data-opening] .sp-id { opacity: 0; }
 
-  .sp-copy { top: 70px; left: 20px; right: 20px; }
-  .sp-edit .sp-copy { top: calc(50% + 64px); text-align: left; }
-  .sp-edit .sp-lede { margin-left: 0; }
+  /* the pill: portrait, name, and a small up/down pair of arrows */
+  .sp-grip { display: grid; grid-template-columns: auto auto auto; grid-template-rows: auto auto; align-items: center; column-gap: 12px; padding: 6px 14px 6px 6px; }
+  .sp-avatar { grid-column: 1; grid-row: 1 / 3; width: 52px; height: 52px; }
+  .sp-gripName {
+    display: block;
+    grid-column: 2;
+    grid-row: 1 / 3;
+    font-family: var(--font-archivo), sans-serif;
+    font-stretch: 112%;
+    font-weight: 750;
+    font-size: 16px;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    color: #1c1611;
+  }
+  .sp-grip svg { grid-column: 3; width: 16px; height: 16px; rotate: 90deg; }
+  .sp-grip svg:first-child { grid-row: 1; align-self: end; }
+  .sp-grip svg:last-of-type { grid-row: 2; align-self: start; }
+  .sp-hint { display: none; } /* About is in the bar above, and a tap on the pill opens it */
+  /* the page heading stays for screen readers and search engines; the pill shows the name */
+  .sp-id { top: 0; left: 0; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); translate: none; }
+
+  /* each half is a simple column: Build from the top left, Cut from the bottom right */
+  .sp-half { display: flex; flex-direction: column; padding: 76px 20px 28px; }
+  .sp-copy, .sp-foot { position: relative; inset: auto; }
+  .sp-edit { justify-content: flex-end; align-items: flex-end; text-align: right; }
   .sp-title { font-size: clamp(56px, 21vw, 120px); }
   .sp-edit .sp-title { font-size: clamp(64px, 24vw, 136px); }
-  /* room is tight: show only the bold line of each intro */
-  .sp-lede { margin-top: 12px; max-width: min(64vw, 300px); font-size: 0; } /* px, not ch: ch is 0 at font-size 0 */
-  .sp-lede strong { font-size: 16px; line-height: 1.4; }
-
-  .sp-foot { left: 20px; right: auto; flex-direction: row; }
-  .sp-tech .sp-foot { bottom: calc(50% + 76px); }
-  .sp-edit .sp-foot { bottom: 22px; align-items: center; }
+  /* show only the bold line of each intro */
+  .sp-lede { margin-top: 12px; max-width: min(74vw, 340px); font-size: 0; }
+  .sp-edit .sp-lede { margin-left: auto; }
+  .sp-lede strong { font-size: 17px; line-height: 1.4; }
+  .sp-foot { margin-top: 22px; flex-direction: row; }
   .sp-count { display: none; }
-  .sp-enter { padding: 13px 19px; font-size: 16px; }
+  .sp-enter { padding: 14px 20px; font-size: 16px; }
 
-  /* the 3D sits on the right of each half, under the text */
-  .sp-tech .sp-stage, .sp-edit .sp-stage { left: 30%; right: 0; width: auto; translate: none; }
-  .sp-tech .sp-stage { top: 150px; bottom: calc(50% + 8px); }
-  .sp-edit .sp-stage { top: calc(50% + 150px); bottom: 6px; }
+  /* 3D: tablets have room for it opposite the text; phones do not (it is not created there) */
+  .sp-stage { display: none; }
+}
+@media (min-width: 700px) and (max-width: 860px) {
+  .sp-tech .sp-stage, .sp-edit .sp-stage { display: block; width: auto; translate: none; }
+  .sp-tech .sp-stage { left: 44%; right: 0; top: 110px; bottom: calc(50% + 24px); }
+  .sp-edit .sp-stage { left: 0; right: 44%; top: calc(50% + 44px); bottom: 20px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .sp-enter, .sp-enter svg, .sp-grip, .sp-contact { transition: none; }
@@ -401,6 +408,13 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
 
 /* ---------- phones on their side: both halves side by side, text only, no drag ---------- */
 @media (max-width: 860px) and (orientation: landscape) and (max-height: 560px) {
+  /* undo the upright-phone column layout and the hidden heading */
+  .sp-half { display: block; padding: 0; }
+  .sp-copy, .sp-foot { position: absolute; }
+  .sp-edit { text-align: left; }
+  .sp-edit .sp-lede { margin-left: 0; }
+  .sp-foot { margin-top: 0; }
+  .sp-id { width: auto; height: auto; overflow: visible; clip-path: none; }
   .sp-root { min-height: 320px; }
   .sp-half { width: 50%; clip-path: none; }
   .sp-tech { left: 0; }

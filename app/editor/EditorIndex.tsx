@@ -12,7 +12,7 @@ const Chevron = ({ dir }: { dir: "left" | "right" }) => (
   </svg>
 );
 
-export type Pick = { title: string; poster: string };
+export type Pick = { title: string; poster?: string };
 
 export default function EditorIndex({ folders, featured = [] }: { folders: EditorItem[]; featured?: Pick[] }) {
   const dialog = useRef<HTMLDialogElement>(null);
@@ -39,6 +39,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
 
   const playing = current === null ? null : all[current];
   const position = playing ? shown.findIndex((v) => v.id === playing.id) : -1;
+  const playingPoster = playing ? featured.find((pick) => pick.title === playing.title)?.poster : undefined;
 
   const open = (video: Video) => {
     setCurrent(video.id);
@@ -125,8 +126,8 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
                   aria-label={`Play ${video.title}`}
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element -- small local still, already sized */}
-                  <img src={pick.poster} alt="" loading="lazy" />
-                  {hoverPick === video.id && <video ref={playMuted} src={video.videoUrl} loop playsInline preload="auto" />}
+                  {pick.poster && <img src={pick.poster} alt="" loading="eager" />}
+                  {hoverPick === video.id && <video ref={playMuted} src={video.videoUrl} loop playsInline preload="metadata" />}
                   <span className="ep-pickPlay" aria-hidden>
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z" /></svg>
                   </span>
@@ -204,7 +205,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
 
       {preview && !playing && (
         <div className="ep-preview" style={{ top: preview.top }} aria-hidden>
-          <video key={preview.video.videoUrl} ref={playMuted} src={preview.video.videoUrl} loop playsInline preload="auto" />
+          <video key={preview.video.videoUrl} ref={playMuted} src={preview.video.videoUrl} loop playsInline preload="metadata" />
           <span>Preview, no sound</span>
         </div>
       )}
@@ -228,6 +229,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
               <video
                 key={playing.videoUrl}
                 src={playing.videoUrl}
+                poster={playingPoster}
                 controls
                 autoPlay
                 playsInline
@@ -238,7 +240,12 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
                   setFailed(true);
                 }}
               />
-              {loading && <p className="ep-loading" role="status">Loading video…</p>}
+              {loading && (
+                <p className="ep-loading" role="status">
+                  <span className="ep-loadingMark" aria-hidden />
+                  Loading video…
+                </p>
+              )}
               {failed && (
                 <div className="ep-error" role="alert">
                   <p>This video could not be loaded here.</p>

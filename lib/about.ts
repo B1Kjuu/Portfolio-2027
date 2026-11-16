@@ -4,7 +4,7 @@ export const person = {
   name: "Joebeck Andrew Gusi",
   role: "Full-stack developer and creative technologist",
   location: "Manila, Philippines",
-  email: "joebeckgusi25@gmail.com",
+  email: "joebeckgusi@gmail.com",
   intro: [
     "I am a full-stack developer and video editor based in Manila. I build responsive web apps with React and Next.js, and I edit high-retention video for brands. Right now I work as a multimedia specialist at YAEY Production while finishing a Computer Engineering degree at the Polytechnic University of the Philippines.",
     "I like working where complex technical systems meet visual storytelling: the same person who writes the React components can also cut the launch video.",

@@ -150,6 +150,102 @@ export type EditorItem = {
 };
 
 export const editorProjects : EditorItem[] = [
+  {
+    type: "folder",
+    title: "Talking Heads",
+    items: [
+      {
+        type: "video",
+        title: "Why Micromanaging Means Trust Issues",
+        description: "Talking-head reel on micromanaging, set in a branded frame with numbered note cards and a full-screen stat graphic.",
+        note: "Influence with Hubert. Vertical, 2:02",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/why-micromanaging-means-trust-issues.mp4"
+      },
+      {
+        type: "video",
+        title: "I Invest in You",
+        description: "Founder-to-camera reel on why investors back people, cut with tag labels and full-screen kinetic type.",
+        note: "Influence with Hubert. Vertical, 2:09",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/i-invest-in-you.mp4"
+      },
+      {
+        type: "video",
+        title: "Cafes and Ideas",
+        description: "Talking-head reel shot in a cafe, with bold two-tone captions and comic-style speech bubbles.",
+        note: "Influence with Hubert. Vertical, 1:37",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/cafes-and-ideas.mp4"
+      },
+      {
+        type: "video",
+        title: "Fancy Office",
+        description: "Talking-head story with on-screen figures, quote cards and an animated meter.",
+        note: "Influence with Hubert. Vertical, 3:15",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/fancy-office.mp4"
+      },
+      {
+        type: "video",
+        title: "Persona",
+        description: "Explainer reel styled as a notebook: handwritten titles, paper note cards and lowercase captions.",
+        note: "Influence with Hubert. Vertical, 1:48",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/persona.mp4"
+      },
+      {
+        type: "video",
+        title: "Trident Digital",
+        description: "Studio talking head on recruiting, set with serif word-by-word captions.",
+        note: "Vertical, 0:57",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/trident-digital.mp4"
+      },
+      {
+        type: "video",
+        title: "Lisa",
+        description: "Real estate agent to camera, with caption highlights, property cutaways and black-and-white inserts.",
+        note: "Vertical, 1:22",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/lisa-talking-head.mp4"
+      },
+      {
+        type: "video",
+        title: "Iman",
+        description: "Direct-to-camera offer video with neon figures and full-screen text beats.",
+        note: "Horizontal, 0:33",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/iman-talking-head.mp4"
+      },
+    ]
+  },
+  {
+    type: "folder",
+    title: "Ads",
+    items: [
+      {
+        type: "video",
+        title: "Semo Ad",
+        description: "Cinematic food commercial: a family kitchen scene cut for warmth, carried by picture alone.",
+        note: "Horizontal, 1:22",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/semo-ad.mp4"
+      },
+      {
+        type: "video",
+        title: "Pool Builders",
+        description: "Trade-show promo mixing an on-site interview with cinematic cutaways, large type and a 3D globe graphic.",
+        note: "Vertical, 0:21",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/pool-builders.mp4"
+      },
+      {
+        type: "video",
+        title: "Brenda Yip Ad",
+        description: "Property advice ad shot in a show flat, with accent-colour captions and on-screen keywords.",
+        note: "Vertical, 1:03",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/brenda-yip-ad.mp4"
+      },
+      {
+        type: "video",
+        title: "IBRA Ad",
+        description: "Desk-and-microphone ad with highlighted captions, colour flashes and a subscribe prompt.",
+        note: "Horizontal, 0:26",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/ibra-ad.mp4"
+      },
+    ]
+  },
 {
     type: "folder",
     title: "UGC",
@@ -184,31 +280,23 @@ type: "video",
       },
       {
         type: "video",
-        title: "Final Clip 1",
-        description: "A/B test variation focusing on a strong visual hook. Built to stop the scroll within the critical first 3 seconds.",
-        note: "First-3-seconds hook focus.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/RAW%20Clip%201_FInal.mp4"
-      },
-      {
-        type: "video",
-        title: "Final Clip 2",
-        description: "Narrative-driven UGC edit. Focuses on authentic storytelling and user experience to build product trust.",
-        note: "Story-driven ad.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/RAW%20Clip%20Snd_Final.mp4"
-      },
-      {
-        type: "video",
-        title: "Final Clip 3",
-        description: "Fast-paced compilation featuring energetic cuts, dynamic zooms, and trend-conscious audio syncing.",
-        note: "Social media deliverable.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/RAW%20Clip%20Trd_Final.mp4"
-      },
-      {
-        type: "video",
         title: "Kelowna Finance",
         description: "Professional yet accessible financial content. Incorporates clean data visualizations, smooth pacing, and authoritative branding.",
         note: "B2C trust-building.",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/kelowna_finance.mp4"
+      },
+    ]
+  },
+  {
+    type: "folder",
+    title: "Events",
+    items: [
+      {
+        type: "video",
+        title: "Pawparazzi",
+        description: "Event reel from a pet expo: quick interviews, crowd moments and bright captions.",
+        note: "Vertical, 0:37",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/pawparazzi.mp4"
       },
     ]
   },
@@ -225,115 +313,11 @@ type: "video",
       },
       {
         type: "video",
-        title: "MOTOVLOG",
+        title: "Motovlog",
         description: "High-octane action sequence. Relies heavily on speed-ramping, kinetic typography, and immersive spatial sound design.",
         note: "Action / Lifestyle edit.",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/TRAVEL/MOTOVLOG%20trial.mp4"
       }
-    ]
-  },
-  {
-    type: "folder",
-    title: "Short Fact Reels",
-    items: [
-      {
-        type: "video",
-        title: "Amsterdam Clock",
-        description: "A short fact reel about the iconic Amsterdam clock and its history.",
-        note: "Fun fact about Dutch timekeeping and culture.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/AMSTERDAM%20CLOCK.mp4"
-      },
-      {
-        type: "video",
-        title: "Clean Windows = Better Visibility",
-        description: "A quick tip reel on why keeping your windows clean improves visibility and safety.",
-        note: "Practical life hack for drivers and homeowners.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/Clean%20windows%20=%20better%20visibility.mp4"
-      },
-      {
-        type: "video",
-        title: "Dental Formula - Water Additive",
-        description: "A short reel highlighting a dental water additive formula for better oral hygiene.",
-        note: "Pet or human dental health product feature.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/DENTAL%20FORMULA%20-%20WATER%20ADDITIVE.mp4"
-      },
-      {
-        type: "video",
-        title: "F1 Car",
-        description: "A fast-paced fact reel breaking down insane engineering stats of a Formula 1 car.",
-        note: "Great for motorsport and engineering enthusiasts.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/F1%20CAR.mp4"
-      },
-      {
-        type: "video",
-        title: "Firefighter Wiggle",
-        description: "A reel explaining the signature wiggle technique firefighters use when navigating through smoke.",
-        note: "Safety and rescue technique breakdown.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/FIREFIGHTER%20WIGGLE.mp4"
-      },
-      {
-        type: "video",
-        title: "Happy Saffron",
-        description: "A short fact reel on saffron's mood-boosting properties and its use as a natural antidepressant.",
-        note: "Covers the science behind saffron and mental wellness.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/HAPPY%20SAFFRON.mp4"
-      },
-      {
-        type: "video",
-        title: "Have You Lost a Hat Too? #Melbourne",
-        description: "A fun reel about Melbourne's notoriously windy streets and the hats they claim.",
-        note: "Relatable moment for Melbourne locals and visitors.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/Have%20you%20lost%20a%20hat%20too%23melbour.mp4"
-      },
-      {
-        type: "video",
-        title: "How Do Astronauts POOP in Space!",
-        description: "A hilarious yet informative reel on the engineering challenge of using the bathroom in zero gravity.",
-        note: "One of the most asked questions about space life — answered.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/How%20Do%20Astronauts%20POOP%20in%20Space!.mp4"
-      },
-      {
-        type: "video",
-        title: "Mud Water",
-        description: "A short reel about MudWtr, the coffee alternative made from mushrooms and adaptogens.",
-        note: "Health and wellness product spotlight.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/MUD%20WATER.mp4"
-      },
-      {
-        type: "video",
-        title: "Meet Brick",
-        description: "The ultimate solution to reclaim your focus — a physical device that blocks distracting apps.",
-        note: "Productivity and digital wellness product feature.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/Meet%20Brick,%20the%20ultimate%20solution%20to%20reclaim%20your%20focus.mp4"
-      },
-      {
-        type: "video",
-        title: "On Sale - $500 Off! Saunas",
-        description: "A promotional reel for high-quality, non-toxic saunas now on sale with $500 off.",
-        note: "Limited-time offer on ready-to-use home saunas.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/On%20sale%20-%20$500%20off!All%20our%20saunas%20are--%20Made%20of%20high%20quality,%20non-toxic%20materials-%20Delivered%20rea.mp4"
-      },
-      {
-        type: "video",
-        title: "Shrimp Salad",
-        description: "A quick and satisfying shrimp salad recipe or food fact reel packed with flavor tips.",
-        note: "Great for food lovers and quick meal inspiration.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/SHRIMP%20SALAD.mp4"
-      },
-      {
-        type: "video",
-        title: "Why Are People Still Eating GOLD! 💀💸",
-        description: "A shocking fact reel on the bizarre trend of consuming edible gold and whether it's worth it.",
-        note: "Covers the health, history, and cost of eating gold.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/Why%20Are%20People%20Still%20Eating%20GOLD!%20%F0%9F%92%80%F0%9F%92%B8.mp4"
-      },
-      {
-        type: "video",
-        title: "Why Is the Stadium SHAKING!",
-        description: "A fascinating reel explaining the science behind stadium vibrations during massive crowd events.",
-        note: "Structural engineering meets crowd psychology.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/SHORT%20FACTS%20REELS/Why%20Is%20the%20Stadium%20SHAKING!.mp4"
-      },
     ]
   },
   {
@@ -347,6 +331,13 @@ type: "video",
         note: "Coastal luxury real estate feature in Corona del Mar, CA.",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/REAL%20ESTATE/Corona%20del%20Mar.mp4"
       },
+      {
+        type: "video",
+        title: "Real Estate Reel",
+        description: "Walk-and-talk to camera with bold kinetic captions and a phone mock-up of a local Instagram ad.",
+        note: "Vertical, 0:44",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/real-estate-reel.mp4"
+      },
     ]
   },
   {
@@ -355,38 +346,38 @@ type: "video",
     items: [
       {
         type: "video",
-        title: "East Coast Living Throughout the Seasons",
+        title: "East Coast Living Through the Seasons",
         description: "A long-form documentary-style video capturing the essence of East Coast life across all four seasons.",
         note: "Lifestyle and travel feature along the East Coast.",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/Copy%20of%20East%20Coast%20living%20throughout%20the%20seasons.mp4"
       },
       {
         type: "video",
-        title: "Hack-A-Shaq",
-        description: "A long-form sports video diving into the infamous Hack-a-Shaq strategy in NBA history.",
-        note: "In-depth basketball tactics and history breakdown.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/Hack-A-Shaq.mp4"
-      },
-      {
-        type: "video",
-        title: "LeBron vs Kobe - Every Time They Faced Off",
-        description: "A comprehensive long-form breakdown of every head-to-head matchup between LeBron James and Kobe Bryant.",
-        note: "Epic NBA rivalry deep dive covering all their meetings.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/LeBron%20vs%20Kobe%20-%20Every%20Time%20They%20Faced%20Off.mp4"
-      },
-      {
-        type: "video",
-        title: "VSL Final",
-        description: "The final cut of a Video Sales Letter (VSL) designed to convert viewers into customers.",
-        note: "Polished VSL ready for campaign deployment.",
-        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/VSL%20FINAL.mp4"
-      },
-      {
-        type: "video",
-        title: "3 forgotten tricks from the 1950s on how to be a beautiful woman",
+        title: "3 Forgotten Tricks from the 1950s",
         description: "Test Vintage-style Edit for a client.",
         note: "vintage-style edit about 1950s",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/3%20forgotten%20tricks%20from%20the%201950s%20on%20how%20to%20be%20a%20beautiful%20woman.mp4"
+      },
+      {
+        type: "video",
+        title: "To Be a Millionaire",
+        description: "Long-form finance video with animated 3D icons and illustrated cutaways.",
+        note: "Horizontal, 4:56",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/to-be-a-millionaire.mp4"
+      },
+      {
+        type: "video",
+        title: "Educational Demo",
+        description: "Long-form educational video to camera, with archival-style cutaways and on-screen effects.",
+        note: "Horizontal, 3:23",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/educational-demo.mp4"
+      },
+      {
+        type: "video",
+        title: "Royston G King",
+        description: "YouTube-style education video with numbered caption lists and animated interface cards.",
+        note: "Horizontal, 1:04",
+        videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/royston-g-king.mp4"
       },
     ]
   },

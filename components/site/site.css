@@ -335,3 +335,9 @@
 .mq-tech li img[data-dark] { filter: invert(1); }
 .mq li { gap: 14px; padding-right: 0; }
 .mq li::after { margin: 0 26px 0 12px; }
+
+/* phones: four links plus the wordmark do not fit; the resume stays in the footer and on About/Contact */
+@media (max-width: 480px) {
+  .sn { padding-inline: 16px; }
+  .sn-resume { display: none; }
+}

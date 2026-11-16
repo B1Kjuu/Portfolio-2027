@@ -4,7 +4,6 @@ import PhoneReel from "@/components/site/PhoneReel";
 import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import { editorProjects, editorTools } from "@/lib/content";
 import { slug } from "@/lib/slug";
-import coffee from "@/assets/reels/ugc-coffee.jpg";
 import estate from "@/assets/reels/real-estate.jpg";
 import kneemax from "@/assets/reels/kneemax.jpg";
 import EditorIndex from "./EditorIndex";
@@ -50,8 +49,8 @@ export default function EditorPage() {
         <EditorIndex
           folders={editorProjects}
           featured={[
-            { title: "Fungy Mushroom Coffee", poster: coffee.src },
-            { title: "Corona del Mar", poster: estate.src },
+            { title: "Iman" },
+            { title: "Real Estate Reel", poster: estate.src },
             { title: "KneeMax", poster: kneemax.src },
           ]}
         />

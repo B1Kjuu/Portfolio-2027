@@ -20,7 +20,7 @@ export default function SiteNav({ side, about = false, contact = false }: { side
             <Link href="/about">About</Link>
           </>
         )}
-        <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
+        <a className="sn-resume" href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
         <Link className="sn-contact" href="/contact" aria-current={contact ? "page" : undefined}>Contact</Link>
       </nav>
     </header>
@@ -72,11 +72,12 @@ export function SiteFooter({ side }: { side: "tech" | "edit" }) {
     <footer className={`sf sf-${side}`}>
       <span>Joebeck Andrew Gusi</span>
       <span className="sf-links">
+        <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
         <Link href="/about">About</Link>
         <a href="https://github.com/B1Kjuu" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/gusi-joebeck-andrew" target="_blank" rel="noreferrer">LinkedIn</a>
         <a href="https://www.facebook.com/b1kjuu" target="_blank" rel="noreferrer">Facebook</a>
-        <a href="mailto:joebeckgusi25@gmail.com">Email</a>
+        <a href="mailto:joebeckgusi@gmail.com">Email</a>
       </span>
     </footer>
   );

@@ -4,8 +4,6 @@ import PhoneReel from "@/components/site/PhoneReel";
 import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import { editorProjects, editorTools } from "@/lib/content";
 import { slug } from "@/lib/slug";
-import estate from "@/assets/reels/real-estate.jpg";
-import kneemax from "@/assets/reels/kneemax.jpg";
 import EditorIndex from "./EditorIndex";
 import "./editor.css";
 
@@ -48,11 +46,7 @@ export default function EditorPage() {
 
         <EditorIndex
           folders={editorProjects}
-          featured={[
-            { title: "Iman" },
-            { title: "Real Estate Reel", poster: estate.src },
-            { title: "KneeMax", poster: kneemax.src },
-          ]}
+          featured={["Iman", "Real Estate Reel", "KneeMax"]}
         />
       </main>
 

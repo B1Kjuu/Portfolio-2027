@@ -122,6 +122,8 @@
   white-space: nowrap;
 }
 .sp-word { display: inline-flex; }
+/* read by screen readers in place of the letter-by-letter animation */
+.sp-srOnly { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .sp-letter {
   display: inline-block;
   animation: sp-letter-rise 700ms var(--ease-out) backwards;

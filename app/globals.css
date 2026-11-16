@@ -122,3 +122,6 @@ html[data-entered] .in[data-phase="hold"] { display: none; } /* later visits: ne
 .wp[data-tone="home"]::after { display: block; left: 50%; width: 50%; background: var(--color-paper); }
 .wp[data-tone="home"][data-phase="ready"]::before, .wp[data-tone="home"][data-phase="leave"]::before { transform: translateX(-100%); }
 .wp[data-tone="home"][data-phase="ready"]::after, .wp[data-tone="home"][data-phase="leave"]::after { transform: translateX(100%); }
+
+/* counting numbers: fixed-width digits and a reserved width, so nearby text never shifts */
+.cu { display: inline-block; font-variant-numeric: tabular-nums; }

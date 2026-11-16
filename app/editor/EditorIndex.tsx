@@ -12,9 +12,15 @@ const Chevron = ({ dir }: { dir: "left" | "right" }) => (
   </svg>
 );
 
-export type Pick = { title: string; poster?: string };
+const PlayIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+    <path d="M7 4.5l13 7.5-13 7.5z" />
+  </svg>
+);
 
-export default function EditorIndex({ folders, featured = [] }: { folders: EditorItem[]; featured?: Pick[] }) {
+// The Cut page is a wall of videos. Each tile is a still frame that plays on hover and
+// opens the player on click; the words (description, format) live in the player.
+export default function EditorIndex({ folders, featured = [] }: { folders: EditorItem[]; featured?: string[] }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const [query, setQuery] = useState("");
   const [current, setCurrent] = useState<number | null>(null);
@@ -30,22 +36,50 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
 
   const q = query.trim().toLowerCase();
   const shown = useMemo(
-    () => (q ? all.filter((v) => `${v.title} ${v.description ?? ""} ${v.note ?? ""} ${v.folder}`.toLowerCase().includes(q)) : all),
+    () =>
+      q
+        ? all.filter((v) => `${v.title} ${v.description ?? ""} ${v.note ?? ""} ${v.client ?? ""} ${v.folder}`.toLowerCase().includes(q))
+        : all,
     [all, q],
   );
   const groups = folders
     .map((f) => ({ title: f.title, id: slug(f.title), items: shown.filter((v) => v.folder === f.title) }))
     .filter((g) => g.items.length > 0);
+  const picks = q ? [] : featured.map((title) => all.find((v) => v.title === title)).filter((v): v is Video => !!v);
 
   const playing = current === null ? null : all[current];
   const position = playing ? shown.findIndex((v) => v.id === playing.id) : -1;
-  const playingPoster = playing ? featured.find((pick) => pick.title === playing.title)?.poster : undefined;
+
+  // Hover preview (mouse only): the tile's own video plays, muted. A short pause before
+  // loading means a passing cursor does not fetch a video.
+  const [hoverId, setHoverId] = useState<string | null>(null);
+  const hoverTimer = useRef(0);
+  const enterTile = (key: string, e: React.PointerEvent) => {
+    if (
+      e.pointerType !== "mouse" ||
+      !window.matchMedia("(hover: hover) and (pointer: fine)").matches ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    )
+      return;
+    window.clearTimeout(hoverTimer.current);
+    hoverTimer.current = window.setTimeout(() => setHoverId(key), 260);
+  };
+  const leaveTile = () => {
+    window.clearTimeout(hoverTimer.current);
+    setHoverId(null);
+  };
+  // React can drop the muted attribute, and unmuted autoplay is blocked: set it by hand.
+  const playMuted = (el: HTMLVideoElement | null) => {
+    if (!el) return;
+    el.muted = true;
+    el.play().catch(() => {});
+  };
 
   const open = (video: Video) => {
     setCurrent(video.id);
     setLoading(true); // large source files can take a while before the first frame
     setFailed(false);
-    leaveHover();
+    leaveTile();
     if (!dialog.current?.open) dialog.current?.showModal();
   };
   const step = (dir: 1 | -1) => {
@@ -56,7 +90,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
   // Clearing the selection unmounts the <video>, which stops playback and the download.
   const onClose = () => setCurrent(null);
 
-  // Highlight the category you are reading in the strip.
+  // Highlight the category you are looking at in the strip.
   useEffect(() => {
     const sections = [...document.querySelectorAll<HTMLElement>(".ep-section")];
     if (!sections.length) return;
@@ -71,79 +105,61 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
     return () => io.disconnect();
   }, [q, folders]);
 
-  // Hover previews (mouse only): a frame plays in place, a list row shows a small floating
-  // player. A short pause before loading means a passing cursor does not fetch a video.
-  const [hoverPick, setHoverPick] = useState<number | null>(null);
-  const [preview, setPreview] = useState<{ video: Video; top: number } | null>(null);
-  const hoverTimer = useRef(0);
-  const canPreview = (e: React.PointerEvent) =>
-    e.pointerType === "mouse" &&
-    window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
-    !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const enterPick = (video: Video, e: React.PointerEvent) => {
-    if (!canPreview(e)) return;
-    window.clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => setHoverPick(video.id), 220);
+  // One tile. `scope` keeps hover state separate when a video appears in "Start here" too.
+  const tile = (video: Video, scope: string, showFolder = false) => {
+    const key = `${scope}-${video.id}`;
+    const poster = video.poster;
+    const ratio = poster ? poster.width / poster.height : 9 / 16;
+    return (
+      <li key={key}>
+        <button
+          type="button"
+          className="ep-tile"
+          style={{ "--ar": String(ratio) } as React.CSSProperties}
+          data-wide={ratio > 1 || undefined}
+          onClick={() => open(video)}
+          onPointerEnter={(e) => enterTile(key, e)}
+          onPointerLeave={leaveTile}
+          aria-label={`Play ${video.title}${video.length ? `, ${video.length}` : ""}`}
+        >
+          {poster ? (
+            // eslint-disable-next-line @next/next/no-img-element -- small local still, already sized
+            <img src={poster.src} width={poster.width} height={poster.height} alt="" loading="lazy" decoding="async" />
+          ) : (
+            <span className="ep-tileFallback" aria-hidden>{video.title}</span>
+          )}
+          {hoverId === key && <video ref={playMuted} src={video.videoUrl} loop playsInline preload="metadata" />}
+          <span className="ep-tilePlay" aria-hidden><PlayIcon /></span>
+          {video.length && <span className="ep-tileTime" aria-hidden>{video.length}</span>}
+          <span className="ep-tileName" aria-hidden>
+            {video.title}
+            {(showFolder || video.client) && <small>{showFolder ? label(video.folder) : video.client}</small>}
+          </span>
+        </button>
+      </li>
+    );
   };
-  const enterRow = (video: Video, e: React.PointerEvent<HTMLElement>) => {
-    if (!canPreview(e)) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const top = Math.max(230, Math.min(window.innerHeight - 360, rect.top - 110));
-    window.clearTimeout(hoverTimer.current);
-    hoverTimer.current = window.setTimeout(() => setPreview({ video, top }), 350);
-  };
-  const leaveHover = () => {
-    window.clearTimeout(hoverTimer.current);
-    setHoverPick(null);
-    setPreview(null);
-  };
-  // React can drop the muted attribute, and unmuted autoplay is blocked: set it by hand.
-  const playMuted = (el: HTMLVideoElement | null) => {
-    if (!el) return;
-    el.muted = true;
-    el.play().catch(() => {});
-  };
-
-  // Hand-picked starting points: the videos we have a still frame for.
-  const picks = featured
-    .map((pick) => ({ pick, video: all.find((v) => v.title === pick.title) }))
-    .filter((p): p is { pick: Pick; video: Video } => !!p.video);
 
   return (
     <>
       {picks.length > 0 && (
-        <section className="ep-picks" aria-labelledby="ep-picks-title">
-          <h2 id="ep-picks-title">Start here</h2>
-          <ul>
-            {picks.map(({ pick, video }) => (
-              <li key={video.id}>
-                <button
-                  type="button"
-                  className="ep-pick"
-                  onClick={() => open(video)}
-                  onPointerEnter={(e) => enterPick(video, e)}
-                  onPointerLeave={leaveHover}
-                  aria-label={`Play ${video.title}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element -- small local still, already sized */}
-                  {pick.poster && <img src={pick.poster} alt="" loading="eager" />}
-                  {!pick.poster && <span className="ep-pickFallback" aria-hidden>{video.title}</span>}
-                  {hoverPick === video.id && <video ref={playMuted} src={video.videoUrl} loop playsInline preload="metadata" />}
-                  <span className="ep-pickPlay" aria-hidden>
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z" /></svg>
-                  </span>
-                  <span className="ep-pickName">
-                    {video.title}
-                    <small>{label(video.folder)}</small>
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
+        <section className="ep-section ep-featured" aria-labelledby="ep-picks-title">
+          <header className="ep-head">
+            <h2 id="ep-picks-title">Start here</h2>
+            <span>{picks.length} picks</span>
+          </header>
+          <ul className="ep-wall">{picks.map((video) => tile(video, "pick", true))}</ul>
         </section>
       )}
 
-      <div className="ep-search">
+      <div className="ep-bar">
+        <nav className="ep-cats" aria-label="Categories">
+          {groups.map((g) => (
+            <a key={g.id} href={`#${g.id}`} aria-current={active === g.id ? "true" : undefined}>
+              {label(g.title)} <span>{g.items.length}</span>
+            </a>
+          ))}
+        </nav>
         <label className="ep-field">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
             <circle cx="11" cy="11" r="7" />
@@ -154,23 +170,15 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
             type="search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by title, client or style"
+            placeholder="Search"
             autoComplete="off"
             enterKeyHint="search"
           />
         </label>
-        <p className="ep-found" role="status">
-          {q ? `${shown.length} of ${all.length} videos` : `${all.length} videos`}
+        <p className="ep-srOnly" role="status">
+          {q ? `${shown.length} of ${all.length} videos` : ""}
         </p>
       </div>
-
-      <nav className="ep-cats" aria-label="Categories">
-        {groups.map((g) => (
-          <a key={g.id} href={`#${g.id}`} aria-current={active === g.id ? "true" : undefined}>
-            {label(g.title)} <span>{g.items.length}</span>
-          </a>
-        ))}
-      </nav>
 
       {groups.length === 0 && (
         <div className="ep-empty">
@@ -185,31 +193,9 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
             <h2>{label(g.title)}</h2>
             <span>{g.items.length} {g.items.length === 1 ? "video" : "videos"}</span>
           </header>
-          <ul className="ep-list">
-            {g.items.map((video) => (
-              <li key={video.id}>
-                <button type="button" className="ep-row" onClick={() => open(video)} onPointerEnter={(e) => enterRow(video, e)} onPointerLeave={leaveHover}>
-                  <span className="ep-play" aria-hidden>
-                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z" /></svg>
-                  </span>
-                  <span className="ep-main">
-                    <span className="ep-name">{video.title}</span>
-                    <span className="ep-desc">{video.description}</span>
-                  </span>
-                  <span className="ep-note">{video.note}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
+          <ul className="ep-wall">{g.items.map((video) => tile(video, g.id))}</ul>
         </section>
       ))}
-
-      {preview && !playing && (
-        <div className="ep-preview" style={{ top: preview.top }} aria-hidden>
-          <video key={preview.video.videoUrl} ref={playMuted} src={preview.video.videoUrl} loop playsInline preload="metadata" />
-          <span>Preview, no sound</span>
-        </div>
-      )}
 
       <dialog
         ref={dialog}
@@ -230,7 +216,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
               <video
                 key={playing.videoUrl}
                 src={playing.videoUrl}
-                poster={playingPoster}
+                poster={playing.poster?.src}
                 controls
                 autoPlay
                 playsInline
@@ -257,7 +243,10 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
             <div className="ep-meta">
               <div>
                 <h3 id="ep-playing">{playing.title}</h3>
-                <p>{playing.description}</p>
+                <p className="ep-metaLine">
+                  {[label(playing.folder), playing.client, playing.length].filter(Boolean).join(" / ")}
+                </p>
+                {playing.description && <p>{playing.description}</p>}
               </div>
               <div className="ep-controls">
                 <span className="ep-pos">{position + 1} of {shown.length}</span>

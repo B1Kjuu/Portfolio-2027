@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import avatar from "@/assets/avatar.png";
+import CountUp from "@/components/site/CountUp";
 import Intro from "@/components/site/Intro";
 import { go } from "@/components/site/Wipe";
 import { seam } from "./seam";
@@ -189,14 +190,14 @@ export default function SplitLanding({
         <section className="sp-half sp-tech" aria-labelledby="build-title">
           <div className="sp-stage"><Stage side="tech" cards={techCards} /></div>
           <div className="sp-copy">
-            <h2 id="build-title" className="sp-title"><span className="sp-word" aria-label="Build"><SplitWord word="Build" /></span><span className="sp-dot" aria-hidden>.</span></h2>
+            <h2 id="build-title" className="sp-title"><span className="sp-word" aria-hidden><SplitWord word="Build" /></span><span className="sp-srOnly">Build</span><span className="sp-dot" aria-hidden>.</span></h2>
             <p className="sp-lede">
               <strong>Web apps, mobile and embedded hardware for teams.</strong> React, Next.js, React Native, ESP32
               and LoRa.
             </p>
           </div>
           <div className="sp-foot">
-            <span className="sp-count">{techCount} projects, {liveCount} live</span>
+            <span className="sp-count"><CountUp value={techCount} /> projects, <CountUp value={liveCount} /> live</span>
             <Link href="/tech" className="sp-enter">See the builds <Arrow /></Link>
           </div>
         </section>
@@ -204,13 +205,13 @@ export default function SplitLanding({
         <section className="sp-half sp-edit" aria-labelledby="cut-title">
           <div className="sp-stage"><Stage side="edit" cards={editCards} /></div>
           <div className="sp-copy">
-            <h2 id="cut-title" className="sp-title"><span className="sp-word" aria-label="Cut"><SplitWord word="Cut" /></span><span className="sp-dot" aria-hidden>.</span></h2>
+            <h2 id="cut-title" className="sp-title"><span className="sp-word" aria-hidden><SplitWord word="Cut" /></span><span className="sp-srOnly">Cut</span><span className="sp-dot" aria-hidden>.</span></h2>
             <p className="sp-lede">
               <strong>Short-form, long-form and UGC edits for brands.</strong> Paced for retention, finished for clients.
             </p>
           </div>
           <div className="sp-foot">
-            <span className="sp-count">{videoCount} videos in {categoryCount} categories</span>
+            <span className="sp-count"><CountUp value={videoCount} /> videos in <CountUp value={categoryCount} /> categories</span>
             <Link href="/editor" className="sp-enter">Watch the edits <Arrow /></Link>
           </div>
         </section>

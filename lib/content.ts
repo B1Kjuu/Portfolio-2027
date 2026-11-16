@@ -10,6 +10,7 @@ import INTERFACE2026 from "@/assets/projects/INTERFACE2026.png";
 import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.png";
 import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.png";
 import YAEYPRODUCTIONS from "@/assets/projects/YAEYPRODUCTIONS.png";
+import JEVONBABY from "@/assets/projects/JEVONBABY.png";
 import affinityIcon from "@/assets/techicons/Affinity.svg";
 import canvaIcon from "@/assets/techicons/Canva.svg";
 import davinciIcon from "@/assets/techicons/DaVinci Resolve.svg";
@@ -21,6 +22,33 @@ import pythonIcon from "@/assets/techicons/Python.svg";
 import reactIcon from "@/assets/techicons/React.svg";
 import tailwindIcon from "@/assets/techicons/Tailwind.svg";
 import typescriptIcon from "@/assets/techicons/Typescript.svg";
+import posterBrendaYipAd from "@/assets/posters/brenda-yip-ad.jpg";
+import posterCafesAndIdeas from "@/assets/posters/cafes-and-ideas.jpg";
+import posterCodyChaffee from "@/assets/posters/cody-chaffee.jpg";
+import posterCoronaDelMar from "@/assets/posters/corona-del-mar.jpg";
+import posterDeathValley from "@/assets/posters/death-valley.jpg";
+import posterEastCoastLiving from "@/assets/posters/east-coast-living.jpg";
+import posterEducationalDemo from "@/assets/posters/educational-demo.jpg";
+import posterFancyOffice from "@/assets/posters/fancy-office.jpg";
+import posterFungyMushroomCoffee from "@/assets/posters/fungy-mushroom-coffee.jpg";
+import posterIInvestInYou from "@/assets/posters/i-invest-in-you.jpg";
+import posterIbraAd from "@/assets/posters/ibra-ad.jpg";
+import posterImanTalkingHead from "@/assets/posters/iman-talking-head.jpg";
+import posterKelownaFinance from "@/assets/posters/kelowna-finance.jpg";
+import posterKingsMedia from "@/assets/posters/kings-media.jpg";
+import posterKneemax from "@/assets/posters/kneemax.jpg";
+import posterLisaTalkingHead from "@/assets/posters/lisa-talking-head.jpg";
+import posterMotovlog from "@/assets/posters/motovlog.jpg";
+import posterPawparazzi from "@/assets/posters/pawparazzi.jpg";
+import posterPersona from "@/assets/posters/persona.jpg";
+import posterPoolBuilders from "@/assets/posters/pool-builders.jpg";
+import posterRealEstateReel from "@/assets/posters/real-estate-reel.jpg";
+import posterRoystonGKing from "@/assets/posters/royston-g-king.jpg";
+import posterSemoAd from "@/assets/posters/semo-ad.jpg";
+import posterThreeForgottenTricks from "@/assets/posters/three-forgotten-tricks.jpg";
+import posterToBeAMillionaire from "@/assets/posters/to-be-a-millionaire.jpg";
+import posterTridentDigital from "@/assets/posters/trident-digital.jpg";
+import posterWhyMicromanagingMeansTrustIssues from "@/assets/posters/why-micromanaging-means-trust-issues.jpg";
 
 export type TechProject = {
   title: string;
@@ -78,6 +106,15 @@ export const techProjects: TechProject[] = [
     note: "Built to centralize event and org information.",
     image: IIA,
     demoLink: "https://iia-p.org",
+  },
+  {
+    title: "Jevonbaby storefront",
+    category: "Websites",
+    description: "Storefront rebuild for Jevonbaby, a wearable breast pump brand: grouped shop, size pickers and a slide-in cart.",
+    note: "Built with Next.js and Tailwind CSS. Checkout hands over to the brand's own store.",
+    image: JEVONBABY,
+    demoLink: "https://jevonbaby.vercel.app",
+    ghLink: "https://github.com/B1Kjuu/Jevonbaby",
   },
   {
     title: "HikeSafe app",
@@ -155,6 +192,9 @@ export type EditorItem = {
   description?: string;
   note?: string;
   videoUrl?: string;
+  poster?: StaticImageData; // still frame shown on the Cut wall and in the player
+  length?: string; // running time, m:ss
+  client?: string; // shown on the tile when the work was for a named client
   items?: EditorItem[];
 };
 
@@ -167,56 +207,69 @@ export const editorProjects : EditorItem[] = [
         type: "video",
         title: "Why Micromanaging Means Trust Issues",
         description: "Talking-head reel on micromanaging, set in a branded frame with numbered note cards and a full-screen stat graphic.",
-        note: "Influence with Hubert. Vertical, 2:02",
+        poster: posterWhyMicromanagingMeansTrustIssues,
+        length: "2:02",
+        client: "Influence with Hubert",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/why-micromanaging-means-trust-issues.mp4"
       },
       {
         type: "video",
         title: "I Invest in You",
         description: "Founder-to-camera reel on why investors back people, cut with tag labels and full-screen kinetic type.",
-        note: "Influence with Hubert. Vertical, 2:09",
+        poster: posterIInvestInYou,
+        length: "2:09",
+        client: "Influence with Hubert",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/i-invest-in-you.mp4"
       },
       {
         type: "video",
         title: "Cafes and Ideas",
         description: "Talking-head reel shot in a cafe, with bold two-tone captions and comic-style speech bubbles.",
-        note: "Influence with Hubert. Vertical, 1:37",
+        poster: posterCafesAndIdeas,
+        length: "1:37",
+        client: "Influence with Hubert",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/cafes-and-ideas.mp4"
       },
       {
         type: "video",
         title: "Fancy Office",
         description: "Talking-head story with on-screen figures, quote cards and an animated meter.",
-        note: "Influence with Hubert. Vertical, 3:15",
+        poster: posterFancyOffice,
+        length: "3:15",
+        client: "Influence with Hubert",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/fancy-office.mp4"
       },
       {
         type: "video",
         title: "Persona",
         description: "Explainer reel styled as a notebook: handwritten titles, paper note cards and lowercase captions.",
-        note: "Influence with Hubert. Vertical, 1:48",
+        poster: posterPersona,
+        length: "1:48",
+        client: "Influence with Hubert",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/influence-with-hubert/persona.mp4"
       },
       {
         type: "video",
         title: "Trident Digital",
         description: "Studio talking head on recruiting, set with serif word-by-word captions.",
-        note: "Vertical, 0:57",
+        poster: posterTridentDigital,
+        length: "0:57",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/trident-digital.mp4"
       },
       {
         type: "video",
         title: "Lisa",
         description: "Real estate agent to camera, with caption highlights, property cutaways and black-and-white inserts.",
-        note: "Vertical, 1:22",
+        poster: posterLisaTalkingHead,
+        length: "1:22",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/lisa-talking-head.mp4"
       },
       {
         type: "video",
         title: "Iman",
         description: "Direct-to-camera offer video with neon figures and full-screen text beats.",
-        note: "Horizontal, 0:33",
+        poster: posterImanTalkingHead,
+        length: "0:33",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/iman-talking-head.mp4"
       },
     ]
@@ -229,28 +282,32 @@ export const editorProjects : EditorItem[] = [
         type: "video",
         title: "Semo Ad",
         description: "Cinematic food commercial: a family kitchen scene cut for warmth, carried by picture alone.",
-        note: "Horizontal, 1:22",
+        poster: posterSemoAd,
+        length: "1:22",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/semo-ad.mp4"
       },
       {
         type: "video",
         title: "Pool Builders",
         description: "Trade-show promo mixing an on-site interview with cinematic cutaways, large type and a 3D globe graphic.",
-        note: "Vertical, 0:21",
+        poster: posterPoolBuilders,
+        length: "0:21",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/pool-builders.mp4"
       },
       {
         type: "video",
         title: "Brenda Yip Ad",
         description: "Property advice ad shot in a show flat, with accent-colour captions and on-screen keywords.",
-        note: "Vertical, 1:03",
+        poster: posterBrendaYipAd,
+        length: "1:03",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/brenda-yip-ad.mp4"
       },
       {
         type: "video",
         title: "IBRA Ad",
         description: "Desk-and-microphone ad with highlighted captions, colour flashes and a subscribe prompt.",
-        note: "Horizontal, 0:26",
+        poster: posterIbraAd,
+        length: "0:26",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/ibra-ad.mp4"
       },
     ]
@@ -264,6 +321,8 @@ type: "video",
         title: "Cody Chaffee",
         description: "Dynamic personal branding cut focusing on speaker authority. Features clean typography and seamless jump cuts to maintain viewer engagement.",
         note: "Optimized for TikTok/Reels.",
+        poster: posterCodyChaffee,
+        length: "0:18",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/Cody%20Chaffee.mov"
       },
       {
@@ -271,6 +330,8 @@ type: "video",
         title: "Fungy Mushroom Coffee",
         description: "High-energy product showcase. Utilizes rhythm-driven transitions, engaging sound design, and quick text callouts to highlight benefits.",
         note: "E-commerce direct response.",
+        poster: posterFungyMushroomCoffee,
+        length: "0:54",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/Fungy%20Mushroom%20Coffee.mp4"
       },
       {
@@ -278,6 +339,8 @@ type: "video",
         title: "King's Media",
         description: "Documentary-style assessment edit. Emphasizes retention-based pacing, visual hooks, and strategic B-roll placement.",
         note: "High-retention agency test.",
+        poster: posterKingsMedia,
+        length: "0:40",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/King_s%20Media.mp4"
       },
       {
@@ -285,6 +348,8 @@ type: "video",
         title: "KneeMax",
         description: "Problem-solution ad structure. Combines clean motion graphics and fast-paced editing designed to drive immediate viewer action.",
         note: "Performance marketing.",
+        poster: posterKneemax,
+        length: "0:37",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/KneeMax_.mp4"
       },
       {
@@ -292,6 +357,8 @@ type: "video",
         title: "Kelowna Finance",
         description: "Professional yet accessible financial content. Incorporates clean data visualizations, smooth pacing, and authoritative branding.",
         note: "B2C trust-building.",
+        poster: posterKelownaFinance,
+        length: "1:11",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/UGC/kelowna_finance.mp4"
       },
     ]
@@ -304,7 +371,8 @@ type: "video",
         type: "video",
         title: "Pawparazzi",
         description: "Event reel from a pet expo: quick interviews, crowd moments and bright captions.",
-        note: "Vertical, 0:37",
+        poster: posterPawparazzi,
+        length: "0:37",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/pawparazzi.mp4"
       },
     ]
@@ -318,6 +386,8 @@ type: "video",
         title: "Death Valley",
         description: "Cinematic landscape edit. Features advanced color grading, sky replacements, and subtle Fusion compositing for a premium feel.",
         note: "Highlighting the Travel on Death Valley.",
+        poster: posterDeathValley,
+        length: "0:31",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/TRAVEL/Death%20Valley.mp4"
       },
       {
@@ -325,6 +395,8 @@ type: "video",
         title: "Motovlog",
         description: "High-octane action sequence. Relies heavily on speed-ramping, kinetic typography, and immersive spatial sound design.",
         note: "Action / Lifestyle edit.",
+        poster: posterMotovlog,
+        length: "1:31",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/TRAVEL/MOTOVLOG%20trial.mp4"
       }
     ]
@@ -338,13 +410,16 @@ type: "video",
         title: "Corona del Mar",
         description: "A real estate showcase video highlighting the beauty and luxury of Corona del Mar properties.",
         note: "Coastal luxury real estate feature in Corona del Mar, CA.",
+        poster: posterCoronaDelMar,
+        length: "0:53",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/REAL%20ESTATE/Corona%20del%20Mar.mp4"
       },
       {
         type: "video",
         title: "Real Estate Reel",
         description: "Walk-and-talk to camera with bold kinetic captions and a phone mock-up of a local Instagram ad.",
-        note: "Vertical, 0:44",
+        poster: posterRealEstateReel,
+        length: "0:44",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/real-estate-reel.mp4"
       },
     ]
@@ -358,6 +433,8 @@ type: "video",
         title: "East Coast Living Through the Seasons",
         description: "A long-form documentary-style video capturing the essence of East Coast life across all four seasons.",
         note: "Lifestyle and travel feature along the East Coast.",
+        poster: posterEastCoastLiving,
+        length: "0:40",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/Copy%20of%20East%20Coast%20living%20throughout%20the%20seasons.mp4"
       },
       {
@@ -365,27 +442,32 @@ type: "video",
         title: "3 Forgotten Tricks from the 1950s",
         description: "Test Vintage-style Edit for a client.",
         note: "vintage-style edit about 1950s",
+        poster: posterThreeForgottenTricks,
+        length: "1:26",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/LONG%20FORM%20/3%20forgotten%20tricks%20from%20the%201950s%20on%20how%20to%20be%20a%20beautiful%20woman.mp4"
       },
       {
         type: "video",
         title: "To Be a Millionaire",
         description: "Long-form finance video with animated 3D icons and illustrated cutaways.",
-        note: "Horizontal, 4:56",
+        poster: posterToBeAMillionaire,
+        length: "4:56",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/to-be-a-millionaire.mp4"
       },
       {
         type: "video",
         title: "Educational Demo",
         description: "Long-form educational video to camera, with archival-style cutaways and on-screen effects.",
-        note: "Horizontal, 3:23",
+        poster: posterEducationalDemo,
+        length: "3:23",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/educational-demo.mp4"
       },
       {
         type: "video",
         title: "Royston G King",
         description: "YouTube-style education video with numbered caption lists and animated interface cards.",
-        note: "Horizontal, 1:04",
+        poster: posterRoystonGKing,
+        length: "1:04",
         videoUrl: "https://b1kjuumedia2026.blob.core.windows.net/videos/client-work/royston-g-king.mp4"
       },
     ]

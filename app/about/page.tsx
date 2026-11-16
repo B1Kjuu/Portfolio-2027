@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import avatar from "@/assets/avatar.png";
+import CountUp from "@/components/site/CountUp";
 import { PointerArea, ScrollTools } from "@/components/site/Motion";
 import SiteNav, { ContactBand, SiteFooter } from "@/components/site/SiteNav";
 import { education, experience, highlights, person, skills, type Entry } from "@/lib/about";
@@ -22,7 +23,17 @@ const Arrow = () => (
 
 // Figures in a highlight (45%, 2,000+) are set in the accent colour.
 const emphasise = (line: string) =>
-  line.split(/(\d[\d,]*\+?%?)/).map((part, i) => (/^\d/.test(part) ? <strong key={i}>{part}</strong> : part));
+  line.split(/(\d[\d,]*\+?%?)/).map((part, i) => {
+    if (!/^\d/.test(part)) return part;
+    // "2,000+" -> counts to 2000 and keeps the "+"; "45%" -> counts to 45 and keeps the "%"
+    const value = Number(part.replace(/[^\d]/g, ""));
+    const suffix = part.replace(/^[\d,]+/, "");
+    return (
+      <strong key={i}>
+        <CountUp value={value} suffix={suffix} />
+      </strong>
+    );
+  });
 
 // A timeline: one line down the side, a marker per entry, the current one marked "Now".
 function Timeline({ items }: { items: Entry[] }) {
@@ -112,12 +123,12 @@ export default function AboutPage() {
           <Link href="/tech" className="ab-side ab-build">
             <span className="ab-sideWord">Build<i>.</i></span>
             <span className="ab-sideLine">Web apps, mobile and embedded hardware.</span>
-            <span className="ab-sideGo">{techProjects.length} projects <Arrow /></span>
+            <span className="ab-sideGo"><CountUp value={techProjects.length} /> projects <Arrow /></span>
           </Link>
           <Link href="/editor" className="ab-side ab-cut">
             <span className="ab-sideWord">Cut<i>.</i></span>
             <span className="ab-sideLine">Short-form, long-form and UGC edits.</span>
-            <span className="ab-sideGo">{videoCount} videos <Arrow /></span>
+            <span className="ab-sideGo"><CountUp value={videoCount} /> videos <Arrow /></span>
           </Link>
         </section>
 

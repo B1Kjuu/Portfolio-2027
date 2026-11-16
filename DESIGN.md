@@ -30,9 +30,12 @@ These values are defined once in `app/globals.css` and consumed through CSS vari
 
 ## Interaction rules
 
-- Keep one authored motion moment per surface; do not add decorative blinking or pulsing.
-- The 3D card shuffle and tool strips are the only continuous loops.
+- Each page has one entrance: titles rise in (letter by letter on the landing page), then supporting text fades in.
+- Continuous loops, and only these: the 3D card shuffle, the tool strips, and the neon pulse around the landing-page portrait.
+- The neon pulse is the one attention cue on the site. It marks the portrait as the control that opens About and drags the split. Do not add other blinking or pulsing elements.
 - The tool strips autoplay continuously; reduced-motion users get a slower loop rather than a stopped layout.
+- Reduced motion: entrances become short fades, the card shuffle and neon pulse stop, and page wipes and hover previews are skipped.
 - Animate transforms, opacity, clip-path, and color; do not animate layout dimensions.
 - Buttons and linked cards have a clear hover and press response.
-- Error states explain what happened and provide a direct recovery link.
+- Loading and error states say what is happening: videos show a spinner with "Loading video…", and a failed video gives a direct link to the file.
+- Text split into animated letters is hidden from screen readers and paired with the whole word as hidden text, so headings are never read letter by letter or left empty.

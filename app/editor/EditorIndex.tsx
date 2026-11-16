@@ -239,6 +239,12 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
                   <a href={playing.videoUrl} target="_blank" rel="noreferrer">Open the video file directly</a>
                 </div>
               )}
+              <div className="ep-controls" aria-label="Video navigation">
+                <span className="ep-pos">{position + 1} of {shown.length}</span>
+                <button type="button" className="ep-step" onClick={() => step(-1)} aria-label="Previous video"><Chevron dir="left" /></button>
+                <button type="button" className="ep-step" onClick={() => step(1)} aria-label="Next video"><Chevron dir="right" /></button>
+                <button type="button" className="ep-close" onClick={() => dialog.current?.close()}>Close</button>
+              </div>
             </div>
             <div className="ep-meta">
               <div>
@@ -247,12 +253,6 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
                   {[label(playing.folder), playing.client, playing.length].filter(Boolean).join(" / ")}
                 </p>
                 {playing.description && <p>{playing.description}</p>}
-              </div>
-              <div className="ep-controls">
-                <span className="ep-pos">{position + 1} of {shown.length}</span>
-                <button type="button" className="ep-step" onClick={() => step(-1)} aria-label="Previous video"><Chevron dir="left" /></button>
-                <button type="button" className="ep-step" onClick={() => step(1)} aria-label="Next video"><Chevron dir="right" /></button>
-                <button type="button" className="ep-close" onClick={() => dialog.current?.close()}>Close</button>
               </div>
             </div>
           </div>

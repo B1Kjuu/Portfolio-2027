@@ -127,6 +127,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
                 >
                   {/* eslint-disable-next-line @next/next/no-img-element -- small local still, already sized */}
                   {pick.poster && <img src={pick.poster} alt="" loading="eager" />}
+                  {!pick.poster && <span className="ep-pickFallback" aria-hidden>{video.title}</span>}
                   {hoverPick === video.id && <video ref={playMuted} src={video.videoUrl} loop playsInline preload="metadata" />}
                   <span className="ep-pickPlay" aria-hidden>
                     <svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4.5l13 7.5-13 7.5z" /></svg>
@@ -225,7 +226,7 @@ export default function EditorIndex({ folders, featured = [] }: { folders: Edito
       >
         {playing && (
           <div className="ep-player">
-            <div className="ep-frame" data-loading={loading || undefined}>
+            <div className="ep-frame" data-loading={loading || undefined} aria-busy={loading}>
               <video
                 key={playing.videoUrl}
                 src={playing.videoUrl}

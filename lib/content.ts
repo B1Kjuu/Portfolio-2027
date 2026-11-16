@@ -9,6 +9,7 @@ import EASYJOURNAL from "@/assets/projects/EASYJOURNAL.png";
 import INTERFACE2026 from "@/assets/projects/INTERFACE2026.png";
 import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.png";
 import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.png";
+import YAEYPRODUCTIONS from "@/assets/projects/YAEYPRODUCTIONS.png";
 import affinityIcon from "@/assets/techicons/Affinity.svg";
 import canvaIcon from "@/assets/techicons/Canva.svg";
 import davinciIcon from "@/assets/techicons/DaVinci Resolve.svg";
@@ -53,6 +54,14 @@ export const techProjects: TechProject[] = [
     note: "Deployed with a lightweight, reliable web stack.",
     image: PTSI,
     demoLink: "https://ptsi-ca79a.web.app",
+  },
+  {
+    title: "YAEY Productions",
+    category: "Websites",
+    description: "Creator-first media studio website for content, production, and operations.",
+    note: "Built to present the studio and its opportunities with a high-energy visual direction.",
+    image: YAEYPRODUCTIONS,
+    demoLink: "https://yaey-productions.vercel.app",
   },
   {
     title: "ResortifyPH",

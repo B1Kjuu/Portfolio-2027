@@ -121,6 +121,11 @@
   line-height: 0.86;
   white-space: nowrap;
 }
+.sp-word { display: inline-flex; }
+.sp-letter {
+  display: inline-block;
+  animation: sp-letter-rise 700ms var(--ease-out) backwards;
+}
 .sp-tech .sp-title {
   font-family: var(--font-archivo), sans-serif;
   font-stretch: 122%;
@@ -206,6 +211,7 @@
   touch-action: none;
 }
 .sp-grip {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -215,6 +221,16 @@
   background: #fbf8f2;
   box-shadow: 0 14px 34px -8px #000000b0;
   transition: transform 160ms var(--ease-out);
+}
+.sp-grip::after {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border: 2px solid #c4f24a;
+  border-radius: inherit;
+  box-shadow: 0 0 8px #c4f24a, 0 0 20px #c4f24acc;
+  pointer-events: none;
+  animation: sp-neon-blink 1.6s ease-in-out 1s infinite;
 }
 .sp-grip svg { width: 18px; height: 18px; flex: none; }
 .sp-gripName { display: none; } /* phones only */
@@ -293,6 +309,13 @@
 @keyframes sp-rise { from { opacity: 0; transform: translateY(0.18em); } }
 @keyframes sp-fade { from { opacity: 0; } }
 @keyframes sp-pop { from { opacity: 0; scale: 0.9; } }
+@keyframes sp-letter-rise { from { opacity: 0; transform: translateY(0.18em); } }
+@keyframes sp-neon-blink {
+  0%, 36%, 100% { opacity: 0.16; transform: scale(0.98); }
+  43% { opacity: 1; transform: scale(1.04); }
+  50% { opacity: 0.2; transform: scale(0.99); }
+  57% { opacity: 0.92; transform: scale(1.03); }
+}
 .sp-title { animation: sp-rise 800ms var(--ease-out) backwards; }
 .sp-edit .sp-title { animation-delay: 70ms; }
 .sp-lede, .sp-foot, .sp-id { animation: sp-fade 600ms var(--ease-out) 160ms backwards; }
@@ -391,7 +414,7 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
   .sp-enter { padding: 14px 20px; font-size: 16px; }
 
   /* 3D: tablets have room for it opposite the text; phones do not (it is not created there) */
-  .sp-stage { display: none; }
+  .sp-tech .sp-stage, .sp-edit .sp-stage { display: none; }
 }
 @media (min-width: 700px) and (max-width: 860px) {
   .sp-tech .sp-stage, .sp-edit .sp-stage { display: block; width: auto; translate: none; }
@@ -401,7 +424,8 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
 @media (prefers-reduced-motion: reduce) {
   .sp-enter, .sp-enter svg, .sp-grip, .sp-contact { transition: none; }
   /* keep the fades, drop the movement */
-  .sp-title, .sp-grip { animation-name: sp-fade; animation-duration: 300ms; }
+  .sp-title, .sp-grip, .sp-letter { animation-name: sp-fade; animation-duration: 300ms; }
+  .sp-grip::after { animation: none; opacity: 0.3; }
   .sp-hint { transition: none; }
   .sp-root[data-settling] .sp-half, .sp-root[data-settling] .sp-seam, .sp-root[data-settling] .sp-handle { transition: none; }
 }
@@ -420,7 +444,7 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
   .sp-tech { left: 0; }
   .sp-edit { left: 50%; right: auto; }
   .sp-seam, .sp-handle, .sp-stage { display: none; }
-  .sp-copy, .sp-edit .sp-copy { top: 62px; left: 20px; right: 16px; text-align: left; }
+  .sp-copy, .sp-edit .sp-copy { top: 104px; left: 20px; right: 16px; text-align: left; }
   .sp-title { font-size: min(13vw, 25svh); }
   .sp-edit .sp-title { font-size: min(15vw, 28svh); }
   .sp-lede { margin-top: 10px; max-width: none; }
@@ -428,6 +452,7 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
   .sp-tech .sp-foot, .sp-edit .sp-foot { left: 20px; right: 16px; bottom: 14px; }
   .sp-enter { padding: 12px 18px; font-size: 15px; }
   .sp-links a:not(.sp-contact) { display: none; }
+  .sp-tech .sp-stage, .sp-edit .sp-stage { display: none; }
   /* the person becomes a pill in the top bar that opens About */
   .sp-id {
     top: 8px;

@@ -36,6 +36,16 @@ const Arrow = () => (
   </svg>
 );
 
+const SplitWord = ({ word }: { word: string }) => (
+  <>
+    {[...word].map((letter, index) => (
+      <span key={`${letter}-${index}`} className="sp-letter" style={{ animationDelay: `${index * 35}ms` }} aria-hidden>
+        {letter}
+      </span>
+    ))}
+  </>
+);
+
 export default function SplitLanding({
   techCards,
   editCards,
@@ -179,7 +189,7 @@ export default function SplitLanding({
         <section className="sp-half sp-tech" aria-labelledby="build-title">
           <div className="sp-stage"><Stage side="tech" cards={techCards} /></div>
           <div className="sp-copy">
-            <h2 id="build-title" className="sp-title">Build<span className="sp-dot">.</span></h2>
+            <h2 id="build-title" className="sp-title"><span className="sp-word" aria-label="Build"><SplitWord word="Build" /></span><span className="sp-dot" aria-hidden>.</span></h2>
             <p className="sp-lede">
               <strong>Web apps, mobile and embedded hardware for teams.</strong> React, Next.js, React Native, ESP32
               and LoRa.
@@ -194,7 +204,7 @@ export default function SplitLanding({
         <section className="sp-half sp-edit" aria-labelledby="cut-title">
           <div className="sp-stage"><Stage side="edit" cards={editCards} /></div>
           <div className="sp-copy">
-            <h2 id="cut-title" className="sp-title">Cut<span className="sp-dot">.</span></h2>
+            <h2 id="cut-title" className="sp-title"><span className="sp-word" aria-label="Cut"><SplitWord word="Cut" /></span><span className="sp-dot" aria-hidden>.</span></h2>
             <p className="sp-lede">
               <strong>Short-form, long-form and UGC edits for brands.</strong> Paced for retention, finished for clients.
             </p>
@@ -212,7 +222,8 @@ export default function SplitLanding({
       <button
         type="button"
         className="sp-handle"
-        aria-label="About Joebeck Andrew Gusi. Click to read more, drag toward Build or Cut to open that side, or use the arrow keys."
+        aria-describedby="profile-hint"
+        aria-label="Click for about me. Drag toward Build or Cut to open that side, or use the arrow keys."
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
@@ -230,8 +241,8 @@ export default function SplitLanding({
             <path d="M9 6l6 6-6 6" />
           </svg>
         </span>
-        <span className="sp-hint" aria-hidden>
-          About me
+        <span id="profile-hint" className="sp-hint" role="tooltip">
+          Click for about me
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>

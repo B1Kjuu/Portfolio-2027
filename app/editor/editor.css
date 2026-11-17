@@ -285,6 +285,40 @@ html { scroll-behavior: smooth; }
   .ep-note { grid-column: 2; text-align: left; }
 }
 
+@media (max-width: 600px) {
+  .ep-dialog {
+    width: calc(100vw - 20px);
+    max-width: none;
+    max-height: calc(100dvh - 20px);
+  }
+  .ep-player { gap: 12px; }
+  .ep-frame {
+    display: grid;
+    justify-items: center;
+    width: 100%;
+    gap: 10px;
+  }
+  .ep-player video {
+    width: 100%;
+    max-height: calc(100dvh - 210px);
+    border-radius: 12px;
+  }
+  .ep-frame[data-loading] video { width: min(100%, 340px); }
+  .ep-controls {
+    position: static;
+    justify-content: center;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    background: none;
+    backdrop-filter: none;
+  }
+  .ep-pos { margin-left: 0; }
+  .ep-step { background: #efe6d633; }
+  .ep-close { padding-inline: 20px; }
+  .ep-meta { padding-inline: 2px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .ep-dialog, .ep-play, .ep-close, .ep-row, .ep-cats a { transition: none; }
 }

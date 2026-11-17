@@ -12,7 +12,7 @@ import "./about.css";
 
 export const metadata: Metadata = {
   title: "About — Joebeck Andrew Gusi",
-  description: "Full-stack developer and video editor based in Manila: experience, education and skills.",
+  description: "Full-stack developer, AI engineer, and video editor based in Manila: experience, education, and skills.",
 };
 
 const Arrow = () => (

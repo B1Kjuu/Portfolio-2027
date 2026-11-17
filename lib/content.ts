@@ -11,6 +11,7 @@ import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.png";
 import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.png";
 import YAEYPRODUCTIONS from "@/assets/projects/YAEYPRODUCTIONS.png";
 import JEVONBABY from "@/assets/projects/JEVONBABY.png";
+import OMNIDESKAI from "@/assets/projects/OMNIDESKAI.svg";
 import affinityIcon from "@/assets/techicons/Affinity.svg";
 import canvaIcon from "@/assets/techicons/Canva.svg";
 import davinciIcon from "@/assets/techicons/DaVinci Resolve.svg";
@@ -61,12 +62,21 @@ export type TechProject = {
 };
 
 export const techStats = [
-  { value: "3+", label: "live products and portfolio builds" },
+  { value: "4+", label: "live products and portfolio builds" },
   { value: "90+", label: "Lighthouse scores targeted in production" },
   { value: "Full-stack", label: "React, Node, UI systems, and deployment" },
 ];
 
 export const techProjects: TechProject[] = [
+  {
+    title: "OmniDesk AI",
+    category: "Apps",
+    description: "Multi-tenant AI support desk that answers only from approved business knowledge.",
+    note: "Built with grounded retrieval, quoted sources, tenant isolation, and human escalation when the answer is not known.",
+    image: OMNIDESKAI,
+    demoLink: "https://omnidesk-ai-one.vercel.app",
+    ghLink: "https://github.com/B1Kjuu/omnidesk-ai",
+  },
   {
     title: "P3KCARS",
     category: "Websites",

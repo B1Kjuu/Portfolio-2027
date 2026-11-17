@@ -184,7 +184,7 @@ export default function SplitLanding({
         <Link href="/about" className="sp-id">
           <Image src={avatar} alt="" className="sp-idPhoto" sizes="56px" />
           <h1 className="sp-name">Joebeck Andrew Gusi</h1>
-          <p className="sp-role">Full-stack developer and creative technologist</p>
+          <p className="sp-role">Full-stack developer, AI engineer, and video editor</p>
         </Link>
 
         <section className="sp-half sp-tech" aria-labelledby="build-title">

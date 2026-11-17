@@ -9,8 +9,8 @@ const archivo = Archivo({ variable: "--font-archivo", subsets: ["latin"], axes: 
 const fraunces = Fraunces({ variable: "--font-fraunces", subsets: ["latin"], style: ["normal", "italic"] });
 
 export const metadata: Metadata = {
-  title: "Joebeck Andrew Gusi — Developer and video editor",
-  description: "Portfolio of Joebeck Andrew Gusi (b1kjuu): web, mobile and hardware builds, and client video edits.",
+  title: "Joebeck Andrew Gusi — Developer, AI engineer, and video editor",
+  description: "Portfolio of Joebeck Andrew Gusi (b1kjuu): full-stack web and AI products, mobile and hardware builds, and client video edits.",
   metadataBase: new URL("https://b1kjuu.studio"),
 };
 

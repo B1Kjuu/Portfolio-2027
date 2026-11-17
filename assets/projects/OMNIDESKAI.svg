@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">OmniDesk AI project preview</title>
+  <desc id="desc">A dark customer support dashboard with a red navigation bar and a grounded AI answer.</desc>
+  <rect width="1600" height="1000" fill="#121416"/>
+  <rect width="1600" height="78" fill="#d9251d"/>
+  <rect x="52" y="23" width="32" height="32" rx="2" fill="#fff"/>
+  <text x="68" y="47" fill="#d9251d" font-family="Arial, sans-serif" font-size="21" font-weight="800" text-anchor="middle">O</text>
+  <text x="104" y="48" fill="#fff" font-family="Arial, sans-serif" font-size="25" font-weight="700">OmniDesk AI</text>
+  <text x="1320" y="47" fill="#fff" font-family="Arial, sans-serif" font-size="19" font-weight="600">Sign in</text>
+  <rect x="80" y="142" width="920" height="710" rx="4" fill="#191c20" stroke="#30363d"/>
+  <text x="124" y="224" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="72" font-weight="700">Every answer</text>
+  <text x="124" y="310" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="72" font-weight="700">leaves with</text>
+  <text x="124" y="396" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="72" font-weight="700">its source.</text>
+  <text x="124" y="467" fill="#aab2bb" font-family="Arial, sans-serif" font-size="25">Approved knowledge in. Grounded answer or human handoff out.</text>
+  <rect x="124" y="548" width="760" height="1" fill="#30363d"/>
+  <text x="124" y="600" fill="#f5c518" font-family="monospace" font-size="22" font-weight="700">ANSWERED FROM APPROVED KNOWLEDGE</text>
+  <text x="124" y="659" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="28">“Refunds are accepted within 30 days…”</text>
+  <rect x="124" y="708" width="314" height="42" rx="21" fill="#25352d"/>
+  <text x="281" y="735" fill="#a7e6bd" font-family="Arial, sans-serif" font-size="18" text-anchor="middle">Refund FAQ · cited source</text>
+  <rect x="1050" y="142" width="470" height="710" fill="#20252a" stroke="#30363d"/>
+  <text x="1092" y="204" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="23" font-weight="700">Question route</text>
+  <circle cx="1120" cy="278" r="13" fill="#d9251d"/>
+  <text x="1160" y="287" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="22">Customer asks</text>
+  <path d="M1120 300v82" stroke="#59616b" stroke-width="2"/>
+  <circle cx="1120" cy="420" r="13" fill="#f5c518"/>
+  <text x="1160" y="429" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="22">Search approved sources</text>
+  <path d="M1120 442v82" stroke="#59616b" stroke-width="2"/>
+  <circle cx="1120" cy="562" r="13" fill="#65c18c"/>
+  <text x="1160" y="571" fill="#f3f5f7" font-family="Arial, sans-serif" font-size="22">Cite or escalate</text>
+  <text x="1092" y="710" fill="#8f99a3" font-family="monospace" font-size="18">pgvector · Gemini · Supabase</text>
+</svg>

@@ -2,12 +2,12 @@
 
 export const person = {
   name: "Joebeck Andrew Gusi",
-  role: "Full-stack developer and creative technologist",
+  role: "Full-stack developer, AI engineer, and video editor",
   location: "Manila, Philippines",
   email: "joebeckgusi@gmail.com",
   intro: [
-    "I am a full-stack developer and video editor based in Manila. I build responsive web apps with React and Next.js, and I edit high-retention video for brands. Right now I work as a multimedia specialist at YAEY Production while finishing a Computer Engineering degree at the Polytechnic University of the Philippines.",
-    "I like working where complex technical systems meet visual storytelling: the same person who writes the React components can also cut the launch video.",
+    "I am a full-stack developer, AI engineer, and video editor based in Manila. I build responsive web apps and grounded AI products with React, Next.js, TypeScript, Supabase, and Gemini, while editing high-retention video for brands.",
+    "I like working where product systems meet visual storytelling: the same person who designs the support workflow can also cut the launch video.",
   ],
 };
 
@@ -15,9 +15,18 @@ export type Entry = { title: string; place?: string; when?: string; points: stri
 
 export const experience: Entry[] = [
   {
+    title: "Freelance Full-stack Developer and Video Editor",
+    place: "Self-employed",
+    when: "September 2026 to present",
+    points: [
+      "Build full-stack web applications and AI-powered products with modern TypeScript tooling, Supabase, and Gemini.",
+      "Edit high-retention video and create visual assets for brands, creators, and product teams.",
+    ],
+  },
+  {
     title: "Multimedia Specialist",
     place: "YAEY Production",
-    when: "June 2026 to present",
+    when: "June 2026 to September 2026",
     points: [
       "Produce and edit video assets for brand marketing campaigns.",
       "Deliver high-retention test edits and tighten the visual storytelling workflow.",
@@ -67,14 +76,15 @@ export const education: Entry[] = [
 export const skills: { label: string; items: string[] }[] = [
   {
     label: "Core",
-    items: ["Responsive web design", "UI/UX implementation", "Video editing", "Graphic design", "Retention-based storytelling", "Visual effects", "3D camera tracking"],
+    items: ["Responsive web design", "UI/UX implementation", "Full-stack development", "AI product development", "Video editing", "Graphic design", "Retention-based storytelling", "Visual effects", "3D camera tracking"],
   },
   { label: "Languages", items: ["JavaScript", "TypeScript", "HTML5", "CSS3", "Python", "C", "C++", "C#", "PHP", "Java", "SQL", "Assembly"] },
   {
     label: "Frameworks",
-    items: ["React", "Next.js", "Node.js", "Tailwind CSS", "Material UI", "Redux", "Vue.js", "Express.js", "Bootstrap", "jQuery", "Shopify Liquid"],
+    items: ["React", "Next.js", "React Native", "Node.js", "Tailwind CSS", "Material UI", "Redux", "Vue.js", "Express.js", "Bootstrap", "jQuery", "Shopify Liquid"],
   },
-  { label: "Databases and cloud", items: ["Firebase", "Supabase", "Redis", "MySQL", "Microsoft Azure"] },
+  { label: "AI and platform", items: ["Gemini", "Supabase", "PostgreSQL", "pgvector", "n8n", "Sentry", "Vercel", "GSAP"] },
+  { label: "Databases and cloud", items: ["Firebase", "Redis", "MySQL", "Microsoft Azure"] },
   {
     label: "Tools",
     items: ["Git and GitHub", "VS Code", "Postman", "Figma", "Vite", "DaVinci Resolve", "Adobe Premiere Pro", "Adobe Photoshop", "Adobe Illustrator", "Canva", "Affinity"],

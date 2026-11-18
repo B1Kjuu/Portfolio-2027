@@ -36,7 +36,9 @@
   padding: 10px 0;
 }
 .sp-links { display: flex; align-items: center; gap: 10px; color: #1c1611; }
-.sp-links a { color: inherit; padding: 12px; transition: opacity 160ms ease; }
+.sp-links a { color: inherit; padding: 12px; white-space: nowrap; transition: opacity 160ms ease; }
+/* the centred name block needs the middle of the bar; Resume drops out until there is room */
+@media (max-width: 1279px) { .sp-resume { display: none; } }
 .sp-contact {
   background: #1c1611;
   color: var(--paper) !important;
@@ -275,6 +277,15 @@
   line-height: 1.1;
 }
 .sp-role { font-size: 14px; line-height: 1.35; opacity: 0.78; }
+.sp-proof {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.35;
+  opacity: 0.72;
+}
+/* one line only, and only where it clears both the nav and the headline below */
+@media (max-width: 1099px) { .sp-proof { display: none; } }
+.sp-proof span { font-weight: 700; }
 
 /* Hint under the portrait: what a click and a drag do. */
 .sp-hint {
@@ -371,7 +382,7 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
 @media (max-width: 860px) {
   .sp-root { height: 100svh; min-height: 600px; }
   .sp-nav { padding: 0 20px; height: 64px; }
-  .sp-links { color: #e8ecef; gap: 4px; }
+  .sp-links { color: #e8ecef; gap: 2px; }
   .sp-contact { background: #e8ecef; color: #0c0e11 !important; }
 
   .sp-tech { clip-path: inset(0 0 calc(100% - (var(--p) * 100%)) 0); }
@@ -477,4 +488,5 @@ html[data-intro] .sp-id, html[data-intro] .sp-grip, html[data-intro] .sp-hint { 
   }
   .sp-idPhoto { display: block; width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
   .sp-name { font-size: 16px; }
+  .sp-proof { display: none; }
 }

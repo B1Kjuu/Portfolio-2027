@@ -21,6 +21,9 @@ export default function SiteNav({ side, about = false, contact = false }: { side
           </>
         )}
         <a className="sn-resume" href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
+        <a className="sn-extra" href="mailto:joebeckgusi@gmail.com">Email</a>
+        <a className="sn-extra" href="https://www.instagram.com/b1kjuu/" target="_blank" rel="noreferrer">Instagram</a>
+        <a className="sn-book" href="https://calendly.com/joebeckgusi/30min" target="_blank" rel="noreferrer">Book a call</a>
         <Link className="sn-contact" href="/contact" aria-current={contact ? "page" : undefined}>Contact</Link>
       </nav>
     </header>
@@ -60,7 +63,7 @@ export function ContactBand({ title, body }: { title: string; body: string }) {
               <path d="M5 12h14M13 6l6 6-6 6" />
             </svg>
           </Link>
-          <a className="cb-alt" href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Read the resume</a>
+          <a className="cb-alt" href="https://calendly.com/joebeckgusi/30min" target="_blank" rel="noreferrer">Book a 30-minute call</a>
         </div>
       </div>
     </section>
@@ -77,7 +80,9 @@ export function SiteFooter({ side }: { side: "tech" | "edit" }) {
         <a href="https://github.com/B1Kjuu" target="_blank" rel="noreferrer">GitHub</a>
         <a href="https://www.linkedin.com/in/gusi-joebeck-andrew" target="_blank" rel="noreferrer">LinkedIn</a>
         <a href="https://www.facebook.com/b1kjuu" target="_blank" rel="noreferrer">Facebook</a>
+        <a href="https://www.instagram.com/b1kjuu/" target="_blank" rel="noreferrer">Instagram</a>
         <a href="mailto:joebeckgusi@gmail.com">Email</a>
+        <a href="https://calendly.com/joebeckgusi/30min" target="_blank" rel="noreferrer">Book a call</a>
       </span>
     </footer>
   );

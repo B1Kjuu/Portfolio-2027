@@ -31,6 +31,7 @@ export default function TechPage() {
               <strong>Web apps, mobile and embedded hardware.</strong> Client websites, practical apps and portfolio
               experiments built from idea to deployment.
             </p>
+            <p className="tp-skills"><strong>Build packages starting at ₱25,000.</strong></p>
           </div>
         </PointerArea>
 

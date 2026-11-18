@@ -53,7 +53,9 @@
   letter-spacing: -0.01em;
 }
 .sn-links { display: flex; align-items: center; gap: clamp(2px, 1vw, 10px); }
-.sn-links a { padding: 12px; transition: opacity 160ms ease; }
+.sn-links a { padding: 12px; white-space: nowrap; transition: opacity 160ms ease; }
+/* Email and Instagram live in the footer; the top bar only has room for them on wide screens. */
+@media (max-width: 1099px) { .sn-extra { display: none; } }
 .sn-contact {
   background: var(--ink);
   color: var(--bg) !important;
@@ -211,6 +213,9 @@
 }
 @media (max-width: 640px) {
   .sn { height: 64px; }
+  .sn-links { gap: 2px; }
+  /* phones: Book a call moves to the closing band and footer, so the bar never scrolls sideways */
+  .sn-resume, .sn-book { display: none; }
   .xo { grid-template-columns: 1fr; }
   .xo-go { justify-self: start; margin-top: 16px; }
   .cb { grid-template-columns: 1fr; }

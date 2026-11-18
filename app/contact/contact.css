@@ -81,6 +81,25 @@
 .ct-copy:active, .ct-write:active { transform: scale(0.97); }
 .ct-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .ct-panel-rule { height: 1px; margin: 28px 0 22px; background: var(--line); }
+.ct-book {
+  margin-top: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 52px;
+  padding: 0 24px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 17px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 140ms var(--ease-out);
+}
+.ct-book svg { width: 18px; height: 18px; transition: transform 200ms var(--ease-out); }
+.ct-book:active { transform: scale(0.97); }
 .ct-whatsapp { display: grid; gap: 6px; margin-top: 6px; }
 .ct-contactLabel { color: var(--muted); font-size: 15px; font-weight: 600; }
 .ct-whatsapp a {
@@ -145,6 +164,7 @@
 
 @media (hover: hover) and (pointer: fine) {
   .ct-address:hover { text-decoration-color: var(--accent); }
+  .ct-book:hover svg { transform: translate(2px, -2px); }
   .ct-write:hover svg { transform: translateX(4px); }
   .ct-whatsapp a:hover { color: var(--accent); text-decoration-color: var(--accent); }
   .ct-whatsapp a:hover svg { color: var(--accent); transform: translate(2px, -2px); }

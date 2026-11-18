@@ -24,6 +24,7 @@ const elsewhere = [
   { label: "GitHub", href: "https://github.com/B1Kjuu" },
   { label: "LinkedIn", href: "https://www.linkedin.com/in/gusi-joebeck-andrew" },
   { label: "Facebook", href: "https://www.facebook.com/b1kjuu" },
+  { label: "Instagram", href: "https://www.instagram.com/b1kjuu/" },
 ];
 
 const whatsappNumber = "+63 994 158 6766";
@@ -50,6 +51,12 @@ export default function ContactPage() {
             <div className="ct-contact-panel" aria-label="Contact Joebeck">
               <span className="ct-panel-kicker">Start with an email</span>
               <CopyEmail email={person.email} />
+              <a className="ct-book" href="https://calendly.com/joebeckgusi/30min" target="_blank" rel="noreferrer">
+                Book a 30-minute call
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                  <path d="M7 17L17 7M9 7h8v8" />
+                </svg>
+              </a>
               <div className="ct-panel-rule" />
               <div className="ct-whatsapp">
                 <span className="ct-contactLabel">Prefer WhatsApp?</span>

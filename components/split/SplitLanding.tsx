@@ -174,7 +174,8 @@ export default function SplitLanding({
         <Link href="/" className="sp-mark">b1kjuu</Link>
         <nav className="sp-links" aria-label="Main">
           <Link href="/about">About</Link>
-          <a href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
+          <a className="sp-resume" href="/GUSI_RESUME.pdf" target="_blank" rel="noreferrer">Resume</a>
+          <a href="https://calendly.com/joebeckgusi/30min" target="_blank" rel="noreferrer">Book a call</a>
           <Link className="sp-contact" href="/contact">Contact</Link>
         </nav>
       </header>
@@ -185,6 +186,7 @@ export default function SplitLanding({
           <Image src={avatar} alt="" className="sp-idPhoto" sizes="56px" />
           <h1 className="sp-name">Joebeck Andrew Gusi</h1>
           <p className="sp-role">Full-stack developer, AI engineer, and video editor</p>
+          <p className="sp-proof">Worked with <span>@hubertceo</span>, <span>@RoystonGKingSuccess</span> and <span>@im_siowei</span></p>
         </Link>
 
         <section className="sp-half sp-tech" aria-labelledby="build-title">

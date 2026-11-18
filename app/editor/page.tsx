@@ -44,6 +44,39 @@ export default function EditorPage() {
 
         <Marquee items={editorTools} label="Editing tools" tone="edit" />
 
+        <section className="ep-pricing" aria-labelledby="ep-pricing-title">
+          <div className="ep-pricingHead">
+            <h2 id="ep-pricing-title">Starting prices</h2>
+            <p className="ep-proof">Worked with <strong>@hubertceo</strong>, <strong>@RoystonGKingSuccess</strong> and <strong>@im_siowei</strong>.</p>
+            <a className="ep-book" href="https://calendly.com/joebeckgusi/30min" target="_blank" rel="noreferrer">
+              Book a call
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M7 17L17 7M9 7h8v8" />
+              </svg>
+            </a>
+          </div>
+          <div className="ep-packages">
+            <article>
+              <p>Short-form</p>
+              <strong>₱2,500</strong>
+              <span>starting at</span>
+              <small>Reels, shorts and punchy UGC edits.</small>
+            </article>
+            <article>
+              <p>Long-form</p>
+              <strong>₱8,500</strong>
+              <span>starting at</span>
+              <small>YouTube, documentary and brand stories.</small>
+            </article>
+            <article>
+              <p>Monthly retainer</p>
+              <strong>₱25,000</strong>
+              <span>starting at / month</span>
+              <small>For a consistent edit schedule and faster turnaround.</small>
+            </article>
+          </div>
+        </section>
+
         <EditorIndex
           folders={editorProjects}
           featured={["Iman", "Real Estate Reel", "KneeMax"]}

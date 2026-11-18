@@ -5,6 +5,7 @@
   --muted: var(--color-muted-dark);
   --line: #ffffff1c;
   --accent: var(--color-lime);
+  --accent-text: var(--accent);
   --on-accent: var(--color-ink-dark);
   background: var(--bg);
   color: var(--ink);
@@ -15,6 +16,8 @@
   --muted: var(--color-muted-warm);
   --line: #1c161124;
   --accent: var(--color-vermilion);
+  /* vermilion darkened for small text: 4.5:1+ on paper (plain vermilion is ~4:1) */
+  --accent-text: #b8320f;
   --on-accent: #fff6ea;
   background: var(--bg);
   color: var(--ink);

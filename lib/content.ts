@@ -1,17 +1,17 @@
 import type { StaticImageData } from "next/image";
-import P3KCARS from "@/assets/projects/P3KCARS.png";
-import PTSI from "@/assets/projects/PTSI.png";
-import RESORTIFYPH from "@/assets/projects/RESORTIFYPH.png";
+import P3KCARS from "@/assets/projects/P3KCARS.jpg";
+import PTSI from "@/assets/projects/PTSI.jpg";
+import RESORTIFYPH from "@/assets/projects/RESORTIFYPH.jpg";
 import IIA from "@/assets/projects/IIA.png";
 import HIKESAFE from "@/assets/projects/HIKESAFE.png";
 import HIKESAFEWEB from "@/assets/projects/HIKESAFEWEB.png";
 import EASYJOURNAL from "@/assets/projects/EASYJOURNAL.png";
-import INTERFACE2026 from "@/assets/projects/INTERFACE2026.png";
-import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.png";
-import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.png";
-import YAEYPRODUCTIONS from "@/assets/projects/YAEYPRODUCTIONS.png";
-import JEVONBABY from "@/assets/projects/JEVONBABY.png";
-import OMNIDESKAI from "@/assets/projects/OMNIDESKAI.svg";
+import INTERFACE2026 from "@/assets/projects/INTERFACE2026.jpg";
+import OLDPORTFOLIO from "@/assets/projects/OLDPORTFOLIO.jpg";
+import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.jpg";
+import YAEYPRODUCTIONS from "@/assets/projects/YAEYPRODUCTIONS.jpg";
+import JEVONBABY from "@/assets/projects/JEVONBABY.jpg";
+import OMNIDESKAI from "@/assets/projects/OMNIDESKAI.jpg";
 import affinityIcon from "@/assets/techicons/Affinity.svg";
 import canvaIcon from "@/assets/techicons/Canva.svg";
 import davinciIcon from "@/assets/techicons/DaVinci Resolve.svg";
@@ -80,40 +80,40 @@ export const techProjects: TechProject[] = [
   {
     title: "P3KCARS",
     category: "Websites",
-    description: "Public website with responsive UI and clean navigation.",
-    note: "Frontend build with a polished user-facing experience.",
-    image: P3KCARS, 
+    description: "Website for a Parañaque dealer of pre-owned cars, big bikes and luxury watches.",
+    note: "Inventory, financing, trade-in and appointment pages for a showroom with 2.1M+ Facebook followers.",
+    image: P3KCARS,
     demoLink: "https://p3kcars.com",
   },
   {
     title: "PTSI",
     category: "Websites",
-    description: "Company site deployed to Firebase Hosting.",
-    note: "Deployed with a lightweight, reliable web stack.",
+    description: "Member portal for the Philippine Tuberculosis Society, Inc.",
+    note: "Sign-in and registration for members, deployed on Firebase Hosting.",
     image: PTSI,
     demoLink: "https://ptsi-ca79a.web.app",
   },
   {
     title: "YAEY Productions",
     category: "Websites",
-    description: "Creator-first media studio website for content, production, and operations.",
-    note: "Built to present the studio and its opportunities with a high-energy visual direction.",
+    description: "Website for YAEY Productions, a creator studio behind channels with 19M+ subscribers.",
+    note: "Presents the studio, its culture and its open roles to recruit editors and crew.",
     image: YAEYPRODUCTIONS,
     demoLink: "https://yaey-productions.vercel.app",
   },
   {
     title: "ResortifyPH",
     category: "Websites",
-    description: "Resort booking platform (under development).",
-    note: "Designed to feel fast on mobile and desktop.",
+    description: "Booking platform for staycations and private resorts across the Philippines.",
+    note: "Guests search by destination and book; resort hosts list their own properties. In development.",
     image: RESORTIFYPH,
     demoLink: "https://resortifyph.me",
   },
   {
     title: "IIA",
     category: "Websites",
-    description: "Organization website: content, resources, and membership info.",
-    note: "Built to centralize event and org information.",
+    description: "Website for The Institute of Internal Auditors Philippines.",
+    note: "Puts resources, events and membership details in one place for 2,000+ professionals.",
     image: IIA,
     demoLink: "https://iia-p.org",
   },
@@ -129,32 +129,32 @@ export const techProjects: TechProject[] = [
   {
     title: "HikeSafe app",
     category: "Apps",
-    description: "Safety-focused hiking app; code available on GitHub.",
-    note: "This App is built using React Native, used for offline communication",
+    description: "Offline-first React Native app that keeps hiking groups in touch without signal.",
+    note: "Messages travel over a LoRa radio link built on ESP32 hardware. Our thesis project.",
     image: HIKESAFE,
     ghLink: "https://github.com/B1kjuu/hikesafenew",
   },
   {
     title: "HikeSafe website",
     category: "Websites",
-    description: "Official Website of HIKESAFE. Showcasing our Thesis.",
-    note: "Developed to showcase our thesis project.",
+    description: "Project site for HikeSafe, our thesis on keeping hikers safe off the grid.",
+    note: "Explains the app, the radio hardware behind it and how the system works.",
     image: HIKESAFEWEB,
     demoLink: "https://hike-safe-website-6lktg4co8-jubikks-projects.vercel.app",
   },
   {
     title: "EasyJournal",
     category: "Apps",
-    description: "Simple journaling app; repository with implementation details.",
-    note: "A lightweight personal writing tool.",
+    description: "A minimal journaling app for writing and revisiting daily entries.",
+    note: "Built as a small, focused personal tool. The code is on GitHub.",
     image: EASYJOURNAL,
     ghLink: "https://github.com/B1kjuu/EasyJournal",
   },
   {
     title: "Interface 2026",
     category: "Websites",
-    description: "A seminar website for INTERFACE 2026 with speaker profiles, roadmap, and registration details.",
-    note: "Bridges the event content into a polished seminar experience.",
+    description: "Event site for INTERFACE 2026, PUP's computer engineering seminar with ICpEP.",
+    note: "Speakers, agenda, venue and Luma registration for the May 22, 2026 seminar.",
     image: INTERFACE2026,
     demoLink: "https://interface-2026-six.vercel.app",
   },

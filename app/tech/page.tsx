@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { getImageProps } from "next/image";
+import omnidesk from "@/assets/projects/OMNIDESKAI.jpg";
+import BuildStage from "@/components/site/BuildStage";
 import { Marquee, PointerArea, ScrollTools } from "@/components/site/Motion";
 import SiteNav, { ContactBand, CrossOver, SiteFooter } from "@/components/site/SiteNav";
 import { techProjects, techSkills } from "@/lib/content";
@@ -10,6 +13,9 @@ export const metadata: Metadata = {
   description: "Web, mobile and embedded hardware projects by Joebeck Andrew Gusi.",
 };
 
+// A ~1200px optimized copy of the screenshot for the 3D window, not the 3400px original.
+const heroShot = getImageProps({ src: omnidesk, alt: "", width: 600 }).props.src;
+
 export default function TechPage() {
   return (
     <div className="world-tech">
@@ -18,6 +24,7 @@ export default function TechPage() {
 
       <main id="main">
         <PointerArea className="tp-hero">
+          <BuildStage shot={heroShot} />
           <h1 className="tp-title">Build<span>.</span></h1>
           <div className="tp-intro">
             <p className="tp-lede">

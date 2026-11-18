@@ -67,10 +67,14 @@ export default function CountUp({ value, suffix = "", duration = 1100 }: { value
     };
   }, [value, suffix, duration]);
 
-  // min-width in digits keeps the text around it from shifting while the number grows
+  // An invisible copy of the final figure holds its exact width, so the text around it neither
+  // shifts while the number grows nor leaves a gap after it (a "ch" min-width over-reserves for
+  // narrow glyphs like "," and "+").
+  const final = format(value) + suffix;
   return (
-    <span ref={el} className="cu" style={{ minWidth: `${(format(value) + suffix).length}ch` }}>
-      {format(value) + suffix}
+    <span className="cu" style={{ display: "inline-grid" }}>
+      <span aria-hidden style={{ gridArea: "1 / 1", visibility: "hidden" }}>{final}</span>
+      <span ref={el} style={{ gridArea: "1 / 1" }}>{final}</span>
     </span>
   );
 }

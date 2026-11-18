@@ -18,6 +18,17 @@
   /* the grid is lit around the pointer; it rests top right until the mouse moves */
   mask-image: radial-gradient(560px circle at var(--mx, 80%) var(--my, 20%), #000 0%, transparent 100%);
 }
+/* 3D board + browser window in the space right of the headline (created only at 900px and up) */
+.tp-stage {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  bottom: -20px;
+  left: 50%;
+  pointer-events: none;
+  animation: tp-fade 900ms ease-out 200ms backwards;
+}
+@media (max-width: 899px) { .tp-stage { display: none; } }
 .tp-title {
   position: relative;
   font-family: var(--font-archivo), sans-serif;
@@ -72,6 +83,8 @@
   padding: clamp(32px, 5vw, 72px) var(--gutter);
   border-top: 1px solid var(--line);
 }
+/* the screenshot always takes the wide 7fr column; even rows mirror the columns, not just the order */
+.tp-row:nth-child(even) { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
 .tp-row:nth-child(even) .tp-shot { order: 2; }
 
 .tp-shot {
@@ -119,7 +132,7 @@
 @media (max-width: 900px) {
   .tp-intro { grid-template-columns: 1fr; }
   .tp-skills { text-align: left; }
-  .tp-row { grid-template-columns: 1fr; }
+  .tp-row, .tp-row:nth-child(even) { grid-template-columns: 1fr; }
   .tp-row:nth-child(even) .tp-shot { order: 0; }
 }
 

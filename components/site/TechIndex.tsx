@@ -108,7 +108,8 @@ export default function TechIndex({ projects }: { projects: TechProject[] }) {
                   src={project.image}
                   alt=""
                   sizes="(min-width: 900px) 58vw, 100vw"
-                  placeholder={typeof project.image === "string" ? "empty" : "blur"}
+                  /* static SVG imports have no blurDataURL, so blur would throw */
+                  placeholder={typeof project.image !== "string" && project.image.blurDataURL ? "blur" : "empty"}
                   priority={i === 0}
                 />
               </a>

@@ -12,6 +12,7 @@ import PORTFOLIO2026 from "@/assets/projects/PORTFOLIO2026.jpg";
 import YAEYPRODUCTIONS from "@/assets/projects/YAEYPRODUCTIONS.jpg";
 import JEVONBABY from "@/assets/projects/JEVONBABY.jpg";
 import OMNIDESKAI from "@/assets/projects/OMNIDESKAI.jpg";
+import ROYSTONGKING from "@/assets/projects/ROYSTONGKING.jpg";
 import affinityIcon from "@/assets/techicons/Affinity.svg";
 import canvaIcon from "@/assets/techicons/Canva.svg";
 import davinciIcon from "@/assets/techicons/DaVinci Resolve.svg";
@@ -76,6 +77,14 @@ export const techProjects: TechProject[] = [
     image: OMNIDESKAI,
     demoLink: "https://omnidesk-ai-one.vercel.app",
     ghLink: "https://github.com/B1Kjuu/omnidesk-ai",
+  },
+  {
+    title: "Royston G King",
+    category: "Websites",
+    description: "Personal brand site for Royston G King, a Forbes 30 Under 30 Monaco entrepreneur with 15M+ followers.",
+    note: "Rebuilt his one-page site into Home, Press and Contact: a press archive grouped by year, a scrolling wall of outlet logos, and a contact form ready to switch on.",
+    image: ROYSTONGKING,
+    demoLink: "https://royston-g-king.vercel.app",
   },
   {
     title: "P3KCARS",
